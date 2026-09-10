@@ -125,7 +125,7 @@ test('buildBdrQueue: a flood-failed record sorts last regardless of how much els
     is_fenced: true,
     is_lit: true,
     ingress_egress: 'one-way in, separate exit',
-    geoContext: { floodHazardArea: true, floodZone: 'AE', checkedAt: 'x' },
+    enrichment: { geo: { floodHazardArea: true, floodZone: 'AE', checkedAt: 'x' } },
   });
   const missingEverything = makeLocation({ id: 'missing-everything' });
   const sorted = buildBdrQueue([floodFailedButComplete, missingEverything]);
@@ -216,9 +216,9 @@ test('hasConflictNote: true only when notes contains the conflict: marker', () =
 
 test('floodBanner: null when not flood-failed, includes zone letter when known', () => {
   assert.equal(floodBanner(makeLocation()), null);
-  const withZone = makeLocation({ geoContext: { floodHazardArea: true, floodZone: 'AE', checkedAt: 'x' } });
+  const withZone = makeLocation({ enrichment: { geo: { floodHazardArea: true, floodZone: 'AE', checkedAt: 'x' } } });
   assert.match(floodBanner(withZone) ?? '', /zone AE/);
-  const noZone = makeLocation({ geoContext: { floodHazardArea: true, floodZone: null, checkedAt: 'x' } });
+  const noZone = makeLocation({ enrichment: { geo: { floodHazardArea: true, floodZone: null, checkedAt: 'x' } } });
   assert.ok(floodBanner(noZone)?.includes("Waymo can't use it"));
 });
 

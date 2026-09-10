@@ -160,10 +160,10 @@ export function buildAddLocationInput(
     ['address', !!value.address],
     ['lat', value.lat !== undefined],
     ['lng', value.lng !== undefined],
-    ['priceText', !!value.priceText],
-    ['hoursText', !!value.hoursText],
-    ['capacityText', !!value.capacityText],
-    ['clearanceText', !!value.clearanceText],
+    ['price_text', !!value.priceText],
+    ['hours_text', !!value.hoursText],
+    ['capacity_text', !!value.capacityText],
+    ['clearance_text', !!value.clearanceText],
     ['ingressEgress', !!value.ingressEgress],
     // undefined = untouched; null = "checked, couldn't tell" is still a
     // recorded fact, same done-means convention as bdrView's checklist rows.

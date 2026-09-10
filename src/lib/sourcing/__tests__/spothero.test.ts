@@ -112,7 +112,7 @@ test('mapFeaturedSpotToInput: maps a full listing, priceText preserved verbatim'
 test('mapFeaturedSpotToInput: every captured field is self-reported provenance', () => {
   const spots = extractFeaturedSpots(extractNextData(FIXTURE_HTML));
   const input = mapFeaturedSpotToInput(spots[0])!;
-  for (const field of ['name', 'address', 'lat', 'lng', 'priceText']) {
+  for (const field of ['name', 'address', 'lat', 'lng', 'price_text']) {
     assert.equal(input.fieldProvenance![field], 'self-reported', `${field} provenance`);
   }
 });
@@ -128,7 +128,7 @@ test('mapFeaturedSpotToInput: missing rate -> priceText left undefined, listing 
   const input = mapFeaturedSpotToInput(spots[2]);
   assert.ok(input);
   assert.equal(input!.priceText, undefined);
-  assert.equal(input!.fieldProvenance!.priceText, undefined);
+  assert.equal(input!.fieldProvenance!.price_text, undefined);
   assert.equal(input!.sourceUrl, 'https://spothero.com/facility/8436/60-se-2nd-st-parking');
 });
 

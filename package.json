@@ -12,6 +12,7 @@
     "migrate:verify": "node --experimental-strip-types scripts/migrate-to-aggregated-db.ts --verify-only"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
     "@radix-ui/react-avatar": "^1.2.3",
     "@radix-ui/react-checkbox": "^1.3.8",
     "@radix-ui/react-collapsible": "^1.1.17",
@@ -35,19 +36,24 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "cn": "^0.2.6",
     "d3-delaunay": "^6.0.4",
     "firebase": "^12.16.0",
     "firebase-admin": "^14.2.0",
+    "framer-motion": "^13.2.0",
     "lucide-react": "^1.25.0",
     "motion": "^13.1.1",
     "next": "16.2.11",
+    "next-themes": "^0.4.6",
     "ngeohash": "^0.6.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.10.1",
     "server-only": "^0.0.1",
+    "shadcn": "^4.21.0",
     "sonner": "^2.0.7",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

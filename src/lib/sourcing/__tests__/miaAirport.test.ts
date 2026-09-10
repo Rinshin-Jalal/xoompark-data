@@ -111,7 +111,7 @@ await test('ingestMiaGarages: maps every garage name, shared priceText applied t
   assert.equal(result.errors.length, 0);
   assert.equal(store.docs.size, 4);
   const dolphin = store.docs.get('mia-airport:dolphin-garage')!;
-  assert.equal(dolphin.priceText, 'Each 20 minute increment: $2.00; Maximum Daily Rate: $25.00');
+  assert.equal(dolphin.price_text, 'Each 20 minute increment: $2.00; Maximum Daily Rate: $25.00');
 });
 
 console.log('\nall miaAirport tests passed');

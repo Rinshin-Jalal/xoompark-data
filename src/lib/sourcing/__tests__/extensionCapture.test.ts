@@ -198,8 +198,8 @@ test('buildExtensionImportInput: every populated field is self-reported provenan
   )!;
   assert.equal(input.fieldProvenance!.name, 'self-reported');
   assert.equal(input.fieldProvenance!.address, 'self-reported');
-  assert.equal(input.fieldProvenance!.priceText, 'self-reported');
-  assert.equal(input.fieldProvenance!.hoursText, undefined); // never captured -> no entry at all
+  assert.equal(input.fieldProvenance!.price_text, 'self-reported');
+  assert.equal(input.fieldProvenance!.hours_text, undefined); // never captured -> no entry at all
 });
 
 test('buildExtensionImportInput: missing captured tab URL -> null (caller counts as skipped)', () => {

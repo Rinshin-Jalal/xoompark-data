@@ -35,6 +35,12 @@ body { background: var(--background); color: var(--foreground); font-family: Ari
 
 a:focus-visible, button:focus-visible { outline: 2px solid #0e1c36; outline-offset: 3px; border-radius: 2px; }
 
+/* XoomPark brand logo mark — shared by the outreach workspace and the auth
+   screen (lime square + "xp" + lime dot). */
+.logo-mark { font-size:19px; display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:9px; background:#caf28a; color:#183328; font-weight:900; font-style:italic; letter-spacing:-3px; padding-right:4px; }
+.logo-mark span { transform:translateY(-1px); }
+.logo-dot { color:#caf28a; }
+
 .xp-announcement { display:flex; align-items:center; justify-content:center; gap:.45rem; min-height:2.5rem; background:#afcbff; color:#0e1c36; font-family:var(--font-geist-mono),monospace; font-size:10px; font-weight:700; letter-spacing:.15em; text-align:center; }
 .xp-logo { font-family:var(--font-geist-mono),monospace; font-size:1rem; font-weight:700; letter-spacing:.16em; line-height:1; }
 .xp-logo span { color:#1a3a7a; font-size:.5em; vertical-align:top; }

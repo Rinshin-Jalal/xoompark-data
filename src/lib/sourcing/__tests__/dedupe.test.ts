@@ -49,9 +49,9 @@ test('upsert-create: new doc is draft with single evidence entry', () => {
   assert.equal(doc.id, 'spothero:12345');
   assert.equal(doc.status, 'draft');
   assert.equal(doc.evidence.length, 1);
-  assert.deepEqual(doc.evidence[0], { source: 'spothero', url: baseInput.sourceUrl, seenAt: '2026-08-23T00:00:00.000Z' });
-  assert.equal(doc.rawInput, baseInput.rawInput);
-  assert.equal(doc.createdAt, '2026-08-23T00:00:00.000Z');
+  assert.deepEqual(doc.evidence[0], { source: 'spothero', url: baseInput.sourceUrl, seen_at: '2026-08-23T00:00:00.000Z' });
+  assert.equal(doc.raw_input, baseInput.rawInput);
+  assert.equal(doc.created_at, '2026-08-23T00:00:00.000Z');
 });
 
 // ── upsert-merge-fills-empty ──────────────────────────────────────────────────
@@ -68,17 +68,17 @@ test('upsert-merge: fills empty fields, adds new source to evidence', () => {
     capacityText: '50 spaces',
     capturedBy: 'scraped',
     rawInput: { raw: 2 },
-    fieldProvenance: { hoursText: 'verified' },
+    fieldProvenance: { hours_text: 'verified' },
   };
   const merged = buildUpsertDoc(existing, secondInput, '2026-08-24T00:00:00.000Z');
 
-  assert.equal(merged.hoursText, '24/7');
-  assert.equal(merged.capacityText, '50 spaces');
-  assert.equal(merged.fieldProvenance.hoursText, 'verified');
-  assert.equal(merged.fieldProvenance.capacityText, 'unknown');
+  assert.equal(merged.hours_text, '24/7');
+  assert.equal(merged.capacity_text, '50 spaces');
+  assert.equal(merged.field_sources.hours_text, 'verified');
+  assert.equal(merged.field_sources.capacity_text, 'unknown');
   assert.equal(merged.evidence.length, 2);
   assert.ok(merged.evidence.some((e) => e.source === 'parkopedia'));
-  assert.equal(merged.updatedAt, '2026-08-24T00:00:00.000Z');
+  assert.equal(merged.updated_at, '2026-08-24T00:00:00.000Z');
   assert.equal(merged.status, 'draft'); // untouched by merge
 });
 
@@ -88,7 +88,7 @@ test('upsert-merge: re-seeing the same source does not duplicate evidence', () =
   const merged = buildUpsertDoc(existing, reseen, '2026-08-25T00:00:00.000Z');
   assert.equal(merged.evidence.length, 1);
   // priceText already non-empty on existing -> conflict, not overwritten
-  assert.equal(merged.priceText, '$10/day');
+  assert.equal(merged.price_text, '$10/day');
 });
 
 // ── conflict-preservation ─────────────────────────────────────────────────────
@@ -103,8 +103,8 @@ test('conflict-preservation: existing non-empty value wins, conflict logged in n
   };
   const merged = buildUpsertDoc(existing, conflicting, '2026-08-26T00:00:00.000Z');
 
-  assert.equal(merged.priceText, '$10/day', 'existing value must survive');
-  assert.ok(merged.notes?.includes('conflict:priceText:$10/day|$8/day'), `notes was: ${merged.notes}`);
+  assert.equal(merged.price_text, '$10/day', 'existing value must survive');
+  assert.ok(merged.notes?.includes('conflict:price_text:$10/day|$8/day'), `notes was: ${merged.notes}`);
 });
 
 test('conflict-preservation: multiple conflicts across merges append, never overwrite silently', () => {
@@ -112,9 +112,9 @@ test('conflict-preservation: multiple conflicts across merges append, never over
   doc = buildUpsertDoc(doc, { ...baseInput, source: 'osm', priceText: '$8/day' }, '2026-08-24T00:00:00.000Z');
   doc = buildUpsertDoc(doc, { ...baseInput, source: 'google', priceText: '$9/day' }, '2026-08-25T00:00:00.000Z');
 
-  assert.equal(doc.priceText, '$10/day');
-  assert.ok(doc.notes?.includes('conflict:priceText:$10/day|$8/day'));
-  assert.ok(doc.notes?.includes('conflict:priceText:$10/day|$9/day'));
+  assert.equal(doc.price_text, '$10/day');
+  assert.ok(doc.notes?.includes('conflict:price_text:$10/day|$8/day'));
+  assert.ok(doc.notes?.includes('conflict:price_text:$10/day|$9/day'));
   assert.equal(doc.evidence.length, 3);
 });
 
@@ -133,37 +133,37 @@ test('three-state round trip: Yes -> true, No -> false, Can\'t tell -> null, unt
     },
     '2026-08-23T00:00:00.000Z',
   );
-  assert.equal(doc.access247, true);
-  assert.equal(doc.fenced, false);
-  assert.equal(doc.lit, null);
-  assert.equal(doc.ingressEgress, 'one-way in, separate exit');
-  assert.equal(doc.stallsTotal, 62);
+  assert.equal(doc.is_24_7, true);
+  assert.equal(doc.is_fenced, false);
+  assert.equal(doc.is_lit, null);
+  assert.equal(doc.ingress_egress, 'one-way in, separate exit');
+  assert.equal(doc.stall_count, 62);
 
   const untouched = buildUpsertDoc(null, baseInput, '2026-08-23T00:00:00.000Z');
-  assert.equal(untouched.access247, undefined);
-  assert.equal(untouched.fenced, undefined);
-  assert.equal(untouched.lit, undefined);
+  assert.equal(untouched.is_24_7, undefined);
+  assert.equal(untouched.is_fenced, undefined);
+  assert.equal(untouched.is_lit, undefined);
 });
 
 test('merge: existing fenced=true + incoming scrape without the field -> stays true, no conflict', () => {
   const existing = buildUpsertDoc(null, { ...baseInput, fenced: true }, '2026-08-23T00:00:00.000Z');
   const merged = buildUpsertDoc(existing, baseInput, '2026-08-24T00:00:00.000Z');
-  assert.equal(merged.fenced, true);
-  assert.ok(!merged.notes?.includes('conflict:fenced'), `notes was: ${merged.notes}`);
+  assert.equal(merged.is_fenced, true);
+  assert.ok(!merged.notes?.includes('conflict:is_fenced'), `notes was: ${merged.notes}`);
 });
 
 test('merge: incoming fenced=false against existing true -> conflict logged, true wins', () => {
   const existing = buildUpsertDoc(null, { ...baseInput, fenced: true }, '2026-08-23T00:00:00.000Z');
   const merged = buildUpsertDoc(existing, { ...baseInput, source: 'osm', fenced: false }, '2026-08-24T00:00:00.000Z');
-  assert.equal(merged.fenced, true);
-  assert.ok(merged.notes?.includes('conflict:fenced:true|false'), `notes was: ${merged.notes}`);
+  assert.equal(merged.is_fenced, true);
+  assert.ok(merged.notes?.includes('conflict:is_fenced:true|false'), `notes was: ${merged.notes}`);
 });
 
 test('merge: null (checked, couldn\'t tell) counts as empty — a later real value fills it', () => {
   const existing = buildUpsertDoc(null, { ...baseInput, lit: null }, '2026-08-23T00:00:00.000Z');
   const merged = buildUpsertDoc(existing, { ...baseInput, source: 'osm', lit: true }, '2026-08-24T00:00:00.000Z');
-  assert.equal(merged.lit, true);
-  assert.ok(!merged.notes?.includes('conflict:lit'), `notes was: ${merged.notes}`);
+  assert.equal(merged.is_lit, true);
+  assert.ok(!merged.notes?.includes('conflict:is_lit'), `notes was: ${merged.notes}`);
 });
 
 test('cross-source merge folds the new fields too (toMergeInput)', async () => {
@@ -187,9 +187,9 @@ test('cross-source merge folds the new fields too (toMergeInput)', async () => {
     { uid: 'u1', email: 'a@b.c', name: 'A' },
     '2026-08-25T00:00:00.000Z',
   );
-  assert.equal(mergedPrimary.fenced, true);
-  assert.equal(mergedPrimary.access247, true);
-  assert.equal(mergedPrimary.stallsTotal, 80);
+  assert.equal(mergedPrimary.is_fenced, true);
+  assert.equal(mergedPrimary.is_24_7, true);
+  assert.equal(mergedPrimary.stall_count, 80);
 });
 
 console.log('\nall dedupe tests passed');

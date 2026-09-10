@@ -138,10 +138,10 @@ test('buildManualPasteImportInput: fieldProvenance self-reported only on present
   const input = buildManualPasteImportInput(FACILITY, 'https://example.com/lot');
   assert.equal(input?.fieldProvenance?.name, 'self-reported');
   assert.equal(input?.fieldProvenance?.address, 'self-reported');
-  assert.equal(input?.fieldProvenance?.priceText, 'self-reported');
-  assert.equal('hoursText' in (input?.fieldProvenance ?? {}), false);
-  assert.equal('capacityText' in (input?.fieldProvenance ?? {}), false);
-  assert.equal('clearanceText' in (input?.fieldProvenance ?? {}), false);
+  assert.equal(input?.fieldProvenance?.price_text, 'self-reported');
+  assert.equal('hours_text' in (input?.fieldProvenance ?? {}), false);
+  assert.equal('capacity_text' in (input?.fieldProvenance ?? {}), false);
+  assert.equal('clearance_text' in (input?.fieldProvenance ?? {}), false);
 });
 
 test('buildManualPasteImportInput: returns null when sourceUrl is blank', () => {

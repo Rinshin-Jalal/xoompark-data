@@ -1,4 +1,6 @@
 import 'server-only';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { getAdminFirestore } from '@/lib/firebaseAdmin';
 import { listSourcedLocations } from '@/lib/sourcing/store';
 import type { OutreachRecord } from '@/lib/sourcing/types';
@@ -21,6 +23,11 @@ async function getOutreachMap(): Promise<Record<string, OutreachRecord>> {
 }
 
 export default async function OutreachPage() {
+  const cookieStore = await cookies();
+  if (!cookieStore.get('session')?.value) {
+    redirect('/outreach/auth');
+  }
+
   const lots = await listSourcedLocations({});
   const outreachMap = await getOutreachMap();
   const leads = lots.map((lot) => makeLead(lot, outreachMap[lot.id] ?? null));

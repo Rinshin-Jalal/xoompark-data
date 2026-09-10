@@ -17,9 +17,9 @@
 export const FILL_TRACK_ORDER = [
   'ratesHours',
   'capacity',
-  'fenced',
-  'lit',
-  'ingressEgress',
+  'is_fenced',
+  'is_lit',
+  'ingress_egress',
   'clearance',
   'open247',
 ] as const;
@@ -45,20 +45,20 @@ export const FIELD_SOURCE_LADDERS: Record<FillTrackFieldKey, string[]> = {
   ],
   // "Fenced / Well lit" — doc covers both fields under one combined heading,
   // so fenced and lit share the identical ladder below.
-  fenced: [
+  is_fenced: [
     'Google Street View — walk the perimeter virtually. Fence visible? Light poles? Light fixtures on garage ceilings visible through entrances?',
     'Operator site photo galleries — marketing shots show fencing/lighting constantly',
     'Google Maps user photos — recent ones show current state',
     'Record what the imagery SHOWS + which tool (notes: "fence visible SV 2024, north side"). Imagery is evidence — you verified from a source in front of you.',
   ],
-  lit: [
+  is_lit: [
     'Google Street View — walk the perimeter virtually. Fence visible? Light poles? Light fixtures on garage ceilings visible through entrances?',
     'Operator site photo galleries — marketing shots show fencing/lighting constantly',
     'Google Maps user photos — recent ones show current state',
     'Record what the imagery SHOWS + which tool (notes: "fence visible SV 2024, north side"). Imagery is evidence — you verified from a source in front of you.',
   ],
   // "Separate ingress/egress (one-way preferred)"
-  ingressEgress: [
+  ingress_egress: [
     'Street View — drive the frontage virtually. Count curb cuts/exits.',
     'Satellite/aerial view (Google Maps satellite) — ramp locations, one-way lane markings often visible',
     'Operator site maps/directions pages — usually describe entrance streets',

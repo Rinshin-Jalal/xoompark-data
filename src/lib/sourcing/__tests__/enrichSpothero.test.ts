@@ -87,13 +87,13 @@ test('extractFacilityQueryData: returns null when no facility query is present',
 test('mapFacilityDetailToInput: clearance extracted verbatim from the height-restriction line', () => {
   const input = mapFacilityDetailToInput(GARAGE_DETAIL, 'https://spothero.com/facility/92951/100-se-2nd-st-parking', '92951');
   assert.equal(input.clearanceText, "Height Restriction: 6' 2\"");
-  assert.equal(input.fieldProvenance!.clearanceText, 'self-reported');
+  assert.equal(input.fieldProvenance!.clearance_text, 'self-reported');
 });
 
 test('mapFacilityDetailToInput: no clearance data (valet stand, null clearance_inches, no height text) -> undefined', () => {
   const input = mapFacilityDetailToInput(VALET_DETAIL, 'https://spothero.com/facility/100130/1109-brickell-ave-2-parking', '100130');
   assert.equal(input.clearanceText, undefined);
-  assert.equal(input.fieldProvenance!.clearanceText, undefined);
+  assert.equal(input.fieldProvenance!.clearance_text, undefined);
 });
 
 test('mapFacilityDetailToInput: falls back to formatted clearance_inches when no height-restriction text exists', () => {
@@ -152,24 +152,24 @@ test('CRITICAL: empty-field-only fill respected — existing priceText/hoursText
     priceText: '$15.00 (4hr)', // already populated by the city tier
     hoursText: 'Mon-Fri 6am-11pm', // already populated, deliberately DIFFERENT from the facility page's 24/7
     capturedBy: 'scraped',
-    fieldProvenance: { priceText: 'self-reported', hoursText: 'self-reported' },
+    fieldProvenance: { price_text: 'self-reported', hours_text: 'self-reported' },
     rawInput: { spotId: '92951' },
   };
   const existing = buildUpsertDoc(null, cityTierInput, '2026-08-23T00:00:00.000Z');
-  assert.equal(existing.clearanceText, undefined, 'sanity: city tier never set clearanceText');
+  assert.equal(existing.clearance_text, undefined, 'sanity: city tier never set clearanceText');
 
   const enrichInput = mapFacilityDetailToInput(GARAGE_DETAIL, cityTierInput.sourceUrl, '92951');
   const merged = buildUpsertDoc(existing, enrichInput, '2026-08-23T01:00:00.000Z');
 
   // priceText matches on both sides here -> no conflict, existing value kept as-is.
-  assert.equal(merged.priceText, '$15.00 (4hr)');
+  assert.equal(merged.price_text, '$15.00 (4hr)');
   // hoursText conflicts (existing 'Mon-Fri 6am-11pm' vs facility page '24/7 text')
   // -> existing wins, conflict logged, NOT force-overwritten.
-  assert.equal(merged.hoursText, 'Mon-Fri 6am-11pm', 'existing hoursText must survive - no special-cased overwrite');
-  assert.ok(merged.notes?.includes('conflict:hoursText:'), `expected a logged hoursText conflict, notes was: ${merged.notes}`);
+  assert.equal(merged.hours_text, 'Mon-Fri 6am-11pm', 'existing hoursText must survive - no special-cased overwrite');
+  assert.ok(merged.notes?.includes('conflict:hours_text:'), `expected a logged hoursText conflict, notes was: ${merged.notes}`);
   // clearanceText was empty on existing -> genuinely new field, gets filled.
-  assert.equal(merged.clearanceText, "Height Restriction: 6' 2\"");
-  assert.equal(merged.fieldProvenance.clearanceText, 'self-reported');
+  assert.equal(merged.clearance_text, "Height Restriction: 6' 2\"");
+  assert.equal(merged.field_sources.clearance_text, 'self-reported');
 });
 
 test('empty-field-only fill: when the existing field really is empty, enrichment fills it (not just clearanceText)', () => {
@@ -186,9 +186,9 @@ test('empty-field-only fill: when the existing field really is empty, enrichment
   const enrichInput = mapFacilityDetailToInput(GARAGE_DETAIL, cityTierInput.sourceUrl, '92951');
   const merged = buildUpsertDoc(existing, enrichInput, '2026-08-23T01:00:00.000Z');
 
-  assert.equal(merged.priceText, '$15.00 (4hr)');
-  assert.equal(merged.hoursText, 'Open 24/7');
-  assert.equal(merged.fieldProvenance.priceText, 'self-reported');
+  assert.equal(merged.price_text, '$15.00 (4hr)');
+  assert.equal(merged.hours_text, 'Open 24/7');
+  assert.equal(merged.field_sources.price_text, 'self-reported');
 });
 
 test('evidence: re-upserting under the same source updates that entry in place (detail attached), not appended', () => {
@@ -204,7 +204,7 @@ test('evidence: re-upserting under the same source updates that entry in place (
   const merged = buildUpsertDoc(existing, enrichInput, '2026-08-23T01:00:00.000Z');
 
   assert.equal(merged.evidence.length, 1, 'still one spothero evidence entry, not two');
-  assert.equal(merged.evidence[0].seenAt, '2026-08-23T01:00:00.000Z', 'seenAt refreshed');
+  assert.equal(merged.evidence[0].seen_at, '2026-08-23T01:00:00.000Z', 'seenAt refreshed');
   assert.ok(merged.evidence[0].detail, 'evidence entry now carries the facility-page detail snapshot');
 });
 
@@ -212,9 +212,9 @@ test('evidence: re-upserting under the same source updates that entry in place (
 
 function fakeDoc(id: string, source: string, enrichedAt?: string): SourcedParkingLocation {
   return {
-    id, name: id, source, sourceUrl: `https://spothero.com/facility/${id}/x-parking`, sourceListingId: id,
-    evidence: [], fieldProvenance: {}, capturedBy: 'scraped', status: 'draft', rawInput: null,
-    createdAt: '2026-08-23T00:00:00.000Z', updatedAt: '2026-08-23T00:00:00.000Z', enrichedAt,
+    id, name: id, source_name: source, source_url: `https://spothero.com/facility/${id}/x-parking`, source_listing_id: id,
+    evidence: [], field_sources: {}, captured_by: 'scraped', status: 'draft', raw_input: null,
+    created_at: '2026-08-23T00:00:00.000Z', updated_at: '2026-08-23T00:00:00.000Z', enriched_at: enrichedAt,
   };
 }
 

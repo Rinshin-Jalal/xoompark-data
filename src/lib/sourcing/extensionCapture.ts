@@ -353,10 +353,10 @@ function buildImportInput(
   for (const [field, present] of [
     ['name', true],
     ['address', !!facility.address],
-    ['priceText', !!facility.priceText],
-    ['hoursText', !!facility.hoursText],
-    ['capacityText', !!facility.capacityText],
-    ['clearanceText', !!facility.clearanceText],
+    ['price_text', !!facility.priceText],
+    ['hours_text', !!facility.hoursText],
+    ['capacity_text', !!facility.capacityText],
+    ['clearance_text', !!facility.clearanceText],
   ] as const) {
     if (present) fieldProvenance[field] = 'self-reported';
   }

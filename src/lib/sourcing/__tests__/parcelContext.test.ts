@@ -97,8 +97,8 @@ test('point-in-polygon hit: exact parcel, no distance, not ambiguous', () => {
   assert.equal(ctx.dorCode, '1229');
   assert.equal(ctx.lotSizeSqft, 12345);
   assert.equal(ctx.ownerMailingAddress, '1234 BRICKELL AVE, MIAMI, FL, 33131');
-  assert.ok(ctx.source_url.startsWith('https://gisweb.miamidade.gov/'));
-  assert.ok(ctx.source_url.includes('esriGeometryPoint'));
+  assert.ok(ctx.sourceUrl.startsWith('https://gisweb.miamidade.gov/'));
+  assert.ok(ctx.sourceUrl.includes('esriGeometryPoint'));
 });
 
 test('reference-folio point hit falls through to the envelope fallback', () => {
@@ -107,7 +107,7 @@ test('reference-folio point hit falls through to the envelope fallback', () => {
   assert.equal(ctx.ownerOfRecord, 'MIAMI-DADE COUNTY');
   assert.equal(ctx.matchMethod, 'nearest');
   assert.ok(typeof ctx.matchDistanceM === 'number');
-  assert.ok(ctx.source_url.includes('esriGeometryEnvelope'));
+  assert.ok(ctx.sourceUrl.includes('esriGeometryEnvelope'));
 });
 
 test('ROW miss (zero point hits) resolves via nearest candidate', () => {

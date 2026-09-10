@@ -63,8 +63,8 @@ test('full context mapping: phone, address, class, status, year, audit URL', () 
   assert.equal(ctx.accountStatus, 'Active');
   assert.equal(ctx.receiptYear, 2025);
   assert.equal(ctx.folio, '01-4139-021-1310');
-  assert.ok(ctx.source_url.includes('MapServer/23/query'));
-  assert.ok(decodeURIComponent(ctx.source_url).includes("FOLIO='01-4139-021-1310'"));
+  assert.ok(ctx.sourceUrl.includes('MapServer/23/query'));
+  assert.ok(decodeURIComponent(ctx.sourceUrl).includes("FOLIO='01-4139-021-1310'"));
 });
 
 test('valet/garage names count as parking businesses', () => {

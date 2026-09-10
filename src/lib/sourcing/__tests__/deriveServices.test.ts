@@ -27,40 +27,40 @@ test('every lot gets parking_stall, nothing guessed', () => {
 });
 
 test('on-site DC fast ports => charging + ev_connector', () => {
-  const { services, resources } = deriveServicesResources({ evContext: { onSiteDcFastPorts: 4, checkedAt: 'x' } });
+  const { services, resources } = deriveServicesResources({ enrichment: { ev: { onSiteDcFastPorts: 4, checkedAt: 'x' } } });
   assert.deepEqual(services, ['charging']);
   assert.deepEqual(resources, ['parking_stall', 'ev_connector']);
 });
 
 test('on-site Level 2 ports also count as charging (overnight fleet charging)', () => {
-  const { services, resources } = deriveServicesResources({ evContext: { onSiteDcFastPorts: null, onSiteLevel2Ports: 8, checkedAt: 'x' } });
+  const { services, resources } = deriveServicesResources({ enrichment: { ev: { onSiteDcFastPorts: null, onSiteLevel2Ports: 8, checkedAt: 'x' } } });
   assert.deepEqual(services, ['charging']);
   assert.deepEqual(resources, ['parking_stall', 'ev_connector']);
 });
 
 test('null (checked, none) or 0 ports => no charging', () => {
   for (const ev of [{ onSiteDcFastPorts: null, onSiteLevel2Ports: null }, { onSiteDcFastPorts: 0, onSiteLevel2Ports: 0 }]) {
-    const { services, resources } = deriveServicesResources({ evContext: { ...ev, checkedAt: 'x' } });
+    const { services, resources } = deriveServicesResources({ enrichment: { ev: { ...ev, checkedAt: 'x' } } });
     assert.deepEqual(services, []);
     assert.deepEqual(resources, ['parking_stall']);
   }
 });
 
 test('car wash within WASH_NEAR_M => wash + wash_bay; beyond or absent => no', () => {
-  const near = deriveServicesResources({ amenityContext: { nearestCarWashM: WASH_NEAR_M, checkedAt: 'x' } });
+  const near = deriveServicesResources({ enrichment: { amenities: { nearestCarWashM: WASH_NEAR_M, checkedAt: 'x' } } });
   assert.deepEqual(near.services, ['wash']);
   assert.deepEqual(near.resources, ['parking_stall', 'wash_bay']);
-  const far = deriveServicesResources({ amenityContext: { nearestCarWashM: WASH_NEAR_M + 1, checkedAt: 'x' } });
+  const far = deriveServicesResources({ enrichment: { amenities: { nearestCarWashM: WASH_NEAR_M + 1, checkedAt: 'x' } } });
   assert.deepEqual(far.services, []);
-  const none = deriveServicesResources({ amenityContext: { nearestCarWashM: null, checkedAt: 'x' } });
+  const none = deriveServicesResources({ enrichment: { amenities: { nearestCarWashM: null, checkedAt: 'x' } } });
   assert.deepEqual(none.services, []);
 });
 
 test('car repair within SERVICE_NEAR_M => service + service_bay', () => {
-  const near = deriveServicesResources({ amenityContext: { nearestCarServiceM: 50, checkedAt: 'x' } });
+  const near = deriveServicesResources({ enrichment: { amenities: { nearestCarServiceM: 50, checkedAt: 'x' } } });
   assert.deepEqual(near.services, ['service']);
   assert.deepEqual(near.resources, ['parking_stall', 'service_bay']);
-  const far = deriveServicesResources({ amenityContext: { nearestCarServiceM: SERVICE_NEAR_M + 1, checkedAt: 'x' } });
+  const far = deriveServicesResources({ enrichment: { amenities: { nearestCarServiceM: SERVICE_NEAR_M + 1, checkedAt: 'x' } } });
   assert.deepEqual(far.services, []);
 });
 
@@ -92,13 +92,13 @@ test('staging: not 24/7 => no', () => {
 test('capacity falls through capacity_text then pitstopContext.capacity', () => {
   const viaText: DeriveInput = { capacity_text: '2,000 spaces', is_24_7: true, is_fenced: true };
   assert.deepEqual(deriveServicesResources(viaText).services, ['staging']);
-  const viaPitstop: DeriveInput = { pitstopContext: { capacity: 150, checkedAt: 'x' }, is_24_7: true, is_fenced: true };
+  const viaPitstop: DeriveInput = { enrichment: { pitstop: { capacity: 150, checkedAt: 'x' } }, is_24_7: true, is_fenced: true };
   assert.deepEqual(deriveServicesResources(viaPitstop).services, ['staging']);
 });
 
 test('charging + staging stack', () => {
   const loc: DeriveInput = {
-    evContext: { onSiteDcFastPorts: 2, checkedAt: 'x' },
+    enrichment: { ev: { onSiteDcFastPorts: 2, checkedAt: 'x' } },
     stall_count: 300,
     is_24_7: true,
     is_fenced: true,

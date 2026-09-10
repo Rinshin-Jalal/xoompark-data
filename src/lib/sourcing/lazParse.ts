@@ -155,8 +155,8 @@ export function mapLazFacilityToInput(listing: LazFacilityListing): SourcedLocat
     ['address', !!listing.address],
     ['lat', listing.lat !== undefined],
     ['lng', listing.lng !== undefined],
-    ['hoursText', !!listing.hoursText],
-    ['priceText', !!listing.priceText],
+    ['hours_text', !!listing.hoursText],
+    ['price_text', !!listing.priceText],
   ] as const) {
     if (present) fieldProvenance[field] = 'self-reported';
   }

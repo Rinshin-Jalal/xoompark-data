@@ -120,8 +120,8 @@ export function mapLocationToInput(loc: ParkopediaLocation): SourcedLocationInpu
     ['address', !!address],
     ['lat', lat !== undefined],
     ['lng', lng !== undefined],
-    ['priceText', !!priceText],
-    ['hoursText', !!hoursText],
+    ['price_text', !!priceText],
+    ['hours_text', !!hoursText],
   ] as const) {
     if (present) fieldProvenance[field] = 'self-reported';
   }

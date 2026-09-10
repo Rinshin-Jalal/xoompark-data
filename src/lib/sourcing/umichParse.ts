@@ -108,8 +108,8 @@ export function mapUmichLotToInput(
   for (const [field, present] of [
     ['name', true],
     ['address', !!row.address],
-    ['hoursText', !!row.hoursText],
-    ['priceText', !!priceText],
+    ['hours_text', !!row.hoursText],
+    ['price_text', !!priceText],
   ] as const) {
     if (present) fieldProvenance[field] = 'self-reported';
   }

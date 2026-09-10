@@ -21,12 +21,12 @@ const spotheroInput: SourcedLocationInput = {
   address: '1320 NW 12th St, Miami, FL',
   lat: 25.789,
   lng: -80.226,
-  source_name: 'spothero',
-  source_url: 'https://spothero.com/listing/94167',
-  source_listing_id: '94167',
-  price_text: '$10/day',
-  captured_by: 'scraped',
-  raw_input: { raw: 'spothero' },
+  source: 'spothero',
+  sourceUrl: 'https://spothero.com/listing/94167',
+  sourceListingId: '94167',
+  priceText: '$10/day',
+  capturedBy: 'scraped',
+  rawInput: { raw: 'spothero' },
 };
 
 const parkopediaInput: SourcedLocationInput = {
@@ -34,12 +34,12 @@ const parkopediaInput: SourcedLocationInput = {
   address: 'Municipal Lot 18',
   lat: 25.78901,
   lng: -80.22601,
-  source_name: 'parkopedia',
-  source_url: 'https://en.parkopedia.com/parking/lot/401186',
-  source_listing_id: '401186',
-  hours_text: 'Mon-Sun 00:00-24:00',
-  captured_by: 'scraped',
-  raw_input: { raw: 'parkopedia' },
+  source: 'parkopedia',
+  sourceUrl: 'https://en.parkopedia.com/parking/lot/401186',
+  sourceListingId: '401186',
+  hoursText: 'Mon-Sun 00:00-24:00',
+  capturedBy: 'scraped',
+  rawInput: { raw: 'parkopedia' },
 };
 
 test('merge: fills empty fields on primary from secondary', () => {
@@ -82,7 +82,7 @@ test('merge: evidence appended exactly once, not duplicated if source already pr
   // Re-merging a secondary whose source is already in primary's evidence
   // (simulated by merging again with the same already-merged-once primary)
   // must not add a second parkopedia evidence entry.
-  const secondaryAgain = buildUpsertDoc(null, { ...parkopediaInput, price_text: '$5/day' }, '2026-08-23T00:00:00.000Z');
+  const secondaryAgain = buildUpsertDoc(null, { ...parkopediaInput, priceText: '$5/day' }, '2026-08-23T00:00:00.000Z');
   const { mergedPrimary: mergedTwice } = mergeSourcedLocationsPure(
     mergedPrimary,
     secondaryAgain,
@@ -110,7 +110,7 @@ test('merge: rejects merging an already-merged secondary', () => {
   const primary = buildUpsertDoc(null, spotheroInput, '2026-08-23T00:00:00.000Z');
   const otherPrimary = buildUpsertDoc(
     null,
-    { ...spotheroInput, source_listing_id: '99999', source_url: 'https://spothero.com/listing/99999' },
+    { ...spotheroInput, sourceListingId: '99999', sourceUrl: 'https://spothero.com/listing/99999' },
     '2026-08-23T00:00:00.000Z',
   );
   const secondary = buildUpsertDoc(null, parkopediaInput, '2026-08-23T00:00:00.000Z');

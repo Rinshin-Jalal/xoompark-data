@@ -44,17 +44,17 @@ test('evaluateHardFilter notResidentialAdjacent: missing geoContext -> unknown',
 });
 
 test('evaluateHardFilter notResidentialAdjacent: residentialAdjacent true -> fail (inverted, adjacency is bad)', () => {
-  const loc = makeLocation({ geoContext: { residentialAdjacent: true, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { residentialAdjacent: true, checkedAt: 'x' } } });
   assert.equal(evaluateHardFilter(loc, 'notResidentialAdjacent').result, 'fail');
 });
 
 test('evaluateHardFilter notResidentialAdjacent: residentialAdjacent false -> pass', () => {
-  const loc = makeLocation({ geoContext: { residentialAdjacent: false, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { residentialAdjacent: false, checkedAt: 'x' } } });
   assert.equal(evaluateHardFilter(loc, 'notResidentialAdjacent').result, 'pass');
 });
 
 test('evaluateHardFilter notResidentialAdjacent: geoContext present but field itself missing -> unknown', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: false, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: false, checkedAt: 'x' } } });
   assert.equal(evaluateHardFilter(loc, 'notResidentialAdjacent').result, 'unknown');
 });
 
@@ -66,28 +66,28 @@ test('evaluateHardFilter aboveFloodPlain: missing geoContext -> unknown', () => 
 });
 
 test('evaluateHardFilter aboveFloodPlain: floodHazardArea true -> fail, detail carries zone letter', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: true, floodZone: 'AE', checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: true, floodZone: 'AE', checkedAt: 'x' } } });
   const result = evaluateHardFilter(loc, 'aboveFloodPlain');
   assert.equal(result.result, 'fail');
   assert.equal(result.detail, 'Zone AE');
 });
 
 test('evaluateHardFilter aboveFloodPlain: floodHazardArea true, no zone letter -> fail, no detail', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: true, floodZone: null, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: true, floodZone: null, checkedAt: 'x' } } });
   const result = evaluateHardFilter(loc, 'aboveFloodPlain');
   assert.equal(result.result, 'fail');
   assert.equal(result.detail, undefined);
 });
 
 test('evaluateHardFilter aboveFloodPlain: floodHazardArea false -> pass', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: false, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: false, checkedAt: 'x' } } });
   assert.equal(evaluateHardFilter(loc, 'aboveFloodPlain').result, 'pass');
 });
 
 // --- the other 6 columns stay unknown regardless of geoContext -------------
 
 test('evaluateHardFilter: schema-less keys (e.g. dedicatedStalls) always unknown, even with geoContext set', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: false, residentialAdjacent: false, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: false, residentialAdjacent: false, checkedAt: 'x' } } });
   assert.equal(evaluateHardFilter(loc, 'dedicatedStalls').result, 'unknown');
   assert.equal(evaluateHardFilter(loc, 'open247').result, 'unknown');
 });
@@ -134,17 +134,17 @@ test('evaluateHardFilter: Phase II keys (dedicatedStalls, cellCoverage) still al
 // --- hasHardFail -------------------------------------------------------------
 
 test('hasHardFail: true when the flood check fails', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: true, residentialAdjacent: false, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: true, residentialAdjacent: false, checkedAt: 'x' } } });
   assert.equal(hasHardFail(loc), true);
 });
 
 test('hasHardFail: true when the residential check fails', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: false, residentialAdjacent: true, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: false, residentialAdjacent: true, checkedAt: 'x' } } });
   assert.equal(hasHardFail(loc), true);
 });
 
 test('hasHardFail: false when both real checks pass (rest are unknown, not fail)', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: false, residentialAdjacent: false, checkedAt: 'x' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: false, residentialAdjacent: false, checkedAt: 'x' } } });
   assert.equal(hasHardFail(loc), false);
 });
 
@@ -160,12 +160,12 @@ test('sortForReview: failed records sink to the bottom, created_at-desc preserve
   const failA = makeLocation({
     id: 'failA',
     created_at: '2026-08-23T00:00:00.000Z',
-    geoContext: { floodHazardArea: true, checkedAt: 'x' },
+    enrichment: { geo: { floodHazardArea: true, checkedAt: 'x' } },
   });
   const failB = makeLocation({
     id: 'failB',
     created_at: '2026-08-21T00:00:00.000Z',
-    geoContext: { residentialAdjacent: true, checkedAt: 'x' },
+    enrichment: { geo: { residentialAdjacent: true, checkedAt: 'x' } },
   });
 
   // Deliberately scrambled input order.

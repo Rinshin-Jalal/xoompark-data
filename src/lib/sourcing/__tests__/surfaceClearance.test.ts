@@ -30,14 +30,14 @@ const baseInput: SourcedLocationInput = {
 
 test('create: surface + clearance input -> clearance stripped, provenance dropped', () => {
   const doc = buildUpsertDoc(null, { ...baseInput, surfaceType: 'surface', clearanceText: "6'8\"" }, '2026-09-04T00:00:00.000Z');
-  assert.equal(doc.surfaceType, 'surface');
-  assert.equal(doc.clearanceText, undefined);
-  assert.equal(doc.fieldProvenance.clearanceText, undefined);
+  assert.equal(doc.surface_type, 'surface');
+  assert.equal(doc.clearance_text, undefined);
+  assert.equal(doc.field_sources.clearance_text, undefined);
 });
 
 test('create: structured + clearance -> kept (the sane combo)', () => {
   const doc = buildUpsertDoc(null, { ...baseInput, surfaceType: 'structured', clearanceText: "6'8\"" }, '2026-09-04T00:00:00.000Z');
-  assert.equal(doc.clearanceText, "6'8\"");
+  assert.equal(doc.clearance_text, "6'8\"");
 });
 
 // ── merge path ───────────────────────────────────────────────────────────────
@@ -45,25 +45,25 @@ test('create: structured + clearance -> kept (the sane combo)', () => {
 test('merge: incoming clearance onto an existing surface lot -> stripped (fill-then-guard)', () => {
   const existing = buildUpsertDoc(null, { ...baseInput, surfaceType: 'surface' }, '2026-09-04T00:00:00.000Z');
   const merged = buildUpsertDoc(existing, { ...baseInput, source: 'osm', clearanceText: "7'0\"" }, '2026-09-05T00:00:00.000Z');
-  assert.equal(merged.surfaceType, 'surface');
-  assert.equal(merged.clearanceText, undefined);
+  assert.equal(merged.surface_type, 'surface');
+  assert.equal(merged.clearance_text, undefined);
 });
 
 test('merge: legacy surface+clearance doc self-heals on the next upsert', () => {
   // Simulate a pre-guard prod doc: surface + clearance set directly.
   const legacy = buildUpsertDoc(null, { ...baseInput, surfaceType: 'structured', clearanceText: "6'8\"" }, '2026-09-04T00:00:00.000Z');
-  const poisoned: SourcedParkingLocation = { ...legacy, surfaceType: 'surface' };
+  const poisoned: SourcedParkingLocation = { ...legacy, surface_type: 'surface' };
   const merged = buildUpsertDoc(poisoned, { ...baseInput, source: 'osm' }, '2026-09-05T00:00:00.000Z');
-  assert.equal(merged.clearanceText, undefined);
-  assert.equal(merged.fieldProvenance.clearanceText, undefined);
+  assert.equal(merged.clearance_text, undefined);
+  assert.equal(merged.field_sources.clearance_text, undefined);
 });
 
 test('merge: existing structured + incoming surface+clearance -> structured wins, clearance kept', () => {
   const existing = buildUpsertDoc(null, { ...baseInput, surfaceType: 'structured' }, '2026-09-04T00:00:00.000Z');
   const merged = buildUpsertDoc(existing, { ...baseInput, source: 'osm', surfaceType: 'surface', clearanceText: "6'8\"" }, '2026-09-05T00:00:00.000Z');
   // surfaceType conflicts -> existing 'structured' survives (never-overwrite)
-  assert.equal(merged.surfaceType, 'structured');
-  assert.equal(merged.clearanceText, "6'8\"");
+  assert.equal(merged.surface_type, 'structured');
+  assert.equal(merged.clearance_text, "6'8\"");
 });
 
 console.log('\nall surface-clearance tests passed');

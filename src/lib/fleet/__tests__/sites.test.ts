@@ -169,7 +169,7 @@ test('summary carries all 9 hard-filter tri-states and never invents a fail', ()
 
 test('summary reports confirmed hard fails (flood zone, residential adjacency)', () => {
   const loc = makeLocation({
-    geoContext: { floodHazardArea: true, floodZone: 'AE', residentialAdjacent: true, checkedAt: '2026-01-01T00:00:00Z' },
+    enrichment: { geo: { floodHazardArea: true, floodZone: 'AE', residentialAdjacent: true, checkedAt: '2026-01-01T00:00:00Z' } },
   });
   const s = toFleetSiteSummary(loc);
   assert.equal(s.hardFilters.aboveFloodPlain, 'fail');
@@ -362,12 +362,12 @@ test('detail keeps the fields fleets need (geoContext, hours, ingress)', () => {
   const loc = makeLocation({
     hours_text: '24/7',
     ingress_egress: 'separate one-way',
-    geoContext: { floodHazardArea: false, residentialAdjacent: false, checkedAt: '2026-01-01T00:00:00Z' },
+    enrichment: { geo: { floodHazardArea: false, residentialAdjacent: false, checkedAt: '2026-01-01T00:00:00Z' } },
   });
   const d = toFleetSiteDetail(loc);
   assert.equal(d.hours_text, '24/7');
   assert.equal(d.ingress_egress, 'separate one-way');
-  assert.ok(d.geoContext && typeof d.geoContext === 'object');
+  assert.ok(d.enrichment?.geo && typeof d.enrichment.geo === 'object');
   assert.equal((d.hardFilters as Record<string, string>).is_fenced, 'unknown'); // summary projection present
 });
 
@@ -385,7 +385,7 @@ test('detail: a hypothetical new internal field cannot leak by default', () => {
 // --- JSON-safety property ----------------------------------------------------
 
 test('summary and detail are JSON-safe (no cycles; undefined keys drop, nothing appears)', () => {
-  const loc = makeLocation({ geoContext: { floodHazardArea: true, floodZone: 'AE', checkedAt: '2026-01-01T00:00:00Z' } });
+  const loc = makeLocation({ enrichment: { geo: { floodHazardArea: true, floodZone: 'AE', checkedAt: '2026-01-01T00:00:00Z' } } });
   for (const [label, obj] of [['summary', toFleetSiteSummary(loc)], ['detail', toFleetSiteDetail(loc)]] as const) {
     const s = JSON.stringify(obj); // throws on cycles
     const back = JSON.parse(s);
@@ -508,7 +508,7 @@ test('summary carries managedBy', () => {
 
 function makeLocationWithDemand(overrides: Partial<SourcedParkingLocation> = {}): SourcedParkingLocation {
   return makeLocation({
-    geoContext: {
+    enrichment: { geo: {
       checkedAt: '2026-01-01T00:00:00Z',
       demand: {
         algorithm: 'haversine-geodesic-air-miles',
@@ -533,7 +533,7 @@ function makeLocationWithDemand(overrides: Partial<SourcedParkingLocation> = {})
           um_coral_gables: 4.5,
         },
       },
-    },
+    } },
     ...overrides,
   });
 }
@@ -553,7 +553,7 @@ test('summary omits demand fields when no demand context', () => {
 test('maxDistToDemandMi filters by nearest distance', () => {
   const near = makeLocationWithDemand();
   const far = makeLocationWithDemand({
-    geoContext: {
+    enrichment: { geo: {
       checkedAt: '2026-01-01T00:00:00Z',
       demand: {
         algorithm: 'haversine-geodesic-air-miles',
@@ -565,7 +565,7 @@ test('maxDistToDemandMi filters by nearest distance', () => {
         nearestDistanceMi: 14.2,
         distancesMiByZoneId: { hard_rock_stadium: 14.2 },
       },
-    },
+    } },
   });
   const out = filterFleetSites([near, far], { maxDistToDemandMi: 5 });
   assert.equal(out.length, 1);
@@ -591,7 +591,7 @@ test('maxDistToZone filters by specific zone distance', () => {
 test('sortBy=nearest sorts by nearestDistanceMi ascending', () => {
   const close = makeLocationWithDemand();
   const far = makeLocationWithDemand({
-    geoContext: {
+    enrichment: { geo: {
       checkedAt: '2026-01-01T00:00:00Z',
       demand: {
         algorithm: 'haversine-geodesic-air-miles',
@@ -603,7 +603,7 @@ test('sortBy=nearest sorts by nearestDistanceMi ascending', () => {
         nearestDistanceMi: 14.2,
         distancesMiByZoneId: { hard_rock_stadium: 14.2 },
       },
-    },
+    } },
   });
   const out = filterFleetSites([far, close], { sortBy: 'nearest' });
   assert.equal(out[0].id, close.id);
@@ -613,7 +613,7 @@ test('sortBy=nearest sorts by nearestDistanceMi ascending', () => {
 test('sortBy=zoneId sorts by that specific zone distance', () => {
   const nearDowntown = makeLocationWithDemand();
   const farDowntown = makeLocationWithDemand({
-    geoContext: {
+    enrichment: { geo: {
       checkedAt: '2026-01-01T00:00:00Z',
       demand: {
         algorithm: 'haversine-geodesic-air-miles',
@@ -628,7 +628,7 @@ test('sortBy=zoneId sorts by that specific zone distance', () => {
           downtown_miami: 8.0,
         },
       },
-    },
+    } },
   });
   const out = filterFleetSites([farDowntown, nearDowntown], { sortBy: 'downtown_miami' });
   assert.equal(out[0].id, nearDowntown.id); // 1.1 mi < 8.0 mi
@@ -691,7 +691,7 @@ test('parse: sortBy=bogus rejected', () => {
 test('demand filter + sort compose', () => {
   const close = makeLocationWithDemand();
   const mid = makeLocationWithDemand({
-    geoContext: {
+    enrichment: { geo: {
       checkedAt: '2026-01-01T00:00:00Z',
       demand: {
         algorithm: 'haversine-geodesic-air-miles',
@@ -703,10 +703,10 @@ test('demand filter + sort compose', () => {
         nearestDistanceMi: 0.9,
         distancesMiByZoneId: { kaseya_center: 0.9, brickell: 0.42 },
       },
-    },
+    } },
   });
   const far = makeLocationWithDemand({
-    geoContext: {
+    enrichment: { geo: {
       checkedAt: '2026-01-01T00:00:00Z',
       demand: {
         algorithm: 'haversine-geodesic-air-miles',
@@ -718,7 +718,7 @@ test('demand filter + sort compose', () => {
         nearestDistanceMi: 14.2,
         distancesMiByZoneId: { hard_rock_stadium: 14.2 },
       },
-    },
+    } },
   });
   const out = filterFleetSites([far, mid, close], { maxDistToDemandMi: 5, sortBy: 'nearest' });
   assert.equal(out.length, 2);

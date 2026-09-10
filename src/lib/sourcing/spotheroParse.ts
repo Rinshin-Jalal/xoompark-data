@@ -96,7 +96,7 @@ export function mapFeaturedSpotToInput(spot: SpotHeroFeaturedSpot): SourcedLocat
     ['address', !!address],
     ['lat', addr?.latitude !== undefined],
     ['lng', addr?.longitude !== undefined],
-    ['priceText', !!priceText],
+    ['price_text', !!priceText],
   ] as const) {
     if (present) fieldProvenance[field] = 'self-reported';
   }

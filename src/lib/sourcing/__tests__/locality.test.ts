@@ -24,15 +24,15 @@ function makeLocation(overrides: Partial<SourcedParkingLocation> = {}): SourcedP
   return {
     id: `loc-${seq}`,
     name: `Lot ${seq}`,
-    source: 'spothero',
-    sourceUrl: 'https://example.com',
+    source_name: 'spothero',
+    source_url: 'https://example.com',
     evidence: [],
-    fieldProvenance: {},
-    capturedBy: 'scraped',
+    field_sources: {},
+    captured_by: 'scraped',
     status: 'draft',
-    rawInput: null,
-    createdAt: '2026-08-23T00:00:00.000Z',
-    updatedAt: '2026-08-23T00:00:00.000Z',
+    raw_input: null,
+    created_at: '2026-08-23T00:00:00.000Z',
+    updated_at: '2026-08-23T00:00:00.000Z',
     ...overrides,
   };
 }
@@ -131,39 +131,39 @@ test('deriveLocality: lat/lng far outside every locality AND no usable address -
 // --- isEnriched --------------------------------------------------------------
 
 test('isEnriched: fewer than 5 non-empty fields -> false', () => {
-  const loc = makeLocation({ priceText: '$10/day', hoursText: '9-5' });
+  const loc = makeLocation({ price_text: '$10/day', hours_text: '9-5' });
   assert.equal(isEnriched(loc), false);
 });
 
 test('isEnriched: exactly 5 non-empty fields -> true', () => {
   const loc = makeLocation({
-    priceText: '$10/day',
-    hoursText: '9-5',
-    capacityText: '400 spaces',
-    fenced: true,
-    lit: false,
+    price_text: '$10/day',
+    hours_text: '9-5',
+    capacity_text: '400 spaces',
+    is_fenced: true,
+    is_lit: false,
   });
   assert.equal(isEnriched(loc), true);
 });
 
 test('isEnriched: tri-state null counts as filled for access247/fenced/lit', () => {
   const loc = makeLocation({
-    priceText: '$10/day',
-    hoursText: '9-5',
-    access247: null,
-    fenced: null,
-    lit: null,
+    price_text: '$10/day',
+    hours_text: '9-5',
+    is_24_7: null,
+    is_fenced: null,
+    is_lit: null,
   });
   assert.equal(isEnriched(loc), true);
 });
 
 test('isEnriched: surfaceType/gateType null (untouched default) does NOT count as filled', () => {
   const loc = makeLocation({
-    priceText: '$10/day',
-    hoursText: '9-5',
-    capacityText: '400 spaces',
-    surfaceType: null,
-    gateType: null,
+    price_text: '$10/day',
+    hours_text: '9-5',
+    capacity_text: '400 spaces',
+    surface_type: null,
+    gate_type: null,
   });
   assert.equal(isEnriched(loc), false); // only 3 real fields filled
 });
@@ -182,11 +182,11 @@ test('localityStats: lotCount/enrichedCount/savedCount per locality', () => {
     makeLocation({ locality: 'Brickell', status: 'saved' }),
     makeLocation({
       locality: 'Brickell',
-      priceText: '$10',
-      hoursText: '9-5',
-      capacityText: '400',
-      fenced: true,
-      lit: true,
+      price_text: '$10',
+      hours_text: '9-5',
+      capacity_text: '400',
+      is_fenced: true,
+      is_lit: true,
     }),
     makeLocation({ locality: 'South Beach' }),
   ];

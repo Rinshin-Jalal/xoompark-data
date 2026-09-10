@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 import {
   ArrowUpRight,
   ArrowRight,
-  Bell,
   Building2,
   Check,
   ChevronRight,
@@ -68,6 +67,9 @@ import {
   propertyValue,
   nextAction,
 } from '@/lib/outreach/workflow';
+import { StatCards, type StatCardData } from '@/components/spectrumui/charts/stat-cards';
+import { TaskRows, type TaskRow } from '@/components/spectrumui/blocks/ai-assistants/task-rows';
+import { AvatarStack, type AvatarItem } from '@/components/spectrumui/avatar-stack';
 
 const nav = [
   ['today', 'My day', LayoutGrid],
@@ -215,25 +217,12 @@ export default function Workspace({ initialData }: { initialData: Data }) {
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
-          <div className="sidebar-tip">
-            <span>
-              <Zap size={17} /> Built for the next step
-            </span>
-            <p>Source enrichment → BDR review & email → SDR call.</p>
-            <button onClick={() => go('team')}>
-              See how it works <ArrowUpRight size={14} />
-            </button>
-          </div>
-        </SidebarContent>
+          </SidebarContent>
         <SidebarFooter>
-          <div className="sync">
-            <i /> Inventory imported
-            <small>{data.leads.length} properties · Sep 7, 2026</small>
-          </div>
           <div className="profile">
             <span className="avatar dark">XP</span>
             <div>
-              XoomPark team<small>Private preview · role simulation</small>
+              XoomPark team<small>Private preview</small>
             </div>
           </div>
         </SidebarFooter>
@@ -242,19 +231,9 @@ export default function Workspace({ initialData }: { initialData: Data }) {
         <header className="topbar">
           <div className="breadcrumbs">
             <SidebarTrigger />
-            <span>Workspace</span>
-            <ChevronRight size={14} />
             <strong>{nav.find((n) => n[0] === view)?.[1]}</strong>
           </div>
-          <div className="top-actions">
-            <span className="live">
-              <i /> Live workspace
-            </span>
-            <button className="icon-button" aria-label="Notifications">
-              <Bell size={19} />
-            </button>
-            <span className="avatar">XP</span>
-          </div>
+          <span className="avatar">XP</span>
         </header>
         <main className="content">
           <div className="page-heading">
@@ -291,28 +270,16 @@ export default function Workspace({ initialData }: { initialData: Data }) {
             </div>
           </div>
           {view !== 'team' && (
-            <div className="stats">
-              {[
-                [relevant.length, 'Properties in scope', 'From your SF inventory', Building2, 'neutral'],
-                [counts.research + counts.verify, 'Need research', 'Decision-maker verification', Search, 'amber'],
-                [counts.ready + counts.email_followup + counts.email_reply, 'BDR email queue', 'Drafts, replies and follow-ups', Mail, 'green'],
-                [counts.sdr + counts.followup, 'In SDR queue', 'Calls and follow-ups', Phone, 'purple'],
-              ].map(([n, t, s, I, c]) => {
-                const Icon = I as typeof Building2;
-                return (
-                  <div className="stat" key={String(t)}>
-                    <div>
-                      <span>{String(t)}</span>
-                      <Icon size={18} />
-                    </div>
-                    <strong>{String(n).padStart(2, '0')}</strong>
-                    <small className={String(c)}>
-                      <i />
-                      {String(s)}
-                    </small>
-                  </div>
-                );
-              })}
+            <div className="mb-7">
+              <StatCards
+                columns={4}
+                cards={[
+                  { label: 'Properties in scope', value: relevant.length, caption: 'From your SF inventory' },
+                  { label: 'Need research', value: counts.research + counts.verify, caption: 'Decision-maker verification' },
+                  { label: 'BDR email queue', value: counts.ready + counts.email_followup + counts.email_reply, caption: 'Drafts, replies and follow-ups' },
+                  { label: 'In SDR queue', value: counts.sdr + counts.followup, caption: 'Calls and follow-ups' },
+                ]}
+              />
             </div>
           )}
           {view === 'today' && (
@@ -386,28 +353,6 @@ export default function Workspace({ initialData }: { initialData: Data }) {
                 </div>
               </section>
               <aside className="right-rail">
-                <div className="focus-card">
-                  <div className="focus-top">
-                    <span>
-                      <Zap size={16} /> TODAY’S FOCUS
-                    </span>
-                    <span>01</span>
-                  </div>
-                  <h2>
-                    Find the person.
-                    <br />
-                    Unlock the property.
-                  </h2>
-                  <p>Start with the official operator source. A front-desk number is a route in, not a confirmed decision-maker.</p>
-                  <Button onClick={() => { go('research'); setOwner(data.settings.researcher); }}>
-                    Open research desk <ArrowRight size={16} />
-                  </Button>
-                  <div className="focus-lines">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                </div>
                 <section className="panel workflow-card">
                   <h2>The handoff, simplified</h2>
                   {[
@@ -606,6 +551,9 @@ export default function Workspace({ initialData }: { initialData: Data }) {
               <section className="panel settings-panel">
                 <h2>Who owns the next step?</h2>
                 <p className="muted">Preview role names, not authenticated employee accounts.</p>
+                <div className="mt-4">
+                  <AvatarStack items={owners.map((name) => ({ name }))} />
+                </div>
                 <form style={{ display: 'grid', gap: 18, marginTop: 28 }}>
                   {[
                     ['researcher', 'Research owner'],

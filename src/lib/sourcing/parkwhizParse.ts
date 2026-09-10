@@ -82,7 +82,7 @@ export function mapQuoteToInput(quote: ParkWhizQuote): SourcedLocationInput | nu
     ['address', !!address],
     ['lat', lat !== undefined],
     ['lng', lng !== undefined],
-    ['priceText', !!priceText],
+    ['price_text', !!priceText],
   ] as const) {
     if (present) fieldProvenance[field] = 'self-reported';
   }

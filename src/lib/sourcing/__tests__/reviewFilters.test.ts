@@ -100,22 +100,22 @@ test('applyReviewFilters status: draft/saved', () => {
 test('applyReviewFilters source_name: matches an explicit known source', () => {
   const a = makeLocation({ source_name: 'laz' });
   const b = makeLocation({ source_name: 'spothero' });
-  const result = applyReviewFilters([a, b], filters({ source_name: 'laz' }));
+  const result = applyReviewFilters([a, b], filters({ source: 'laz' }));
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
 
 test('applyReviewFilters source_name: other catches non-listed sources', () => {
   const a = makeLocation({ source_name: 'extension' });
   const b = makeLocation({ source_name: 'spothero' });
-  const result = applyReviewFilters([a, b], filters({ source_name: 'other' }));
+  const result = applyReviewFilters([a, b], filters({ source: 'other' }));
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
 
 // --- flood / residential (via evaluateHardFilter) --------------------------
 
 test('applyReviewFilters flood: pass/fail/unknown', () => {
-  const pass = makeLocation({ geoContext: { floodHazardArea: false, checkedAt: 'x' } });
-  const fail = makeLocation({ geoContext: { floodHazardArea: true, checkedAt: 'x' } });
+  const pass = makeLocation({ enrichment: { geo: { floodHazardArea: false, checkedAt: 'x' } } });
+  const fail = makeLocation({ enrichment: { geo: { floodHazardArea: true, checkedAt: 'x' } } });
   const unknown = makeLocation();
   assert.deepEqual(applyReviewFilters([pass, fail, unknown], filters({ flood: 'pass' })).map((l) => l.id), [pass.id]);
   assert.deepEqual(applyReviewFilters([pass, fail, unknown], filters({ flood: 'fail' })).map((l) => l.id), [fail.id]);
@@ -126,8 +126,8 @@ test('applyReviewFilters flood: pass/fail/unknown', () => {
 });
 
 test('applyReviewFilters residential: pass/fail/unknown', () => {
-  const pass = makeLocation({ geoContext: { residentialAdjacent: false, checkedAt: 'x' } });
-  const fail = makeLocation({ geoContext: { residentialAdjacent: true, checkedAt: 'x' } });
+  const pass = makeLocation({ enrichment: { geo: { residentialAdjacent: false, checkedAt: 'x' } } });
+  const fail = makeLocation({ enrichment: { geo: { residentialAdjacent: true, checkedAt: 'x' } } });
   const unknown = makeLocation();
   assert.deepEqual(
     applyReviewFilters([pass, fail, unknown], filters({ residential: 'pass' })).map((l) => l.id),
@@ -232,7 +232,7 @@ test('applyReviewFilters: three combined filters narrow further than any subset'
 
   const result = applyReviewFilters(
     [a, b],
-    filters({ search: 'brickell', locality: 'Brickell', status: 'saved', source_name: 'laz' }),
+    filters({ search: 'brickell', locality: 'Brickell', status: 'saved', source: 'laz' }),
   );
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
@@ -253,7 +253,7 @@ test('hasActiveReviewFilters: true when any single dimension is non-default', ()
   assert.equal(hasActiveReviewFilters(filters({ search: 'x' })), true);
   assert.equal(hasActiveReviewFilters(filters({ locality: 'Brickell' })), true);
   assert.equal(hasActiveReviewFilters(filters({ status: 'saved' })), true);
-  assert.equal(hasActiveReviewFilters(filters({ source_name: 'laz' })), true);
+  assert.equal(hasActiveReviewFilters(filters({ source: 'laz' })), true);
   assert.equal(hasActiveReviewFilters(filters({ flood: 'pass' })), true);
   assert.equal(hasActiveReviewFilters(filters({ residential: 'fail' })), true);
   assert.equal(hasActiveReviewFilters(filters({ added_by: 'Priya' })), true);

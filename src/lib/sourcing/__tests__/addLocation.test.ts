@@ -88,13 +88,13 @@ test('buildAddLocationInput: only non-empty provided fields get verified provena
 
   const input = buildAddLocationInput(validated.value, raw);
   assert.equal(input.fieldProvenance?.name, 'verified');
-  assert.equal(input.fieldProvenance?.priceText, 'verified');
+  assert.equal(input.fieldProvenance?.price_text, 'verified');
   // never provided -> no entry at all, not 'unknown'
   assert.equal('address' in (input.fieldProvenance ?? {}), false);
   assert.equal('lat' in (input.fieldProvenance ?? {}), false);
   assert.equal('lng' in (input.fieldProvenance ?? {}), false);
-  assert.equal('hoursText' in (input.fieldProvenance ?? {}), false);
-  assert.equal('capacityText' in (input.fieldProvenance ?? {}), false);
+  assert.equal('hours_text' in (input.fieldProvenance ?? {}), false);
+  assert.equal('capacity_text' in (input.fieldProvenance ?? {}), false);
 });
 
 test('buildAddLocationInput: sets source=manual, capturedBy=bdr-captured, status draft via upsert path', () => {
@@ -144,7 +144,7 @@ test('buildAddLocationInput: carries clearance/ingress/tri-state fields through,
   assert.equal(input.access247, true);
   assert.equal(input.fenced, false);
   assert.equal(input.lit, null);
-  assert.equal(input.fieldProvenance?.clearanceText, 'verified');
+  assert.equal(input.fieldProvenance?.clearance_text, 'verified');
   assert.equal(input.fieldProvenance?.ingressEgress, 'verified');
   assert.equal(input.fieldProvenance?.access247, 'verified');
   assert.equal(input.fieldProvenance?.fenced, 'verified');

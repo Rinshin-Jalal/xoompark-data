@@ -71,8 +71,8 @@ test('mapUmichLotToInput: maps a lot row + shared rate, sourceUrl is page#slug',
   assert.equal(input!.capturedBy, 'scraped');
   assert.equal(input!.fieldProvenance!.name, 'self-reported');
   assert.equal(input!.fieldProvenance!.address, 'self-reported');
-  assert.equal(input!.fieldProvenance!.hoursText, 'self-reported');
-  assert.equal(input!.fieldProvenance!.priceText, 'self-reported');
+  assert.equal(input!.fieldProvenance!.hours_text, 'self-reported');
+  assert.equal(input!.fieldProvenance!.price_text, 'self-reported');
 });
 
 test('mapUmichLotToInput: missing name -> null', () => {

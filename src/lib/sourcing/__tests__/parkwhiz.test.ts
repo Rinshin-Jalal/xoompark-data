@@ -61,7 +61,7 @@ test('mapQuoteToInput: maps a full quote, entrance coords are [lat, lng]', () =>
 
 test('mapQuoteToInput: every captured field is self-reported provenance', () => {
   const input = mapQuoteToInput(QUOTE)!;
-  for (const field of ['name', 'address', 'lat', 'lng', 'priceText']) {
+  for (const field of ['name', 'address', 'lat', 'lng', 'price_text']) {
     assert.equal(input.fieldProvenance![field], 'self-reported', `${field} provenance`);
   }
 });

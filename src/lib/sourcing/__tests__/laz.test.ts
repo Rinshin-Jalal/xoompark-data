@@ -200,11 +200,11 @@ test('mapLazFacilityToInput: maps a full listing, sourceListingId from LAZ URL p
 test('mapLazFacilityToInput: every captured field is self-reported provenance', () => {
   const listing = parseLazFacility({ url: 'https://www.lazparking.com/local/miami-fl/wynwood-garage', markdown: WYNWOOD_MARKDOWN });
   const input = mapLazFacilityToInput(listing)!;
-  for (const field of ['name', 'address', 'lat', 'lng', 'hoursText']) {
+  for (const field of ['name', 'address', 'lat', 'lng', 'hours_text']) {
     assert.equal(input.fieldProvenance![field], 'self-reported', `${field} provenance`);
   }
   // priceText was never captured on this listing — must not appear at all.
-  assert.equal(input.fieldProvenance!.priceText, undefined);
+  assert.equal(input.fieldProvenance!.price_text, undefined);
 });
 
 test('mapLazFacilityToInput: missing url -> null (caller counts as skipped)', () => {

@@ -108,7 +108,7 @@ test('mapLocationToInput: maps a full listing, priceText and hoursText preserved
 test('mapLocationToInput: every captured field is self-reported provenance', () => {
   const locations = extractLocations(extractReactProps(FIXTURE_HTML));
   const input = mapLocationToInput(locations[0])!;
-  for (const field of ['name', 'address', 'lat', 'lng', 'priceText', 'hoursText']) {
+  for (const field of ['name', 'address', 'lat', 'lng', 'price_text', 'hours_text']) {
     assert.equal(input.fieldProvenance![field], 'self-reported', `${field} provenance`);
   }
 });
@@ -125,7 +125,7 @@ test('mapLocationToInput: missing rates/hours -> priceText/hoursText left undefi
   assert.ok(input);
   assert.equal(input!.priceText, undefined);
   assert.equal(input!.hoursText, undefined);
-  assert.equal(input!.fieldProvenance!.priceText, undefined);
+  assert.equal(input!.fieldProvenance!.price_text, undefined);
   assert.equal(input!.sourceUrl, 'https://en.parkopedia.com/parking/garage/100_se_2nd_st/33131/miami/');
 });
 
@@ -135,15 +135,15 @@ function stubRecord(overrides: Partial<SourcedParkingLocation>): SourcedParkingL
   return {
     id: 'stub',
     name: 'stub',
-    source: 'stub',
-    sourceUrl: 'https://example.com',
+    source_name: 'stub',
+    source_url: 'https://example.com',
     evidence: [],
-    fieldProvenance: {},
-    capturedBy: 'scraped',
+    field_sources: {},
+    captured_by: 'scraped',
     status: 'draft',
-    rawInput: null,
-    createdAt: '2026-08-23T00:00:00.000Z',
-    updatedAt: '2026-08-23T00:00:00.000Z',
+    raw_input: null,
+    created_at: '2026-08-23T00:00:00.000Z',
+    updated_at: '2026-08-23T00:00:00.000Z',
     ...overrides,
   };
 }
@@ -160,8 +160,8 @@ test('findCrossSourceMatches: reports a match for near-identical address + <50m 
   const parkopediaRecords = [
     stubRecord({
       id: 'parkopedia:5555',
-      source: 'parkopedia',
-      normalizedAddress: '100 southeast 2nd street miami fl 33131',
+      source_name: 'parkopedia',
+      normalized_address: '100 southeast 2nd street miami fl 33131',
       lat: 25.772085,
       lng: -80.191057,
     }),
@@ -169,8 +169,8 @@ test('findCrossSourceMatches: reports a match for near-identical address + <50m 
   const spotheroRecords = [
     stubRecord({
       id: 'spothero:92951',
-      source: 'spothero',
-      normalizedAddress: '100 southeast 2nd street miami fl 33131',
+      source_name: 'spothero',
+      normalized_address: '100 southeast 2nd street miami fl 33131',
       // ~9m away — same building, different pin capture (search vs physical)
       lat: 25.77201,
       lng: -80.191057,
@@ -186,10 +186,10 @@ test('findCrossSourceMatches: reports a match for near-identical address + <50m 
 
 test('findCrossSourceMatches: no match beyond 50m', () => {
   const parkopediaRecords = [
-    stubRecord({ id: 'parkopedia:1', source: 'parkopedia', normalizedAddress: 'a', lat: 25.77, lng: -80.19 }),
+    stubRecord({ id: 'parkopedia:1', source: 'parkopedia', normalized_address: 'a', lat: 25.77, lng: -80.19 }),
   ];
   const spotheroRecords = [
-    stubRecord({ id: 'spothero:1', source: 'spothero', normalizedAddress: 'a', lat: 25.80, lng: -80.19 }),
+    stubRecord({ id: 'spothero:1', source: 'spothero', normalized_address: 'a', lat: 25.80, lng: -80.19 }),
   ];
   const matches = findCrossSourceMatches(parkopediaRecords, spotheroRecords);
   assert.equal(matches.length, 0);
@@ -201,8 +201,8 @@ test('classifyCrossSourceMatch: identical address + <50m -> confident', () => {
   const parkopediaRecords = [
     stubRecord({
       id: 'parkopedia:5555',
-      source: 'parkopedia',
-      normalizedAddress: '100 southeast 2nd street miami fl 33131',
+      source_name: 'parkopedia',
+      normalized_address: '100 southeast 2nd street miami fl 33131',
       lat: 25.772085,
       lng: -80.191057,
     }),
@@ -210,8 +210,8 @@ test('classifyCrossSourceMatch: identical address + <50m -> confident', () => {
   const spotheroRecords = [
     stubRecord({
       id: 'spothero:92951',
-      source: 'spothero',
-      normalizedAddress: '100 southeast 2nd street miami fl 33131',
+      source_name: 'spothero',
+      normalized_address: '100 southeast 2nd street miami fl 33131',
       lat: 25.77201,
       lng: -80.191057,
     }),
@@ -225,8 +225,8 @@ test('classifyCrossSourceMatch: <50m apart but dissimilar addresses -> ambiguous
   const parkopediaRecords = [
     stubRecord({
       id: 'parkopedia:1',
-      source: 'parkopedia',
-      normalizedAddress: '100 southeast 2nd street miami fl 33131',
+      source_name: 'parkopedia',
+      normalized_address: '100 southeast 2nd street miami fl 33131',
       lat: 25.772085,
       lng: -80.191057,
     }),
@@ -234,10 +234,10 @@ test('classifyCrossSourceMatch: <50m apart but dissimilar addresses -> ambiguous
   const spotheroRecords = [
     stubRecord({
       id: 'spothero:1',
-      source: 'spothero',
+      source_name: 'spothero',
       // Same pin (0m away) but an unrelated address string — e.g. a garage
       // and an adjacent meter sharing a lat/lng capture.
-      normalizedAddress: 'totally different unrelated address',
+      normalized_address: 'totally different unrelated address',
       lat: 25.772085,
       lng: -80.191057,
     }),
@@ -257,8 +257,8 @@ test('classifyCrossSourceMatch: shared "Lot 18" label with no street match -> co
   const parkopediaRecords = [
     stubRecord({
       id: 'parkopedia:401186',
-      source: 'parkopedia',
-      normalizedAddress: 'Municipal Lot 18',
+      source_name: 'parkopedia',
+      normalized_address: 'Municipal Lot 18',
       lat: 25.77209,
       lng: -80.19106,
     }),
@@ -266,8 +266,8 @@ test('classifyCrossSourceMatch: shared "Lot 18" label with no street match -> co
   const spotheroRecords = [
     stubRecord({
       id: 'spothero:94167',
-      source: 'spothero',
-      normalizedAddress: '1320 NW 12th St - Lot 18',
+      source_name: 'spothero',
+      normalized_address: '1320 NW 12th St - Lot 18',
       lat: 25.77210, // ~3.4m away
       lng: -80.19106,
     }),
@@ -284,8 +284,8 @@ test('classifyCrossSourceMatch: same street name, different street number -> amb
   const parkopediaRecords = [
     stubRecord({
       id: 'parkopedia:2498819',
-      source: 'parkopedia',
-      normalizedAddress: '710 SW 16th Ave',
+      source_name: 'parkopedia',
+      normalized_address: '710 SW 16th Ave',
       lat: 25.76,
       lng: -80.2,
     }),
@@ -293,8 +293,8 @@ test('classifyCrossSourceMatch: same street name, different street number -> amb
   const spotheroRecords = [
     stubRecord({
       id: 'spothero:15898',
-      source: 'spothero',
-      normalizedAddress: '701 SW 16th Ave',
+      source_name: 'spothero',
+      normalized_address: '701 SW 16th Ave',
       lat: 25.76001, // well under 50m
       lng: -80.2,
     }),

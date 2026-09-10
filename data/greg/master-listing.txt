@@ -1,0 +1,120 @@
+                                                                                                                July 2026
+                                                                                                       MASTER LOCATION LISTING
+                                                                                                        ("Owned/Managed/Leased")
+ Loc#                    Location Name                                         Address                                   City            Zip    O/M/L   Mgr
+AP005   PreFlight Atlanta                             4000 Global Gateway Conn., College Park, GA   Atlanta                        GA   30337     O
+AP011   PreFlight Phoenix                             44 N. 44th St., Phoenix, AZ                   Phoenix                        AZ   85034     O
+AP012   PreFlight Boston                              111 Eastern Ave., Chelsea, MA                 Boston                         MA   02150     O
+AP014   PreFlight Boston Massport Garage              270 Central Ave.,Chelsea, MA                  Boston                         MA   02150     O
+AP015   PreFlight Boston Massport Overflow Lot        149 Eastern Ave., Chelsea, MA                 Boston                         MA   02150     O
+AP020   PreFlight O'Hare                              4155 Mannheim Road, Schiller Park, IL         Schiller Park                  IL   60176     O
+AP021   PreFlight Denver                              5951 N. Jackson Gap Way, Aurora CO            Denver                         CO   80019     O
+AT029   Greyhound Lot                                 237 Peachtree St                              Atlanta                        GA   30303     O     SP+
+AT035   236 Williams St Lot & Garage                  236 Williams St                               Atlanta                        GA   30303     O     SP+
+AT043   521 Peachtree Lot                             521 Peachtree St                              Atlanta                        GA   30308     O     SP+
+AT045   53 14th St. NE Lot                            53 14th St. NE                                Atlanta                        GA   30309     O     SP+
+AT058   640 Peachtree St Lot                          640 Peachtree St                              Atlanta                        GA   30308     O     SP+
+AT076   126 Mitchell St Lot (183 Pryor)               126 Mitchell St                               Atlanta                        GA   30303     O     SP+
+AT080   Atlanta Hilton Garage                         255 Courtland St NE                           Atlanta                        GA   30303     O     SP+
+AT081   Atlanta Hilton Garden Inn                     275 Baker Street NW                           Atlanta                        GA   30313     O     SP+
+AT101   20 Lincoln Garage                             20 Lincoln St, Savannah, GA                   Savannah                       GA   31401     O
+AT102   115 E Congress Garage                         115 E Congress St., Savannah GA               Savannah                       GA   31401     O
+BO011   Harbor Garage                                 70 East India Row                             Boston                         MA   02110     M
+CH101   South Loop Garage                             318 South Federal                             Chicago                        IL   60604     M
+CH151   North Bridge Self Park Garage                 10 East Grand                                 Chicago                        IL   60654     M
+CH157   Marriott Hotel Valet (parked at CH410)        541 North Rush                                Chicago                        IL   60611     M
+CH173   COS Building Lot                              2500 Ridge Avenue, Evanston, IL               Evanston                       IL   60201     M
+CH174   Evanston Hospital Main Garage                 2650 Ridge Avenue, Evanston, IL               Evanston                       IL   60201     M
+CH175   Evanston Hospital Valet                       2650 Ridge Avenue, Evanston, IL               Evanston                       IL   60201     M
+CH177   Evanston Medical Building                     2650 Ridge Avenue, Evanston, IL               Evanston                       IL   60201     M
+CH224   855 W. Madison                                855 W. Madison                                Chicago                        IL   60607     M
+CH231   Asbury Plaza Garage                           750 North Dearborn                            Chicago                        IL   60654     M
+CH246   Shops at North Bridge Garage                  516 North Rush                                Chicago                        IL   60611     L
+CH247   445 North Wabash Lot                          430 North Rush                                Chicago                        IL   60611     L
+CH248   JP Morgan Chase Garage                        20 South Clark                                Chicago                        IL   60603     M
+CH285   University of Chicago - Parking A             5841 South Maryland                           Chicago                        IL   60637     M
+CH287   University of Chicago - Campus South Garage   6054 S. Drexel Ave.                           Chicago                        IL   60637     M
+CH291   University of Chicago - Parking B             5656 South Maryland                           Chicago                        IL   60637     M
+CH292   University of Chicago - Valet Operations      5758 South Maryland                           Chicago                        IL   60637     M
+CH296   319 West Randolph Lot                         319 West Randolph                             Chicago                        IL   60606     M
+CH311   Mart Parc Wells Garage                        401 North Wells                               Chicago                        IL   60654     M
+CH379   Wolf Point Driveway                           325 W. Wolf Point Plaza (350 N. Orleans)      Chicago                        IL   60654
+CH380   MAP/Wolf Point                                325 W. Wolf Point Plaza (350 N. Orleans)      Chicago                        IL   60654    M
+CH381   Sales Force Tower                             330 W. Wolf Point Plaza                       Chicago                        IL   60654    M
+CH382   Canal-Kinzie South Lot                        527 West Kinzie                               Chicago                        IL   60606    M
+CH383   Merchandise Mart Garage                       222 Merchandise Mart                          Chicago                        IL   60654    M
+CH394   1000 Lake Shore Plaza Garage                  1000 North Lake Shore                         Chicago                        IL   60611    M
+CH409   Sterling Garage                               111 W. Kinzie                                 Chicago                        IL   60654    M
+CH410   Rush-Ohio-Wabash ("ROW") Garage               50 East Ohio                                  Chicago                        IL   60611    M
+CH421   GP Command Center                             329 S. Franklin                               Chicago                        IL   60661    M
+CH584   Ontario-St. Clair Garage                      614 North St. Clair                           Chicago                        IL   60611    O
+CH596   200 North Clark (203 N LaSalle) Garage        200 North Clark Street                        Chicago                        IL   60601    O
+CH597   Theatre District Self Park Garage             181 North Dearborn                            Chicago                        IL   60601    O
+CH598   Adams-Wabash Self Park Garage                 17-21 East Adams                              Chicago                        IL   60603    O
+CH599   Government Center Self Park Garage            181 N. Clark                                  Chicago                        IL   60601    O
+CH600   (Willis) Tower Self Park Garage               211 W. Adams                                  Chicago                        IL   60606    O
+CH607   Washington Wells Self Park Garage             217 W. Washington                             Chicago                        IL   60606    O
+CH610   Washington Franklin Self Park Garage          230 W. Washington                             Chicago                        IL   60606    O
+CH612   200 W. Randolph Self Park Garage              200 W. Randolph                               Chicago                        IL   60606    O
+CH614   Lake-Wells Garage                             177 North Wells                               Chicago                        IL   60606    O
+CH616   Traders Self Park Garage                      326 South Wells/328 South Franklin            Chicago                        IL   60606    O
+CH618   Lake Franklin Self Park                       180 N. Franklin/301 W. Lake Street            Chicago                        IL   60606    O
+                                                                                                                                       July 2026
+                                                                                                                              MASTER LOCATION LISTING
+                                                                                                                               ("Owned/Managed/Leased")
+CH650   Orleans - Hubbard                                          437 North Orleans                                      Chicago                                                IL              60654      M
+CH651   Wabash Randolph Self Park                                  20 East Randolph                                       Chicago                                                IL              60601      M
+CH652   60 East Lake Garage                                        60 East Lake                                           Chicago                                                IL              60601      M
+CH653   Washington Madison Wells (WMW)                             172 W. Madison                                         Chicago                                                IL              60602      M
+CL001   200 Public Square Garage                                   320 Superior Ave                                       Cleveland                                              IL              44114      O        SP+
+DC122   Palladium Garage                                           1325 18th St NW                                        Washington DC                                          Washington DC   20036      O      ProPark
+DC136   Downunder Garage                                           110 W. Lombard St, Baltimore, MD                       Baltimore                                              MD              21201      O      ProPark
+DC137   Lombard Garage                                             221 W. Lombard St, Baltimore, MD                       Baltimore                                              MD              21201      O      ProPark
+DC140   Penn Quarter (Clara Barton)                                616 E Street                                           Baltimore                                              MD              20004      O      ProPark
+DC178   300 East Pratt                                             300 East Pratt St., Baltimore, MD                      Baltimore                                              MD              21202      O      ProPark
+GP001   Capitol Commons Garage                                     10 S. Capitol Ave., Indianapolis, IN                   Indianapolis                                           IN              46204      M
+ML605   Milwaukee Center Garage                                    819 North Water                                        Milwuakee                                              WI              53202      O         SP+
+ML607   Milwaukee Grand Avenue Mall                                615 N Plankinton Ave                                   Milwuakee                                              WI              53203      O      Interstate
+MN001   517 Marquette Garage                                       517 Marquette Ave                                      Minneapolis                                            MN              55402      O         SP+
+MN002   Xcel Garage                                                11 S. 4th Street                                       Minneapolis                                            MN              55402      O         SP+
+MN005   Gaviidae Common                                            651 Nicollet Ave                                       Minneapolis                                            MN              55402      O         SP+
+MN010   Government Plaza Garage                                    415 S. 5th Street                                      Minneapolis                                            MN              55415      O         SP+
+NO001   1200 Poydras Garage                                        1200 Poydras St., New Orleans, LA                      New Orleans                                            LA              70113      O         SP+
+PH003   Juniper & Locust Garage                                    1327 Locust St                                         Philadelphia                                           PA              19107      O        SP+
+PH006   1111 Sansom St Lot                                         1111 Sansom St                                         Philadelphia                                           PA              19107      O        SP+
+PH007   15th & Sansom Garage                                       114 S 15th Street                                      Philadelphia                                           PA              19102      O        SP+
+PH010   Thomas Jefferson Garage                                    910/32 Chestnut Street (107 S. 10th Street)            Philadelphia                                           PA              19107      O        SP+
+PH011   TJU Surface Lot (9c)                                       900 Chestnut St                                        Philadelphia                                           PA              19107      L        SP+
+PH012   TJUH Valet Operation                                       111 South 11th Street                                  Philadelphia                                           PA              19107      M        SP+
+PH013   TJUH Hamilton Garage                                       11th & Locust Streets                                  Philadelphia                                           PA              19107      M        SP+
+PH014   Jefferson Hospital/Neurosciences Dept                      9th & Locust Streets                                   Philadelphia                                           PA              19107      M        SP+
+PH015   1728 Sansom St Garage                                      1728 Sansom St                                         Philadelphia                                           PA              19103      M
+PH016   Sonesta Garage                                             1800 Market St                                         Philadelphia                                           PA              19103      O        SP+
+PH023   Symphony House Garage                                      440 S Broad St                                         Philadelphia                                           PA              19146      O        SP+
+PH025   Love Park                                                  1599 JFK Blvd., Garage Level 1                         Philadelphia                                           PA              19102      O        SP+
+PH030   TJU Valet Lot                                              107 S 10th St                                          Philadelphia                                           PA              19107      L        SP+
+PH034   Jefferson Hospital/925 Chestnut VALET                      925 Chestnut Street                                    Philadelphia                                           PA              19107      M        SP+
+PH035   TJUH Honickman Self-Park & Valet                           1101 Chestnut Street                                   Philadelphia                                           PA              19107      M        SP+
+PI001   Forbes and Grant Lot                                       401 Grant Street                                       Pittsburgh                                             PA              15219      O
+PI002   Forbes Garage                                              400 Smithfield Street                                  Pittsburgh                                             PA              15222      O
+PI003   Allies Garage                                              200 Smithfield Street                                  Pittsburgh                                             PA              15222      O
+PI004   625 Stanwix Garage ("Riverfront")                          625 Stanwix Street                                     Pittsburgh                                             PA              15222      O
+PI006   6th & Penn                                                 546 Penn Avenue                                        Pittsburgh                                             PA              15222      O        SP+
+PI007   Liberty Center                                             1001 Liberty Avenue Pgh                                Pittsburgh                                             PA              15222      O        ABM
+RM001   Remote Monitoring Center                                   81 W. Lake Street (Govt Ctr)                                                                                  PA              60601   IP Natl
+SA001   Market Street Self Park                                    421 W. Market Street                                   San Antonio                                            TX              78205      O        SP+
+SA002   River Bend Self Park                                       210 N. Presa                                           San Antonio                                            TX              78205      O        SP+
+SF001   Museum Parc Garage                                         300 Third Street                                       San Francisco                                          CA              94107      O        SP+
+SL001   Stadium East Self Park Garage                              200 S. Broadway                                        St Louis                                               MI              63102      O
+SL002   Stadium West Self Park Garage                              215 S. 8th Street (100 S. 9th)                         St Louis                                               MI              63102      O
+SL003   Kiener East Self Park Garage                               500 Pine Street                                        St Louis                                               MI              63101      O
+SL004   Kiener West Self Park Garage                               604 Pine Street                                        St Louis                                               MI              63101      O
+
+                                                                                    LOCATIONS PREFIX KEY: Unless otherwise indicated, Location address are assumed to be in cities below
+ AP     PreFlight Airport Parking (Cities & States as indicated)
+ AT     Atlanta (and Savannah where indicated)                     ML Milwaukee, WI                                                                                                               SA
+ CH     Chicago, IL                                                MN Minneapolis, MN                                                                                                             SF
+ CL     Cleveland, OH                                              PH Philadelphia, PA                                                                                                            SL
+ DC     Washington DC (and Baltimore where indicated)              PI Pittsburgh, PA
+ GP     General Parking Indianapolis, IN                           RM Remote Monitoring Center/Chicago
+

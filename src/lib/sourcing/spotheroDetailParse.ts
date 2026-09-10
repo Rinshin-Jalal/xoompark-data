@@ -128,9 +128,9 @@ export function mapFacilityDetailToInput(
 
   const fieldProvenance: SourcedLocationInput['fieldProvenance'] = {};
   for (const [field, present] of [
-    ['clearanceText', !!clearanceText],
-    ['hoursText', !!hoursText],
-    ['priceText', !!priceText],
+    ['clearance_text', !!clearanceText],
+    ['hours_text', !!hoursText],
+    ['price_text', !!priceText],
   ] as const) {
     if (present) fieldProvenance[field] = 'self-reported';
   }
