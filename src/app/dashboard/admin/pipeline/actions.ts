@@ -7,7 +7,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { getAdminAuth, getAdminFirestore } from '@/lib/firebaseAdmin';
 import type { ProspectSide, ProspectStage } from './types';
 
-const BD_COLLECTION = 'bdProspects';
+const BD_COLLECTION = 'prospects';
 const LIST_PATH = '/dashboard/admin/pipeline';
 
 async function requireAdmin(): Promise<{ uid: string; email: string; name: string }> {

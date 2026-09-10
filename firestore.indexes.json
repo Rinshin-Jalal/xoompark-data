@@ -1,21 +1,21 @@
 {
   "indexes": [
     {
-      "collectionGroup": "siteFindings",
+      "collectionGroup": "pitstop_findings",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "metro", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "bdProspects",
+      "collectionGroup": "prospects",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "updatedAt", "order": "DESCENDING" }
       ]
     },
     {
-      "collectionGroup": "bdProspects",
+      "collectionGroup": "prospects",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "side", "order": "ASCENDING" },
@@ -23,14 +23,14 @@
       ]
     },
     {
-      "collectionGroup": "savedChargingLocations",
+      "collectionGroup": "charging_sites",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "name", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "sourcedParkingLocations",
+      "collectionGroup": "parking_lots",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "status", "order": "ASCENDING" }

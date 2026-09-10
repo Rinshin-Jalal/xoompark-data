@@ -5,30 +5,30 @@ import { MapPin, Zap, Search, FileText, Database, Building2 } from 'lucide-react
 async function getAggregatedStats() {
   const db = getAdminFirestore();
   try {
-    const [sourcedLots, chargingSites, siteFindings, fleetFeedback, prospects] = await Promise.all([
-      db.collection('sourcedParkingLocations').count().get(),
-      db.collection('savedChargingLocations').count().get(),
-      db.collection('siteFindings').count().get(),
-      db.collection('fleetFeedback').count().get(),
-      db.collection('bdProspects').count().get(),
+    const [sourcedLots, chargingSites, pitstopFindings, fleetFeedback, prospects] = await Promise.all([
+      db.collection('parking_lots').count().get(),
+      db.collection('charging_sites').count().get(),
+      db.collection('pitstop_findings').count().get(),
+      db.collection('fleet_feedback').count().get(),
+      db.collection('prospects').count().get(),
     ]);
     return {
       sourcedLots: sourcedLots.data().count,
       chargingSites: chargingSites.data().count,
-      siteFindings: siteFindings.data().count,
-      fleetFeedback: fleetFeedback.data().count,
+      pitstop_findings: pitstopFindings.data().count,
+      fleet_feedback: fleetFeedback.data().count,
       prospects: prospects.data().count,
     };
   } catch {
-    return { sourcedLots: 0, chargingSites: 0, siteFindings: 0, fleetFeedback: 0, prospects: 0 };
+    return { sourcedLots: 0, chargingSites: 0, pitstop_findings: 0, fleet_feedback: 0, prospects: 0 };
   }
 }
 
 const STAT_CARDS = [
   { key: 'sourcedLots' as const, label: 'Sourced Lots', icon: MapPin },
   { key: 'chargingSites' as const, label: 'Charging Sites', icon: Zap },
-  { key: 'siteFindings' as const, label: 'Pitstop Findings', icon: Search },
-  { key: 'fleetFeedback' as const, label: 'Fleet Feedback', icon: FileText },
+  { key: 'pitstop_findings' as const, label: 'Pitstop Findings', icon: Search },
+  { key: 'fleet_feedback' as const, label: 'Fleet Feedback', icon: FileText },
   { key: 'prospects' as const, label: 'BD Prospects', icon: Building2 },
 ];
 

@@ -1,6 +1,6 @@
 import type { FinderConfig, MetroCode } from '@/lib/types';
 
-// Hardcoded defaults for all metros. Load from Firestore finderConfigs on startup; fall back to these.
+// Hardcoded defaults for all metros. Load from Firestore pitstop_configs on startup; fall back to these.
 // Each entry is a complete scoring config — add a metro by adding one entry here.
 
 export const DEFAULT_FINDER_CONFIGS: Record<MetroCode, Omit<FinderConfig, 'createdAt' | 'updatedAt'>> = {

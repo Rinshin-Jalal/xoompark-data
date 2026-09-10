@@ -149,7 +149,7 @@ export interface SourcedParkingLocation {
     checkedAt: string; // ISO
   };
 
-  /** COMPUTED cross-reference to the pitstop-finder's siteFindings (matched
+  /** COMPUTED cross-reference to the pitstop-finder's pitstop_findings (matched
    * by lat/lng proximity, ≤75m) — same discipline as geoContext. */
   pitstopContext?: {
     osmId?: string;

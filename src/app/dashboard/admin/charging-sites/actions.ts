@@ -17,7 +17,7 @@ export async function findChargingSites(params: AfdcSearchParams) {
 /**
  * Save (or refresh) a station. Merge, not overwrite: clearance and notes are
  * ours and must survive a re-save that only refreshes the AFDC snapshot —
- * same rule siteFindings already applies to manual fields.
+ * same rule pitstop_findings already applies to manual fields.
  */
 export async function saveChargingLocation(
   afdcId: number,
@@ -28,7 +28,7 @@ export async function saveChargingLocation(
 ) {
   const admin = await requireAdmin();
   const db = getDb();
-  const ref = db.collection('savedChargingLocations').doc(String(afdcId));
+  const ref = db.collection('charging_sites').doc(String(afdcId));
   const existing = await ref.get();
 
   await ref.set(
@@ -51,7 +51,7 @@ export async function saveChargingLocation(
 export async function listSavedChargingLocations(): Promise<SavedChargingLocation[]> {
   await requireAdmin();
   const db = getDb();
-  const snapshot = await db.collection('savedChargingLocations').orderBy('name').get();
+  const snapshot = await db.collection('charging_sites').orderBy('name').get();
   return JSON.parse(JSON.stringify(snapshot.docs.map((doc) => doc.data())));
 }
 
@@ -62,7 +62,7 @@ export async function updateChargingLocationClearance(
   await requireAdmin();
   const db = getDb();
   const value: Clearance | null = clearance;
-  await db.collection('savedChargingLocations').doc(String(afdcId)).update({
+  await db.collection('charging_sites').doc(String(afdcId)).update({
     clearance: value,
     updatedAt: FieldValue.serverTimestamp(),
   });
@@ -71,7 +71,7 @@ export async function updateChargingLocationClearance(
 export async function updateChargingLocationNotes(afdcId: number, notes: string) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('savedChargingLocations').doc(String(afdcId)).update({
+  await db.collection('charging_sites').doc(String(afdcId)).update({
     notes: notes || null,
     updatedAt: FieldValue.serverTimestamp(),
   });
@@ -80,7 +80,7 @@ export async function updateChargingLocationNotes(afdcId: number, notes: string)
 export async function updateChargingLocationOwnerName(afdcId: number, ownerName: string) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('savedChargingLocations').doc(String(afdcId)).update({
+  await db.collection('charging_sites').doc(String(afdcId)).update({
     ownerName: ownerName || null,
     updatedAt: FieldValue.serverTimestamp(),
   });
@@ -89,7 +89,7 @@ export async function updateChargingLocationOwnerName(afdcId: number, ownerName:
 export async function updateChargingLocationPortMounting(afdcId: number, portMounting: PortMounting | null) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('savedChargingLocations').doc(String(afdcId)).update({
+  await db.collection('charging_sites').doc(String(afdcId)).update({
     portMounting,
     updatedAt: FieldValue.serverTimestamp(),
   });
@@ -98,7 +98,7 @@ export async function updateChargingLocationPortMounting(afdcId: number, portMou
 export async function deleteSavedChargingLocation(afdcId: number) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('savedChargingLocations').doc(String(afdcId)).delete();
+  await db.collection('charging_sites').doc(String(afdcId)).delete();
 }
 
 /**
@@ -115,7 +115,7 @@ export async function bulkImportClearance(rows: ClearanceImportRow[]) {
   const skipped: { afdcId: number; reason: string }[] = [];
 
   for (const row of rows) {
-    const ref = db.collection('savedChargingLocations').doc(String(row.afdcId));
+    const ref = db.collection('charging_sites').doc(String(row.afdcId));
     const existing = await ref.get();
     if (!existing.exists) {
       skipped.push({ afdcId: row.afdcId, reason: 'not a saved location — save it from a search first' });

@@ -3,7 +3,7 @@ import { getAdminFirestore } from '@/lib/firebaseAdmin';
 import type { Prospect } from './types';
 import { PipelineClient } from './_components/PipelineClient';
 
-const BD_COLLECTION = 'bdProspects';
+const BD_COLLECTION = 'prospects';
 
 async function getProspects(): Promise<Prospect[]> {
   const db = getAdminFirestore();

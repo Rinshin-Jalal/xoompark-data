@@ -7,7 +7,7 @@ import { PrintButton } from '../../_components/PrintButton';
 import type { Prospect } from '../../types';
 import { INFRA_LABELS, FLEET_LABELS, SERVICE_LABELS } from '../../types';
 
-const BD_COLLECTION = 'bdProspects';
+const BD_COLLECTION = 'prospects';
 
 async function getProspect(id: string): Promise<Prospect | null> {
   const db = getAdminFirestore();

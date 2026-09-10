@@ -260,7 +260,7 @@ function hoursImply247(text?: string): boolean {
 }
 
 /**
- * Public projection of the parking-sourcing pipeline (sourcedParkingLocations).
+ * Public projection of the parking-sourcing pipeline (parking_lots).
  * No status filter — 'draft'/'saved' is a BDR workflow state, not a
  * public-readiness gate, and the bulk of the inventory (~1500 docs) is draft.
  * Strict allowlist like toPublicSite: NO name, address, source, price, or raw
@@ -270,7 +270,7 @@ function hoursImply247(text?: string): boolean {
  */
 async function getSourcedPublicSites(): Promise<PublicSite[]> {
   const db = getAdminFirestore();
-  const snap = await db.collection('sourcedParkingLocations').get();
+  const snap = await db.collection('parking_lots').get();
 
   // First pass: collect the mappable docs with their public projection.
   const entries: { city: string; site: PublicSite }[] = [];

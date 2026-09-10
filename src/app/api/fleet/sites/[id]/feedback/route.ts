@@ -41,7 +41,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const now = new Date().toISOString();
   const docId = feedbackDocId(principal.keyId, id);
-  const ref = getAdminFirestore().collection('fleetFeedback').doc(docId);
+  const ref = getAdminFirestore().collection('fleet_feedback').doc(docId);
   await ref.set({
     id: docId,
     siteId: id,

@@ -3,7 +3,7 @@ import { getAdminFirestore } from '../firebaseAdmin.ts';
 import type { OutreachRecord, OutreachState } from './types.ts';
 
 const outreachCollection = (lotId: string) =>
-  getAdminFirestore().collection('sourcedParkingLocations').doc(lotId).collection('outreach');
+  getAdminFirestore().collection('parking_lots').doc(lotId).collection('outreach');
 
 export async function getOutreachRecord(lotId: string): Promise<OutreachRecord | null> {
   const snap = await outreachCollection(lotId).limit(1).get();

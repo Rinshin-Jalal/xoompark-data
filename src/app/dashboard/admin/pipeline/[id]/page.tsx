@@ -14,7 +14,7 @@ import { AddNoteForm } from '../_components/AddNoteForm';
 import { StageSelect } from '../_components/StageSelect';
 import { DeleteProspectButton, DeleteNoteButton } from '../_components/DeleteButtons';
 
-const BD_COLLECTION = 'bdProspects';
+const BD_COLLECTION = 'prospects';
 
 async function getProspect(id: string): Promise<Prospect | null> {
   const db = getAdminFirestore();

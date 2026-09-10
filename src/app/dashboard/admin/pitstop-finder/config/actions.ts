@@ -78,7 +78,7 @@ export async function saveFinderConfig(
   const db = getDb();
 
   try {
-    const existing = await db.collection('finderConfigs').doc(metro).get();
+    const existing = await db.collection('pitstop_configs').doc(metro).get();
 
     const doc: Record<string, any> = {
       ...config,
@@ -89,7 +89,7 @@ export async function saveFinderConfig(
       doc.createdAt = FieldValue.serverTimestamp();
     }
 
-    await db.collection('finderConfigs').doc(metro).set(doc, { merge: true });
+    await db.collection('pitstop_configs').doc(metro).set(doc, { merge: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     throw new Error(`Failed to save config: ${message}`);
@@ -105,11 +105,11 @@ export async function deleteMetro(metro: MetroCode, deleteFindings: boolean = fa
 
   try {
     // Delete config
-    await db.collection('finderConfigs').doc(metro).delete();
+    await db.collection('pitstop_configs').doc(metro).delete();
 
     // Optionally delete all site findings for this metro
     if (deleteFindings) {
-      const sites = await db.collection('siteFindings').where('metro', '==', metro).get();
+      const sites = await db.collection('pitstop_findings').where('metro', '==', metro).get();
       if (sites.size > 0) {
         const batch = db.batch();
         sites.docs.forEach((doc) => batch.delete(doc.ref));

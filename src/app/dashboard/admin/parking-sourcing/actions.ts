@@ -19,7 +19,7 @@ import type { SourcedLocationInput, SourcedParkingLocation, SourcingStatus } fro
 
 // Same collection sourcing/store.ts writes to — no delete function here either,
 // same hard rule: sourced records are never removed, only edited or toggled.
-const COLLECTION = 'sourcedParkingLocations';
+const COLLECTION = 'parking_lots';
 
 export type SourcedLocationEdits = Partial<
   Pick<
@@ -391,7 +391,7 @@ export async function advanceOutreachState(lotId: string, state: OutreachState):
 export async function exportOutreachCsv(): Promise<string> {
   await requireAdmin();
   const db = getAdminFirestore();
-  const lotsSnap = await db.collection('sourcedParkingLocations').get();
+  const lotsSnap = await db.collection('parking_lots').get();
 
   const headers = [
     'lot_name', 'address', 'locality', 'source',
@@ -406,7 +406,7 @@ export async function exportOutreachCsv(): Promise<string> {
     const lot = lotDoc.data() as SourcedParkingLocation;
     if (lot.mergedInto) continue;
     const outreachSnap = await db
-      .collection('sourcedParkingLocations')
+      .collection('parking_lots')
       .doc(lotDoc.id)
       .collection('outreach')
       .limit(1)

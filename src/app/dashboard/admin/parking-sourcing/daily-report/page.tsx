@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 async function getOutreachData() {
   const db = getAdminFirestore();
-  const lotsSnap = await db.collection('sourcedParkingLocations').get();
+  const lotsSnap = await db.collection('parking_lots').get();
 
   const rows: {
     lot: SourcedParkingLocation;
@@ -18,7 +18,7 @@ async function getOutreachData() {
     const lot = lotDoc.data() as SourcedParkingLocation;
     if (lot.mergedInto) continue;
     const outreachSnap = await db
-      .collection('sourcedParkingLocations')
+      .collection('parking_lots')
       .doc(lotDoc.id)
       .collection('outreach')
       .limit(1)

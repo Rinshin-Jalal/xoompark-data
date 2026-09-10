@@ -4,7 +4,7 @@ import { deriveLocality } from './locality.ts';
 import { buildUpsertDoc, computeDedupeKey, mergeSourcedLocationsPure, normalizeAddress, normalizeTriState } from './types.ts';
 import type { AdminUser, SourcedLocationInput, SourcedParkingLocation, SourcingStatus } from './types.ts';
 
-const COLLECTION = 'sourcedParkingLocations';
+const COLLECTION = 'parking_lots';
 const getDb = getAdminFirestore;
 
 // No delete function here — hard rule, sourced records are never removed.

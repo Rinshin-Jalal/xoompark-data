@@ -6,7 +6,7 @@ import { getAdminFirestore } from '@/lib/firebaseAdmin';
 import { ProspectForm } from '../../_components/ProspectForm';
 import type { Prospect } from '../../types';
 
-const BD_COLLECTION = 'bdProspects';
+const BD_COLLECTION = 'prospects';
 
 async function getProspect(id: string): Promise<Prospect | null> {
   const db = getAdminFirestore();

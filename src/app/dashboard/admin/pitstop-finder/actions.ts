@@ -19,7 +19,7 @@ const BATCH_CHUNK_SIZE = 450;
 
 async function persistSiteFindings(db: FirebaseFirestore.Firestore, metro: MetroCode, sites: any[]) {
   const refs = sites.map((site) =>
-    db.collection('siteFindings').doc(`${metro}_${site.osmId.replace('/', '_')}`)
+    db.collection('pitstop_findings').doc(`${metro}_${site.osmId.replace('/', '_')}`)
   );
 
   // Sequential per-doc reads for 1000+ sites is the slow part users actually
@@ -114,7 +114,7 @@ export async function refreshFinderResults(metro: MetroCode) {
     // Load config from Firestore or use default
     let config: FinderConfig | undefined;
     try {
-      const doc = await db.collection('finderConfigs').doc(metro).get();
+      const doc = await db.collection('pitstop_configs').doc(metro).get();
       if (doc.exists) {
         config = doc.data() as FinderConfig;
       }
@@ -151,7 +151,7 @@ export async function refreshFinderResults(metro: MetroCode) {
 export async function updateSiteStatus(siteId: string, newStatus: SiteFindingStatus) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('siteFindings').doc(siteId).update({
+  await db.collection('pitstop_findings').doc(siteId).update({
     status: newStatus,
     updatedAt: FieldValue.serverTimestamp(),
   });
@@ -189,7 +189,7 @@ export async function updateSiteManualFields(
     }
   }
 
-  await db.collection('siteFindings').doc(siteId).update(updateData);
+  await db.collection('pitstop_findings').doc(siteId).update(updateData);
 }
 
 // ===== Promote to Prospect =====
@@ -205,7 +205,7 @@ export async function promoteSiteToProspect(
   const db = getDb();
 
   // Fetch the site to get owner info
-  const siteDoc = await db.collection('siteFindings').doc(siteId).get();
+  const siteDoc = await db.collection('pitstop_findings').doc(siteId).get();
   if (!siteDoc.exists) {
     throw new Error(`Site not found: ${siteId}`);
   }
@@ -213,7 +213,7 @@ export async function promoteSiteToProspect(
   const site = siteDoc.data() as SiteFinding;
 
   // Create prospect record
-  const prospectRef = db.collection('bdProspects').doc();
+  const prospectRef = db.collection('prospects').doc();
   await prospectRef.set({
     side: 'provider',
     stage: 'INITIAL',
@@ -238,7 +238,7 @@ export async function saveFinderConfig(metro: MetroCode, config: Omit<FinderConf
   await requireAdmin();
   const db = getDb();
 
-  const existing = await db.collection('finderConfigs').doc(metro).get();
+  const existing = await db.collection('pitstop_configs').doc(metro).get();
 
   const doc: Record<string, any> = {
     ...config,
@@ -249,7 +249,7 @@ export async function saveFinderConfig(metro: MetroCode, config: Omit<FinderConf
     doc.createdAt = FieldValue.serverTimestamp();
   }
 
-  await db.collection('finderConfigs').doc(metro).set(doc, { merge: true });
+  await db.collection('pitstop_configs').doc(metro).set(doc, { merge: true });
 }
 
 export async function deleteMetro(metro: MetroCode) {
@@ -257,10 +257,10 @@ export async function deleteMetro(metro: MetroCode) {
   const db = getDb();
 
   // Delete config
-  await db.collection('finderConfigs').doc(metro).delete();
+  await db.collection('pitstop_configs').doc(metro).delete();
 
   // Optionally delete all site findings for this metro
-  const sites = await db.collection('siteFindings').where('metro', '==', metro).get();
+  const sites = await db.collection('pitstop_findings').where('metro', '==', metro).get();
   const batch = db.batch();
   sites.docs.forEach((doc) => batch.delete(doc.ref));
   await batch.commit();

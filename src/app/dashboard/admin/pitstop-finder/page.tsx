@@ -18,7 +18,7 @@ const getDb = getAdminFirestore;
 async function getActiveMetros() {
   try {
     const db = getDb();
-    const snapshot = await db.collection('finderConfigs').get();
+    const snapshot = await db.collection('pitstop_configs').get();
     const metros = new Set(snapshot.docs.map((doc) => doc.id));
 
     // Always include defaults, add any Firestore metros
@@ -32,7 +32,7 @@ async function getActiveMetros() {
 async function getMetroConfig(metro: MetroCode): Promise<FinderConfig> {
   try {
     const db = getDb();
-    const doc = await db.collection('finderConfigs').doc(metro).get();
+    const doc = await db.collection('pitstop_configs').doc(metro).get();
     if (doc.exists) {
       return doc.data() as FinderConfig;
     }
@@ -51,9 +51,9 @@ function isMetro(v: string | undefined): v is MetroCode {
 async function Results({ metro }: { metro: MetroCode }) {
   let sites: any[] = [];
   try {
-    // Load sites from Firestore siteFindings collection
+    // Load sites from Firestore pitstop_findings collection
     const db = getDb();
-    const snapshot = await db.collection('siteFindings').where('metro', '==', metro).get();
+    const snapshot = await db.collection('pitstop_findings').where('metro', '==', metro).get();
     // Firestore Timestamps are class instances — RSC can only pass plain objects
     // to the client ResultsTable, so round-trip through JSON to strip them.
     sites = JSON.parse(JSON.stringify(snapshot.docs.map((doc) => doc.data())));
