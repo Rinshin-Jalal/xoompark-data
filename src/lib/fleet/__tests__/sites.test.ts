@@ -2,7 +2,8 @@
 // Same Firestore-free style as the sourcing tests — only imports sites.ts,
 // which only imports hardFilters.ts + types.ts.
 import assert from 'node:assert/strict';
-import { filterFleetSites, toFleetSiteSummary, toFleetSiteDetail, parseFleetQuery, deriveOperator } from '../sites.ts';
+import { filterFleetSites, toFleetSiteSummary, toFleetSiteDetail, parseFleetQuery } from '../sites.ts';
+import { detectOperator } from '../../sourcing/operators.ts';
 import type { SourcedParkingLocation } from '../../sourcing/types.ts';
 
 function test(name: string, fn: () => void) {
@@ -212,7 +213,8 @@ test('REGRESSION: bare query string constrains nothing except managed (null vs u
   assert.equal(query.managed, true); // the ONE default-on filter (commercial requirement)
   assert.equal(status, undefined);
   // And through the filter: a site with a known gate_type survives a bare query.
-  const lpr = makeLocation({ gate_type: 'lpr', source_name: 'laz', name: 'Managed' });
+  // (operator_id set — the default managed:true filter keeps only identified lots.)
+  const lpr = makeLocation({ gate_type: 'lpr', source_name: 'laz', name: 'Managed', operator_id: 'laz', operator_source: 'source' });
   assert.equal(filterFleetSites([lpr], query).length, 1);
 });
 
@@ -452,33 +454,50 @@ test('FUZZ: filterFleetSites invariants hold under random locations x queries', 
 
 // --- operator management ------------------------------------------------------
 
-test('deriveOperator: source-based (laz/ipark scrapers are managed by definition)', () => {
-  assert.equal(deriveOperator({ source_name: 'laz', name: 'First Citizens Bank' }), 'LAZ');
-  assert.equal(deriveOperator({ source_name: 'ipark', name: 'Any Garage' }), 'InterPark');
+// Fake registry mirroring the seeded operators collection (same patterns).
+const REGISTRY = [
+  { id: 'laz', name: 'LAZ Parking', slug: 'laz', name_patterns: ['\\blaz\\b'], source_mappings: ['laz'] },
+  { id: 'interpark', name: 'InterPark', slug: 'interpark', name_patterns: ['inter\\s*park|\\bipark\\b'], source_mappings: ['ipark'] },
+  { id: 'reimagined-pmc', name: 'Reimagined PMC', slug: 'reimagined-pmc', name_patterns: ['reimagined|\\bpmc\\b'], source_mappings: [] },
+  { id: 'platinum', name: 'Platinum', slug: 'platinum', name_patterns: ['platinum\\s+park'], source_mappings: [] },
+  { id: 'ace-parking', name: 'Ace Parking', slug: 'ace-parking', name_patterns: ['\\bace\\s+parking\\b'], source_mappings: [] },
+  { id: 'paradise', name: 'Paradise', slug: 'paradise', name_patterns: ['paradise\\s+park'], source_mappings: [] },
+];
+
+test('detectOperator: source mapping (laz/ipark scrapers are managed by definition)', () => {
+  assert.deepEqual(detectOperator({ source_name: 'laz', name: 'First Citizens Bank' }, REGISTRY), { operator_id: 'laz', operator_source: 'source' });
+  assert.deepEqual(detectOperator({ source_name: 'ipark', name: 'Any Garage' }, REGISTRY), { operator_id: 'interpark', operator_source: 'source' });
 });
 
-test('deriveOperator: name-based brand matching from any source', () => {
-  assert.equal(deriveOperator({ source_name: 'spothero', name: 'LAZ Parking First Citizens Bank' }), 'LAZ');
-  assert.equal(deriveOperator({ source_name: 'spothero', name: 'InterPark 100 Brickell' }), 'InterPark');
-  assert.equal(deriveOperator({ source_name: 'manual', name: 'Ace Parking Downtown' }), 'Ace Parking');
-  assert.equal(deriveOperator({ source_name: 'manual', name: 'Platinum Parking Midtown' }), 'Platinum');
-  assert.equal(deriveOperator({ source_name: 'manual', name: 'Paradise Parking South Beach' }), 'Paradise');
-  assert.equal(deriveOperator({ source_name: 'manual', name: 'Reimagined PMC Lot 4' }), 'Reimagined PMC');
+test('detectOperator: name-based brand matching from any source', () => {
+  assert.equal(detectOperator({ source_name: 'spothero', name: 'LAZ Parking First Citizens Bank' }, REGISTRY)?.operator_id, 'laz');
+  assert.equal(detectOperator({ source_name: 'spothero', name: 'InterPark 100 Brickell' }, REGISTRY)?.operator_id, 'interpark');
+  assert.equal(detectOperator({ source_name: 'manual', name: 'Ace Parking Downtown' }, REGISTRY)?.operator_id, 'ace-parking');
+  assert.equal(detectOperator({ source_name: 'manual', name: 'Platinum Parking Midtown' }, REGISTRY)?.operator_id, 'platinum');
+  assert.equal(detectOperator({ source_name: 'manual', name: 'Paradise Parking South Beach' }, REGISTRY)?.operator_id, 'paradise');
+  assert.equal(detectOperator({ source_name: 'manual', name: 'Reimagined PMC Lot 4' }, REGISTRY)?.operator_id, 'reimagined-pmc');
 });
 
-test('deriveOperator: no false positives on lookalike names', () => {
-  assert.equal(deriveOperator({ source_name: 'spothero', name: 'Ace Hardware Plaza' }), null);
-  assert.equal(deriveOperator({ source_name: 'spothero', name: 'Knight Center Garage' }), null);
-  assert.equal(deriveOperator({ source_name: 'parkopedia', name: 'Brickell Bay Garage' }), null);
-  assert.equal(deriveOperator({ source_name: 'manual', name: 'Platinum Realty Garage' }), null); // no "park"
-  assert.equal(deriveOperator({ source_name: 'manual', name: 'Paradise Casino Valet' }), null);
+test('detectOperator: LBT business license is the third signal', () => {
+  assert.deepEqual(
+    detectOperator({ enrichment: { business_license: { businessName: 'LAZ Parking' } } }, REGISTRY),
+    { operator_id: 'laz', operator_source: 'lbt' },
+  );
 });
 
-test('managed filter: true keeps operator sites, false keeps unmanaged, undefined keeps all', () => {
-  const laz = makeLocation({ source_name: 'laz', name: 'First Citizens Bank' });
-  const spotheroLaz = makeLocation({ source_name: 'spothero', name: 'LAZ Parking Midtown' });
+test('detectOperator: no false positives on lookalike names', () => {
+  assert.equal(detectOperator({ source_name: 'spothero', name: 'Ace Hardware Plaza' }, REGISTRY), null);
+  assert.equal(detectOperator({ source_name: 'spothero', name: 'Knight Center Garage' }, REGISTRY), null);
+  assert.equal(detectOperator({ source_name: 'parkopedia', name: 'Brickell Bay Garage' }, REGISTRY), null);
+  assert.equal(detectOperator({ source_name: 'manual', name: 'Platinum Realty Garage' }, REGISTRY), null); // no "park"
+  assert.equal(detectOperator({ source_name: 'manual', name: 'Paradise Casino Valet' }, REGISTRY), null);
+});
+
+test('managed filter: stored operator_id drives it (true keeps managed, false unmanaged, undefined all)', () => {
+  const laz = makeLocation({ source_name: 'laz', name: 'First Citizens Bank', operator_id: 'laz', operator_source: 'source' });
+  const manual = makeLocation({ source_name: 'spothero', name: 'Some Lot', operator_id: 'ace-parking', operator_source: 'manual' });
   const unmanaged = makeLocation({ source_name: 'parkopedia', name: 'Knight Center Garage' });
-  const all = [laz, spotheroLaz, unmanaged];
+  const all = [laz, manual, unmanaged];
   assert.equal(filterFleetSites(all, { managed: true }).length, 2);
   assert.equal(filterFleetSites(all, { managed: false }).length, 1);
   assert.equal(filterFleetSites(all, { managed: false })[0].id, unmanaged.id);
@@ -497,11 +516,19 @@ test('parse: managed defaults to true, any/true/false parse, junk rejected', () 
   assert.equal(bad.ok, false);
 });
 
-test('summary carries managedBy', () => {
-  const s = toFleetSiteSummary(makeLocation({ source_name: 'laz', name: 'Anything' }));
-  assert.equal(s.managedBy, 'LAZ');
-  const s2 = toFleetSiteSummary(makeLocation({ source_name: 'parkopedia', name: 'Knight Center Garage' }));
+test('summary carries operator_id + managedBy resolved from the registry name map', () => {
+  const names = new Map([['laz', 'LAZ Parking']]);
+  const s = toFleetSiteSummary(makeLocation({ source_name: 'laz', name: 'Anything', operator_id: 'laz', operator_source: 'source' }), undefined, names);
+  assert.equal(s.operator_id, 'laz');
+  assert.equal(s.managedBy, 'LAZ Parking');
+  // id not in the registry (deleted operator) -> name null, id still exposed
+  const s2 = toFleetSiteSummary(makeLocation({ operator_id: 'gone' }), undefined, names);
   assert.equal(s2.managedBy, null);
+  assert.equal(s2.operator_id, 'gone');
+  // no operator -> both null
+  const s3 = toFleetSiteSummary(makeLocation({ source_name: 'parkopedia', name: 'Knight Center Garage' }));
+  assert.equal(s3.managedBy, null);
+  assert.equal(s3.operator_id, null);
 });
 
 // --- demand-zone proximity ---------------------------------------------------

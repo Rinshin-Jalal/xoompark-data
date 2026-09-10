@@ -37,7 +37,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid #0e1c36; outline-offs
 
 /* XoomPark brand logo mark — shared by the outreach workspace and the auth
    screen (lime square + "xp" + lime dot). */
-.logo-mark { font-size:19px; display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:9px; background:#caf28a; color:#183328; font-weight:900; font-style:italic; letter-spacing:-3px; padding-right:4px; }
+.logo-mark { font-size:19px; display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:4px; background:#caf28a; color:#183328; font-weight:900; font-style:italic; letter-spacing:-3px; padding-right:4px; }
 .logo-mark span { transform:translateY(-1px); }
 .logo-dot { color:#caf28a; }
 

@@ -196,9 +196,9 @@ export default function Workspace({ initialData }: { initialData: Data }) {
             </span>
           </div>
           <div className="workspace-label">
-            <span className="workspace-square">SF</span>
+            <span className="workspace-square">XP</span>
             <div>
-              Supply workspace<small>San Francisco</small>
+              Supply workspace<small>All markets</small>
             </div>
             <ChevronRight size={15} />
           </div>
@@ -239,7 +239,7 @@ export default function Workspace({ initialData }: { initialData: Data }) {
           <div className="page-heading">
             <div>
               <div className="eyebrow">
-                <span /> SAN FRANCISCO OPERATIONS
+                <span /> SUPPLY OPERATIONS
               </div>
               <h1>{headings[view][0]}</h1>
               <p>{headings[view][1]}</p>
@@ -253,7 +253,7 @@ export default function Workspace({ initialData }: { initialData: Data }) {
           <div className="context-bar">
             <div>
               <MapPin size={16} />
-              <strong>San Francisco, CA</strong>
+              <strong>All markets</strong>
               <span className="divider" />
               {data.leads.length} imported locations
             </div>
@@ -274,7 +274,7 @@ export default function Workspace({ initialData }: { initialData: Data }) {
               <StatCards
                 columns={4}
                 cards={[
-                  { label: 'Properties in scope', value: relevant.length, caption: 'From your SF inventory' },
+                  { label: 'Properties in scope', value: relevant.length, caption: 'From your inventory' },
                   { label: 'Need research', value: counts.research + counts.verify, caption: 'Decision-maker verification' },
                   { label: 'BDR email queue', value: counts.ready + counts.email_followup + counts.email_reply, caption: 'Drafts, replies and follow-ups' },
                   { label: 'In SDR queue', value: counts.sdr + counts.followup, caption: 'Calls and follow-ups' },

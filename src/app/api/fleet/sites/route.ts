@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { requireFleetKey, FleetAuthError } from '@/lib/fleet/auth';
 import { toFleetSiteSummary, filterFleetSites, parseFleetQuery } from '@/lib/fleet/sites';
 import { listSourcedLocations } from '@/lib/sourcing/store';
+import { loadOperatorRegistry, operatorNameMap } from '@/lib/sourcing/operators';
 
 /**
  * GET /api/fleet/sites — the discovery endpoint over the sourced parking
@@ -39,7 +40,10 @@ export async function GET(request: NextRequest) {
   const { query, status } = parsed.value;
 
   const locations = await listSourcedLocations({ status, limit: 1000 });
-  const results = filterFleetSites(locations, query).map((loc) => toFleetSiteSummary(loc, query.center));
+  // Resolve operator display names from the registry — one load per request
+  // (TTL-cached), ids not in the registry (deleted operator) resolve to null.
+  const operatorNames = await loadOperatorRegistry().then(operatorNameMap).catch(() => new Map<string, string>());
+  const results = filterFleetSites(locations, query).map((loc) => toFleetSiteSummary(loc, query.center, operatorNames));
   // filterFleetSites already sorts by demand distance when sortBy is set.
   // Only sort by geo distance when center is given AND no demand sort requested.
   if (query.center && !query.sortBy) results.sort((a, b) => (a.distanceM ?? Infinity) - (b.distanceM ?? Infinity));

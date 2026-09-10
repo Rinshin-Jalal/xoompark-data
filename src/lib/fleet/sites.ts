@@ -21,8 +21,10 @@ export interface FleetSiteSummary {  id: string;
   is_fenced: boolean | null;
   is_lit: boolean | null;
   inWaymoOdd: boolean | undefined;
-  /** Detected parking operator (LAZ, InterPark, ...) — null = no management company. */
+  /** Operator display name, resolved from the registry by the caller — null = unidentified. */
   managedBy: string | null;
+  /** Stored operator reference (-> operators/{id}) — null = not yet identified. */
+  operator_id: string | null;
   /** All 9 hard-filter evaluations — 'unknown' means "not yet walked", never a fail. */
   hardFilters: Record<string, 'pass' | 'fail' | 'unknown'>;
   /** Present only when the request carried lat/lng. */
@@ -35,36 +37,16 @@ export interface FleetSiteSummary {  id: string;
 const EARTH_RADIUS_M = 6_371_000;
 
 /**
- * Operator-managed detection. Two signals, in priority order:
- * 1. Source — sites scraped from an operator's own site (laz.com, ipark.com)
- *    are managed by that operator by definition.
- * 2. Name — brand match for the operators Greg named (LAZ, Reimagined PMC,
- *    InterPark, Platinum, Ace, Paradise). Patterns are deliberately tight:
- *    "Ace Hardware" must never read as Ace Parking.
- * null = no management company detected.
+ * Operator management. The operator is a STORED field (operator_id ->
+ * operators/{id}), set three ways: write-time auto-detection (source
+ * mapping -> name pattern -> LBT), the one-time backfill, or a manual BDR
+ * override (operator_source = 'manual' — never overwritten by detection).
+ * null = no management company identified.
+ *
+ * The display name (managedBy) is resolved from the registry by the caller
+ * (the fleet API route loads it once per request) — this projection stays
+ * pure/sync.
  */
-const OPERATOR_SOURCES: Record<string, string> = {
-  laz: 'LAZ',
-  ipark: 'InterPark',
-};
-
-const OPERATOR_NAME_PATTERNS: Array<[string, RegExp]> = [
-  ['LAZ', /\blaz\b/i],
-  ['InterPark', /inter\s*park|\bipark\b/i],
-  ['Reimagined PMC', /reimagined|\bpmc\b/i],
-  ['Platinum', /platinum\s+park/i],
-  ['Ace Parking', /\bace\s+parking\b/i],
-  ['Paradise', /paradise\s+park/i],
-];
-
-export function deriveOperator(location: Pick<SourcedParkingLocation, 'source_name' | 'name'>|Pick<SourcedParkingLocation, 'source_name' | 'name'>): string | null {
-  const bySource = OPERATOR_SOURCES[location.source_name];
-  if (bySource) return bySource;
-  for (const [operator, pattern] of OPERATOR_NAME_PATTERNS) {
-    if (pattern.test(location.name)) return operator;
-  }
-  return null;
-}
 
 export function haversineMeters(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -78,6 +60,7 @@ export function haversineMeters(lat1: number, lng1: number, lat2: number, lng2: 
 export function toFleetSiteSummary(
   location: SourcedParkingLocation,
   center?: { lat: number; lng: number },
+  operatorNames?: Map<string, string>,
 ): FleetSiteSummary {
   const hardFilters: Record<string, 'pass' | 'fail' | 'unknown'> = {};
   for (const f of HARD_FILTERS) hardFilters[f.key] = evaluateHardFilter(location, f.key).result;
@@ -97,7 +80,8 @@ export function toFleetSiteSummary(
     is_fenced: location.is_fenced ?? null,
     is_lit: location.is_lit ?? null,
     inWaymoOdd: isInWaymoOdd(location),
-    managedBy: deriveOperator(location),
+    managedBy: location.operator_id ? operatorNames?.get(location.operator_id) ?? null : null,
+    operator_id: location.operator_id ?? null,
     hardFilters,
   };
   if (center && location.lat !== undefined && location.lng !== undefined) {
@@ -165,7 +149,7 @@ export function filterFleetSites(
     if (query.is_24_7 !== undefined && loc.is_24_7 !== query.is_24_7) return false;
     if (query.is_fenced !== undefined && loc.is_fenced !== query.is_fenced) return false;
     if (query.is_lit !== undefined && loc.is_lit !== query.is_lit) return false;
-    if (query.managed !== undefined && (deriveOperator(loc) !== null) !== query.managed) return false;
+    if (query.managed !== undefined && (loc.operator_id != null) !== query.managed) return false;
     if (query.maxDistToDemandMi !== undefined) {
       const dist = loc.enrichment?.geo?.demand?.nearestDistanceMi;
       if (typeof dist !== 'number' || dist > query.maxDistToDemandMi) return false;

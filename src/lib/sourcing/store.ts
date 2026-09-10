@@ -1,6 +1,7 @@
 import 'server-only';
 import { getAdminFirestore } from '../firebaseAdmin.ts';
 import { deriveLocality } from './locality.ts';
+import { detectOperator, loadOperatorRegistry } from './operators.ts';
 import { buildUpsertDoc, computeDedupeKey, mergeSourcedLocationsPure, normalizeAddress, normalizeTriState } from './types.ts';
 import type { AdminUser, SourcedLocationInput, SourcedParkingLocation, SourcingStatus } from './types.ts';
 
@@ -44,6 +45,24 @@ export async function upsertSourcedLocation(input: SourcedLocationInput): Promis
   if (!existing && !doc.locality) {
     const locality = input.locality ?? deriveLocality(doc.address, doc.lat, doc.lng);
     if (locality) doc.locality = locality;
+  }
+
+  // Operator auto-detection on CREATE only — same "compute once, don't
+  // silently overwrite" rule as locality. A manual override
+  // (operator_source = 'manual') is never touched: detection only runs when
+  // operator_id is still unset. Best-effort — a registry load failure skips
+  // detection rather than failing the upsert.
+  if (!existing && !doc.operator_id) {
+    try {
+      const registry = await loadOperatorRegistry();
+      const detected = detectOperator(doc, registry);
+      if (detected) {
+        doc.operator_id = detected.operator_id;
+        doc.operator_source = detected.operator_source;
+      }
+    } catch {
+      // registry unavailable — skip detection, lot stays unidentified
+    }
   }
 
   await ref.set({ ...doc, raw_input: JSON.stringify(doc.raw_input) });

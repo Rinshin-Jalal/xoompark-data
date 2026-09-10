@@ -28,7 +28,7 @@ import { isInWaymoOdd } from '@/lib/sourcing/types';
 import type { OutreachRecord, OutreachState, SourcedParkingLocation } from '@/lib/sourcing/types';
 import { OUTREACH_STATES, OUTREACH_STATE_LABELS } from '@/lib/sourcing/types';
 import { cn } from '@/lib/utils';
-import { setSourcingStatus, updateSourcedLocation, type SourcedLocationEdits } from '../actions';
+import { setSourcingStatus, setLotOperator, getOperatorOptions, updateSourcedLocation, type SourcedLocationEdits } from '../actions';
 import { advanceOutreachState, getOutreach, saveOutreach, type OutreachInput } from '../actions';
 import { TriStateControl } from './SourcingReviewTable';
 
@@ -558,6 +558,25 @@ function BdrCard({
     });
   }
 
+  // Operator override — the BDR picks the management company from the
+  // registry. operator_source = 'manual' marks it human-set: write-time
+  // auto-detection never overwrites a manual set. Clearing returns the lot
+  // to unidentified.
+  const [operatorPending, startOperatorTransition] = useTransition();
+
+  function handleSetOperator(operatorId: string | null) {
+    if ((operatorId ?? null) === (location.operator_id ?? null)) return;
+    startOperatorTransition(async () => {
+      try {
+        await setLotOperator(location.id, operatorId);
+        showToast({ type: 'success', message: operatorId ? 'Operator set (manual)' : 'Operator cleared' });
+        refresh();
+      } catch (err) {
+        showToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to set operator' });
+      }
+    });
+  }
+
   // Property name — editable inline (same on-blur-save pattern as
   // claimed_byInput above). A blank/whitespace-only name is silently
   // rejected and reverted rather than written, matching the +Add Location
@@ -679,6 +698,16 @@ function BdrCard({
           className="flex-1 px-2 py-1 text-sm border border-[#0e1c36]/20 rounded disabled:opacity-50"
         />
       </div>
+
+      {/* Operator override — registry-backed dropdown. Shows the stored
+          operator (auto-detected or manual); picking one marks it manual. */}
+      <OperatorSelect
+        locationId={location.id}
+        currentOperatorId={location.operator_id ?? null}
+        currentSource={location.operator_source ?? null}
+        disabled={operatorPending}
+        onChange={handleSetOperator}
+      />
 
       <OutreachPanel lotId={location.id} showToast={showToast} refresh={refresh} />
 
@@ -1069,6 +1098,80 @@ function WizardStep({
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+// ── Operator override dropdown ──────────────────────────────────────────────
+// Registry-backed select for the manual operator override. Options load
+// lazily on first open (one server action call, then module-cached). Shows
+// how the current operator was set (auto-detected vs manual) so the BDR
+// knows whether their pick sticks.
+
+let operatorOptionsCache: { id: string; name: string }[] | null = null;
+
+function OperatorSelect({
+  locationId,
+  currentOperatorId,
+  currentSource,
+  disabled,
+  onChange,
+}: {
+  locationId: string;
+  currentOperatorId: string | null;
+  currentSource: string | null;
+  disabled: boolean;
+  onChange: (operatorId: string | null) => void;
+}) {
+  const [options, setOptions] = useState<{ id: string; name: string }[] | null>(operatorOptionsCache);
+  const [open, setOpen] = useState(false);
+
+  function handleOpen() {
+    const next = !open;
+    setOpen(next);
+    if (next && !operatorOptionsCache) {
+      getOperatorOptions()
+        .then((opts) => {
+          operatorOptionsCache = opts;
+          setOptions(opts);
+        })
+        .catch(() => setOptions([]));
+    }
+  }
+
+  const currentName = options?.find((o) => o.id === currentOperatorId)?.name;
+
+  return (
+    <div className="flex items-center gap-2 mb-4">
+      <label htmlFor={`operator-${locationId}`} className="text-xs font-medium text-[#0e1c36]/70 shrink-0">
+        Operator:
+      </label>
+      <select
+        id={`operator-${locationId}`}
+        value={currentOperatorId ?? ''}
+        onChange={(e) => onChange(e.target.value || null)}
+        onFocus={handleOpen}
+        disabled={disabled}
+        className="flex-1 px-2 py-1 text-sm border border-[#0e1c36]/20 rounded bg-white disabled:opacity-50"
+      >
+        <option value="">— Unidentified —</option>
+        {currentOperatorId && !options?.some((o) => o.id === currentOperatorId) && (
+          <option value={currentOperatorId}>{currentName ?? currentOperatorId}</option>
+        )}
+        {options?.map((o) => (
+          <option key={o.id} value={o.id}>
+            {o.name}
+          </option>
+        ))}
+      </select>
+      {currentSource && (
+        <span
+          className="text-[9px] font-mono uppercase tracking-wide px-1.5 py-0.5 rounded-full border shrink-0"
+          title={currentSource === 'manual' ? 'Human-set — auto-detection never overwrites' : `Auto-detected via ${currentSource}`}
+        >
+          {currentSource === 'manual' ? 'manual' : 'auto'}
+        </span>
+      )}
     </div>
   );
 }

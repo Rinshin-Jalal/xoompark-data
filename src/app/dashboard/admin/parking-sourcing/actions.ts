@@ -122,6 +122,41 @@ export async function setSourcingStatus(id: string, status: SourcingStatus): Pro
 }
 
 /**
+ * Manual operator override — the BDR picks an operator from the registry
+ * (operators collection) for this lot. operator_source = 'manual' marks it
+ * as human-set: write-time auto-detection never overwrites a manual set.
+ * Pass operatorId = null to clear (back to unidentified; auto-detection may
+ * re-fire on the next create-path upsert, but existing docs are only
+ * re-detected via a re-upsert under the same dedupe key).
+ */
+export async function setLotOperator(id: string, operatorId: string | null): Promise<void> {
+  await requireAdmin();
+  const db = getAdminFirestore();
+
+  if (operatorId) {
+    const opSnap = await db.collection('operators').doc(operatorId).get();
+    if (!opSnap.exists) throw new Error(`Unknown operator: ${operatorId}`);
+  }
+
+  await db.collection(COLLECTION).doc(id).update({
+    operator_id: operatorId,
+    operator_source: operatorId ? 'manual' : null,
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+/** The operator registry for the override dropdown (id + name only). */
+export async function getOperatorOptions(): Promise<{ id: string; name: string }[]> {
+  await requireAdmin();
+  const db = getAdminFirestore();
+  const snap = await db.collection('operators').get();
+  return snap.docs
+    .map((d) => d.data() as { name?: string })
+    .map((d, i) => ({ id: snap.docs[i].id, name: d.name ?? snap.docs[i].id }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
  * Admin-approved cross-source merge: folds secondaryId's soft fields into
  * primaryId (see mergeSourcedLocationsPure in sourcing/types.ts for the
  * exact rules) and marks secondaryId as merged. Secondary is never deleted.
