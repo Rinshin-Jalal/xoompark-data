@@ -1,0 +1,58 @@
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  minInstances: 0
+
+env:
+  # ── Firebase Client SDK (public) ───────────────────────────────────────────
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyDFymwdsN-8lW5SjQTRUM5rhXOl-xzb8Z0
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: xoompark-ec53e.firebaseapp.com
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: xoompark-ec53e
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: xoompark-ec53e.firebasestorage.app
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "27367089597"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:27367089597:web:69543baef94f3a253b1ed4
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    value: G-L7Q84EYHZH
+    availability: [BUILD, RUNTIME]
+
+  # ── Google Maps (public) ───────────────────────────────────────────────────
+  - variable: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+    value: AIzaSyBqlrio3gxT_Gag4rmrPwvh9CQdN1liFig
+    availability: [BUILD, RUNTIME]
+
+  # ── Firebase Functions URL (public) ────────────────────────────────────────
+  - variable: NEXT_PUBLIC_FUNCTIONS_BASE_URL
+    value: https://us-central1-xoompark-ec53e.cloudfunctions.net/api
+    availability: [BUILD, RUNTIME]
+
+  # ── Firebase Admin SDK (server-only, never expose to client) ───────────────
+  - variable: FIREBASE_ADMIN_CREDENTIAL_BASE64
+    secret: adminSdkCredential
+    availability: [RUNTIME]
+
+  # ── Google Maps (server-only — do NOT reuse the NEXT_PUBLIC one above) ──────
+  - variable: GOOGLE_MAPS_API_KEY
+    secret: googleMapsServerKey
+    availability: [RUNTIME]
+
+  # ── NREL API Key (server-only) ───────────────────────────────────────────────
+  - variable: NREL_API_KEY
+    secret: nrelApiKey
+    availability: [RUNTIME]
+
+  # ── Aggregated Firestore database ID ────────────────────────────────────────
+  - variable: FIRESTORE_AGGREGATED_DATABASE_ID
+    value: aggregated
+    availability: [BUILD, RUNTIME]

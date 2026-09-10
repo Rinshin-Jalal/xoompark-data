@@ -1,0 +1,41 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "siteFindings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "metro", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "bdProspects",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "updatedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "bdProspects",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "side", "order": "ASCENDING" },
+        { "fieldPath": "stage", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "savedChargingLocations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "name", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "sourcedParkingLocations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

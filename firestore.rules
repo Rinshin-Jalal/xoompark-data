@@ -1,0 +1,52 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.role == 'admin';
+    }
+
+    // ── Sourced Parking Locations (BDR pipeline — admins only) ────────────
+    match /sourcedParkingLocations/{lotId} {
+      allow read, write: if isAdmin();
+
+      match /outreach/{outreachId} {
+        allow read, write: if isAdmin();
+      }
+    }
+
+    // ── Pit Stop Finder (site discovery — admins only) ─────────────────────
+    match /siteFindings/{siteId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ── Finder Config (scoring weights + metro definitions) ────────────────
+    match /finderConfigs/{metro} {
+      allow read, write: if isAdmin();
+    }
+
+    // ── Saved Charging Locations (AFDC stations we track for BD) ───────────
+    match /savedChargingLocations/{afdcId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ── Fleet Feedback (ML training data from fleet API) ──────────────────
+    match /fleetFeedback/{feedbackId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ── BD Pipeline (internal CRM — admins only) ──────────────────────────
+    match /bdProspects/{prospectId} {
+      allow read, write: if isAdmin();
+
+      match /notes/{noteId} {
+        allow read, write: if isAdmin();
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+functions/node_modules
+# App Hosting builds with `npm ci` against package-lock.json — a stray
+# pnpm lockfile invites dependency drift, keep it local-only.
+/pnpm-lock.yaml
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# functions build output
+functions/lib
+
+# one-time/throwaway scripts
+/scripts
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+firebase-debug.log
+firebase-debug.*.log
+firestore-debug.log
+ui-debug.log
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# local-only deploy config overrides (per-environment backend targeting)
+firebase.*.json
+
+# docs folder — never commit, except the generated charging-coverage report
+# below, which the app reads at runtime. Two gotchas both matter here:
+# 1. Must be docs/* (children only), not docs/ (whole tree) - excluding the
+#    docs/ entry itself blocks tools from ever descending in to evaluate the
+#    negation below, so the re-include silently no-ops.
+# 2. No trailing slash on the negation - firebase-tools' apphosting deploy
+#    walks the tree testing bare path strings with no directory/file context,
+#    so a directory-only pattern (trailing /) never matches and the negation
+#    is silently skipped, even though plain `git check-ignore` (which always
+#    has real filesystem context) gets it right either way.
+docs/*
+!docs/robotaxi-charging-coverage
+
+# opencode local index
+.opencode/
+
+# local scripts — keep on disk, never commit
+/scripts/
+**/scripts/
+
+# skill docs — keep on disk, never commit
+SKILL.md
+.agents/
+.claude/
+AGENTS.md
+CLAUDE.md
