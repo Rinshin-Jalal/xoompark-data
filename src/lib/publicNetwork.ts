@@ -57,23 +57,23 @@ export interface PublicSite {
 
   /** Present only on parking-sourcing sites (no provider offerings yet). */
   source?: 'sourcing';
-  /** Integer inches parsed from clearanceText; undefined = unverified. */
+  /** Integer inches parsed from clearance_text; undefined = unverified. */
   clearanceInches?: number;
-  /** stallsTotal when present, else capacityText parsed ("2,000 spaces" -> 2000). */
-  stallsTotal?: number | null;
+  /** stall_count when present, else capacity_text parsed ("2,000 spaces" -> 2000). */
+  stall_count?: number | null;
   /** Raw access-hours text from the listing ("Mon-Sun 6am-11pm"). */
-  hoursText?: string;
+  hours_text?: string;
   /** Raw rate text from the listing ("$10/2 hours") — sourcing sites only. */
-  priceText?: string;
+  price_text?: string;
   /** Lot's real name — projected ONLY for the demo site (the full-data
    * proof); every other site keeps its name hidden (area code instead). */
   name?: string;
   /** 'surface' (lot) or 'structured' (garage) — sourcing sites only. */
-  surfaceType?: 'surface' | 'structured';
+  surface_type?: 'surface' | 'structured';
   /** Gate mechanism — sourcing sites only. */
-  gateType?: 'manual' | 'automatic' | 'gateless' | 'lpr';
+  gate_type?: 'manual' | 'automatic' | 'gateless' | 'lpr';
   /** Ingress/egress description ("separate one-way") — sourcing sites only. */
-  ingressEgress?: string;
+  ingress_egress?: string;
   /** FEMA flood zone letter, null = checked & clean — sourcing sites only. */
   floodZone?: string | null;
   /** Nearest demand anchor name ("Brickell") — sourcing sites only. Straight-line
@@ -87,9 +87,9 @@ export interface PublicSite {
     nearestDcFastMi?: number | null;
     nearestNetwork?: string | null;
   };
-  access247?: boolean | null;
-  fenced?: boolean | null;
-  lit?: boolean | null;
+  is_24_7?: boolean | null;
+  is_fenced?: boolean | null;
+  is_lit?: boolean | null;
 }
 
 // Matches a trailing "TX" or "CA 94105" state segment (with or without zip),
@@ -253,7 +253,7 @@ function parseCapacityText(text?: string): number | null {
   return m ? Number(m[1]) : null;
 }
 
-/** hoursText ("Open 24/7", "24 hours") -> affirmative 24/7 flag. */
+/** hours_text ("Open 24/7", "24 hours") -> affirmative 24/7 flag. */
 function hoursImply247(text?: string): boolean {
   if (!text) return false;
   return /24\s*\/\s*7|open\s+24|24\s*hours/i.test(text);
@@ -279,7 +279,7 @@ async function getSourcedPublicSites(): Promise<PublicSite[]> {
     // typeof check, not === undefined: scraped docs store missing coords as
     // null, and a null slips through an undefined check, poisons the map
     // centroid toward (0,0) and renders NaN circles.
-    if (d.mergedInto || typeof d.lat !== 'number' || typeof d.lng !== 'number') continue;
+    if (d.merged_into_lot_id || typeof d.lat !== 'number' || typeof d.lng !== 'number') continue;
     // Locality fallback: truncate "Little Havana / Shenandoah" style
     // neighborhood pairs to their primary name so the browse row reads as
     // places, not slash soup. Title-case fixes scraped all-lowercase cities
@@ -304,31 +304,31 @@ async function getSourcedPublicSites(): Promise<PublicSite[]> {
         serviceTypes: (d.services ?? []).map((t) => SERVICE_TAG_TO_PUBLIC[t]),
         resourceTypes: (d.resources ?? []).map((t) => RESOURCE_TAG_TO_PUBLIC[t]),
         source: 'sourcing',
-        clearanceInches: parseClearanceInches(d.clearanceText),
-        // stallsTotal is barely populated (3 docs) — capacityText ("2,000
+        clearanceInches: parseClearanceInches(d.clearance_text),
+        // stall_count is barely populated (3 docs) — capacity_text ("2,000
         // spaces", 360 docs) is where the real counts live.
-        stallsTotal: d.stallsTotal ?? parseCapacityText(d.capacityText),
-        // hoursText is either plain text or raw SpotHero JSON — format to
+        stall_count: d.stall_count ?? parseCapacityText(d.capacity_text),
+        // hours_text is either plain text or raw SpotHero JSON — format to
         // "Mon–Fri 7 AM–11 PM"; undefined when nothing readable.
-        hoursText: formatHoursText(d.hoursText),
-        priceText: d.priceText ?? undefined,
+        hours_text: formatHoursText(d.hours_text),
+        price_text: d.price_text ?? undefined,
         name: doc.id === DEMO_DOC_ID ? (d.name ?? undefined) : undefined,
-        surfaceType: d.surfaceType ?? undefined,
-        gateType: d.gateType ?? undefined,
-        ingressEgress: d.ingressEgress ?? undefined,
-        floodZone: d.geoContext?.floodZone ?? undefined,
+        surface_type: d.surface_type ?? undefined,
+        gate_type: d.gate_type ?? undefined,
+        ingress_egress: d.ingress_egress ?? undefined,
+        floodZone: d.enrichment?.geo?.floodZone ?? undefined,
         // Nearest demand anchor (name resolved from the zone id — the doc
         // stores only the id). Absent when the demand enrichment hasn't run.
-        nearestDemandZone: d.geoContext?.demand
-          ? MIAMI_DEMAND_ZONES.find((z) => z.id === d.geoContext!.demand!.nearestZoneId)?.name ?? d.geoContext.demand.nearestZoneId
+        nearestDemandZone: d.enrichment?.geo?.demand
+          ? MIAMI_DEMAND_ZONES.find((z) => z.id === d.enrichment?.geo!.demand!.nearestZoneId)?.name ?? d.enrichment?.geo.demand.nearestZoneId
           : undefined,
-        nearestDemandMi: d.geoContext?.demand?.nearestDistanceMi ?? undefined,
-        evContext: d.evContext ?? undefined,
-        // access247 is affirmative-only; hoursText ("Open 24/7") is the
+        nearestDemandMi: d.enrichment?.geo?.demand?.nearestDistanceMi ?? undefined,
+        evContext: d.enrichment?.ev ?? undefined,
+        // is_24_7 is affirmative-only; hours_text ("Open 24/7") is the
         // populated signal (1048 docs) — never override an explicit false.
-        access247: d.access247 ?? (hoursImply247(d.hoursText) ? true : undefined),
-        fenced: d.fenced ?? undefined,
-        lit: d.lit ?? undefined,
+        is_24_7: d.is_24_7 ?? (hoursImply247(d.hours_text) ? true : undefined),
+        is_fenced: d.is_fenced ?? undefined,
+        is_lit: d.is_lit ?? undefined,
       },
     });
   }

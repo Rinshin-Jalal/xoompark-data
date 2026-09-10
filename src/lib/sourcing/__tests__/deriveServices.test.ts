@@ -64,44 +64,44 @@ test('car repair within SERVICE_NEAR_M => service + service_bay', () => {
   assert.deepEqual(far.services, []);
 });
 
-test('staging heuristic: capacity + 24/7 + fenced', () => {
-  const loc: DeriveInput = { stallsTotal: STAGING_MIN_CAPACITY, access247: true, fenced: true };
+test('staging heuristic: capacity + 24/7 + is_fenced', () => {
+  const loc: DeriveInput = { stall_count: STAGING_MIN_CAPACITY, is_24_7: true, is_fenced: true };
   assert.deepEqual(deriveServicesResources(loc).services, ['staging']);
 });
 
-test('staging: hoursText "Open 24/7" counts as 24/7', () => {
-  const loc: DeriveInput = { stallsTotal: 200, hoursText: 'Open 24/7', fenced: true };
+test('staging: hours_text "Open 24/7" counts as 24/7', () => {
+  const loc: DeriveInput = { stall_count: 200, hours_text: 'Open 24/7', is_fenced: true };
   assert.deepEqual(deriveServicesResources(loc).services, ['staging']);
 });
 
 test('staging: below capacity threshold => no', () => {
-  const loc: DeriveInput = { stallsTotal: STAGING_MIN_CAPACITY - 1, access247: true, fenced: true };
+  const loc: DeriveInput = { stall_count: STAGING_MIN_CAPACITY - 1, is_24_7: true, is_fenced: true };
   assert.deepEqual(deriveServicesResources(loc).services, []);
 });
 
-test('staging: not fenced => no (never guessed from silence)', () => {
-  const loc: DeriveInput = { stallsTotal: 500, access247: true, fenced: null };
+test('staging: not is_fenced => no (never guessed from silence)', () => {
+  const loc: DeriveInput = { stall_count: 500, is_24_7: true, is_fenced: null };
   assert.deepEqual(deriveServicesResources(loc).services, []);
 });
 
 test('staging: not 24/7 => no', () => {
-  const loc: DeriveInput = { stallsTotal: 500, access247: false, fenced: true };
+  const loc: DeriveInput = { stall_count: 500, is_24_7: false, is_fenced: true };
   assert.deepEqual(deriveServicesResources(loc).services, []);
 });
 
-test('capacity falls through capacityText then pitstopContext.capacity', () => {
-  const viaText: DeriveInput = { capacityText: '2,000 spaces', access247: true, fenced: true };
+test('capacity falls through capacity_text then pitstopContext.capacity', () => {
+  const viaText: DeriveInput = { capacity_text: '2,000 spaces', is_24_7: true, is_fenced: true };
   assert.deepEqual(deriveServicesResources(viaText).services, ['staging']);
-  const viaPitstop: DeriveInput = { pitstopContext: { capacity: 150, checkedAt: 'x' }, access247: true, fenced: true };
+  const viaPitstop: DeriveInput = { pitstopContext: { capacity: 150, checkedAt: 'x' }, is_24_7: true, is_fenced: true };
   assert.deepEqual(deriveServicesResources(viaPitstop).services, ['staging']);
 });
 
 test('charging + staging stack', () => {
   const loc: DeriveInput = {
     evContext: { onSiteDcFastPorts: 2, checkedAt: 'x' },
-    stallsTotal: 300,
-    access247: true,
-    fenced: true,
+    stall_count: 300,
+    is_24_7: true,
+    is_fenced: true,
   };
   const { services, resources } = deriveServicesResources(loc);
   assert.deepEqual(services, ['charging', 'staging']);
@@ -109,7 +109,7 @@ test('charging + staging stack', () => {
 });
 
 test('accepts full SourcedParkingLocation docs (type-level smoke)', () => {
-  const doc = { ...base } as Pick<SourcedParkingLocation, 'evContext' | 'amenityContext' | 'pitstopContext' | 'stallsTotal' | 'capacityText' | 'access247' | 'hoursText' | 'fenced'>;
+  const doc = { ...base } as Pick<SourcedParkingLocation, 'evContext' | 'amenityContext' | 'pitstopContext' | 'stall_count' | 'capacity_text' | 'is_24_7' | 'hours_text' | 'is_fenced'>;
   assert.deepEqual(deriveServicesResources(doc).resources, ['parking_stall']);
 });
 

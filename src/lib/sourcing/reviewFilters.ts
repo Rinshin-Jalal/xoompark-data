@@ -19,10 +19,10 @@ export interface ReviewFilters {
   source: ReviewSourceFilter;
   flood: ReviewHardFilterState;
   residential: ReviewHardFilterState;
-  /** Exact match against SourcedParkingLocation.addedBy (free text, no
+  /** Exact match against SourcedParkingLocation.added_by (free text, no
    * fixed enum like source/status — the filter bar's "All owners" dropdown
    * populates its options from whatever values are actually present). */
-  addedBy: string | null;
+  added_by: string | null;
   /** Default 'in' (not 'all', unlike every other filter here) — Waymo ODD
    * is the lens BD actually works from day to day, same "lens by default"
    * rationale as charging-sites' limitToOdd (see ChargingSitesClient.tsx).
@@ -44,7 +44,7 @@ export const EMPTY_REVIEW_FILTERS: ReviewFilters = {
   source: 'all',
   flood: 'all',
   residential: 'all',
-  addedBy: null,
+  added_by: null,
   odd: 'in',
   hasCoords: 'all',
 };
@@ -67,13 +67,13 @@ export function applyReviewFilters(
 
     if (filters.locality && l.locality !== filters.locality) return false;
 
-    if (filters.addedBy && l.addedBy !== filters.addedBy) return false;
+    if (filters.added_by && l.added_by !== filters.added_by) return false;
 
     if (filters.status !== 'all' && l.status !== filters.status) return false;
 
     if (filters.source !== 'all') {
-      const bucket: ReviewSourceFilter = KNOWN_SOURCES.has(l.source as ReviewSourceFilter)
-        ? (l.source as ReviewSourceFilter)
+      const bucket: ReviewSourceFilter = KNOWN_SOURCES.has(l.source_name as ReviewSourceFilter)
+        ? (l.source_name as ReviewSourceFilter)
         : 'other';
       if (bucket !== filters.source) return false;
     }
@@ -111,7 +111,7 @@ export function hasActiveReviewFilters(filters: ReviewFilters): boolean {
     filters.source !== 'all' ||
     filters.flood !== 'all' ||
     filters.residential !== 'all' ||
-    filters.addedBy !== null ||
+    filters.added_by !== null ||
     filters.odd !== 'in' ||
     filters.hasCoords !== 'all'
   );

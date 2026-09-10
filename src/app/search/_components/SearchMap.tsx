@@ -284,9 +284,9 @@ export function SearchMap({
           >
             <div className="max-w-[240px] py-1 space-y-2">
               <div className="flex flex-wrap gap-1.5">
-                {popupSite.surfaceType && (
+                {popupSite.surface_type && (
                   <span className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border bg-[#0e1c36]/5 border-[#0e1c36]/15 text-[#0e1c36]/60">
-                    {popupSite.surfaceType === 'structured' ? 'Garage' : 'Surface lot'}
+                    {popupSite.surface_type === 'structured' ? 'Garage' : 'Surface lot'}
                   </span>
                 )}
                 {popupSite.clearanceInches != null && (
@@ -294,17 +294,17 @@ export function SearchMap({
                     {Math.floor(popupSite.clearanceInches / 12)}&prime;{popupSite.clearanceInches % 12}&Prime;{popupSite.clearanceInches >= 96 ? ' · fits 8&prime; vehicle' : ''}
                   </span>
                 )}
-                {popupSite.access247 && (
+                {popupSite.is_24_7 && (
                   <span className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border bg-[#0e1c36]/5 border-[#0e1c36]/15 text-[#0e1c36]/60">
                     24/7 access
                   </span>
                 )}
-                {popupSite.fenced && (
+                {popupSite.is_fenced && (
                   <span className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border bg-[#0e1c36]/5 border-[#0e1c36]/15 text-[#0e1c36]/60">
                     Fenced
                   </span>
                 )}
-                {popupSite.lit && (
+                {popupSite.is_lit && (
                   <span className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border bg-[#0e1c36]/5 border-[#0e1c36]/15 text-[#0e1c36]/60">
                     Lit
                   </span>
@@ -329,13 +329,13 @@ export function SearchMap({
                 {locked && <LockedValue label="Exact location" />}
               </div>
               <div className="text-xs text-[#0e1c36]/70 space-y-0.5">
-                {popupSite.stallsTotal != null && (
-                  <div>{popupSite.stallsTotal.toLocaleString()} stalls</div>
+                {popupSite.stall_count != null && (
+                  <div>{popupSite.stall_count.toLocaleString()} stalls</div>
                 )}
-                {locked ? <LockedValue label="Rates" /> : popupSite.priceText && <div>{popupSite.priceText}</div>}
-                {popupSite.hoursText && <div>{popupSite.hoursText}</div>}
-                {popupSite.gateType && <div className="capitalize">{popupSite.gateType} gate</div>}
-                {popupSite.ingressEgress && <div className="capitalize">{popupSite.ingressEgress} ingress/egress</div>}
+                {locked ? <LockedValue label="Rates" /> : popupSite.price_text && <div>{popupSite.price_text}</div>}
+                {popupSite.hours_text && <div>{popupSite.hours_text}</div>}
+                {popupSite.gate_type && <div className="capitalize">{popupSite.gate_type} gate</div>}
+                {popupSite.ingress_egress && <div className="capitalize">{popupSite.ingress_egress} ingress/egress</div>}
                 {popupSite.serviceTypes.length > 0 && (
                   <div className="text-[#0e1c36]/50">{popupSite.serviceTypes.join(' · ')}</div>
                 )}

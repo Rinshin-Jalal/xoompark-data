@@ -226,7 +226,7 @@ export function SearchClient({
   const byMatch = (a: PublicSite, b: PublicSite) =>
     rank(b) - rank(a) ||
     (b.clearanceInches ?? -1) - (a.clearanceInches ?? -1) ||
-    (b.stallsTotal ?? 0) - (a.stallsTotal ?? 0) ||
+    (b.stall_count ?? 0) - (a.stall_count ?? 0) ||
     a.id.localeCompare(b.id);
 
   const groupedSites = useMemo(() => {

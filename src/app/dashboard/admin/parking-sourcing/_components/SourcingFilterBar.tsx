@@ -44,19 +44,19 @@ export function SourcingFilterBar({
   filters,
   onChange,
   locations,
-  addedByOptions,
+  added_byOptions,
 }: {
   filters: ReviewFilters;
   onChange: (patch: Partial<ReviewFilters>) => void;
   /** The FULL unfiltered set — facet counts must not shrink as filters
-   * narrow the rows (same rationale as addedByOptions below). */
+   * narrow the rows (same rationale as added_byOptions below). */
   locations: SourcedParkingLocation[];
-  /** Distinct addedBy values actually present across all locations (not
+  /** Distinct added_by values actually present across all locations (not
    * just the currently-filtered set) — computed once by the parent so this
    * dropdown's options don't shrink to nothing as soon as a filter narrows
    * the visible rows. Empty/omitted hides the dropdown — most installs have
    * no manually-attributed records yet. */
-  addedByOptions?: string[];
+  added_byOptions?: string[];
 }) {
   const [searchInput, setSearchInput] = useState(filters.search);
   // Render-time reconciliation (React's recommended "adjusting state when a
@@ -89,9 +89,9 @@ export function SourcingFilterBar({
     const coords = { yes: 0, no: 0 };
     for (const l of locations) {
       status[l.status === 'saved' ? 'saved' : 'draft']++;
-      const bucket = KNOWN_SOURCES.has(l.source) ? l.source : 'other';
+      const bucket = KNOWN_SOURCES.has(l.source_name) ? l.source_name : 'other';
       source[bucket] = (source[bucket] ?? 0) + 1;
-      if (l.addedBy) owner[l.addedBy] = (owner[l.addedBy] ?? 0) + 1;
+      if (l.added_by) owner[l.added_by] = (owner[l.added_by] ?? 0) + 1;
       const inOdd = isInWaymoOdd(l);
       if (inOdd === true) odd.in++;
       else if (inOdd === false) odd.out++;
@@ -181,14 +181,14 @@ export function SourcingFilterBar({
         <option value="unknown">Residential: unknown</option>
       </select>
 
-      {addedByOptions && addedByOptions.length > 0 && (
+      {added_byOptions && added_byOptions.length > 0 && (
         <select
-          value={filters.addedBy ?? ''}
-          onChange={(e) => onChange({ addedBy: e.target.value || null })}
-          className={cn(selectCls, filters.addedBy ? selectActive : selectQuiet)}
+          value={filters.added_by ?? ''}
+          onChange={(e) => onChange({ added_by: e.target.value || null })}
+          className={cn(selectCls, filters.added_by ? selectActive : selectQuiet)}
         >
           <option value="">Owner: all</option>
-          {addedByOptions.map((name) => (
+          {added_byOptions.map((name) => (
             <option key={name} value={name}>
               {name} ({facets.owner[name] ?? 0})
             </option>
@@ -205,7 +205,7 @@ export function SourcingFilterBar({
             source: 'all',
             flood: 'all',
             residential: 'all',
-            addedBy: null,
+            added_by: null,
             odd: 'in',
             hasCoords: 'all',
           })

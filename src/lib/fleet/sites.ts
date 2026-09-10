@@ -13,13 +13,13 @@ export interface FleetSiteSummary {  id: string;
   lat?: number;
   lng?: number;
   status: string;
-  surfaceType: string | null;
-  gateType: string | null;
-  stallsTotal: number | null;
-  clearanceText?: string | null;
-  access247: boolean | null;
-  fenced: boolean | null;
-  lit: boolean | null;
+  surface_type: string | null;
+  gate_type: string | null;
+  stall_count: number | null;
+  clearance_text?: string | null;
+  is_24_7: boolean | null;
+  is_fenced: boolean | null;
+  is_lit: boolean | null;
   inWaymoOdd: boolean | undefined;
   /** Detected parking operator (LAZ, InterPark, ...) — null = no management company. */
   managedBy: string | null;
@@ -57,8 +57,8 @@ const OPERATOR_NAME_PATTERNS: Array<[string, RegExp]> = [
   ['Paradise', /paradise\s+park/i],
 ];
 
-export function deriveOperator(location: Pick<SourcedParkingLocation, 'source' | 'name'>): string | null {
-  const bySource = OPERATOR_SOURCES[location.source];
+export function deriveOperator(location: Pick<SourcedParkingLocation, 'source_name' | 'name'>|Pick<SourcedParkingLocation, 'source_name' | 'name'>): string | null {
+  const bySource = OPERATOR_SOURCES[location.source_name];
   if (bySource) return bySource;
   for (const [operator, pattern] of OPERATOR_NAME_PATTERNS) {
     if (pattern.test(location.name)) return operator;
@@ -89,13 +89,13 @@ export function toFleetSiteSummary(
     lat: location.lat,
     lng: location.lng,
     status: location.status,
-    surfaceType: location.surfaceType ?? null,
-    gateType: location.gateType ?? null,
-    stallsTotal: location.stallsTotal ?? null,
-    clearanceText: location.clearanceText,
-    access247: location.access247 ?? null,
-    fenced: location.fenced ?? null,
-    lit: location.lit ?? null,
+    surface_type: location.surface_type ?? null,
+    gate_type: location.gate_type ?? null,
+    stall_count: location.stall_count ?? null,
+    clearance_text: location.clearance_text,
+    is_24_7: location.is_24_7 ?? null,
+    is_fenced: location.is_fenced ?? null,
+    is_lit: location.is_lit ?? null,
     inWaymoOdd: isInWaymoOdd(location),
     managedBy: deriveOperator(location),
     hardFilters,
@@ -103,9 +103,9 @@ export function toFleetSiteSummary(
   if (center && location.lat !== undefined && location.lng !== undefined) {
     summary.distanceM = Math.round(haversineMeters(center.lat, center.lng, location.lat, location.lng));
   }
-  if (location.geoContext?.demand) {
-    summary.nearestDemandZoneId = location.geoContext.demand.nearestZoneId;
-    summary.nearestDemandDistanceMi = location.geoContext.demand.nearestDistanceMi;
+  if (location.enrichment?.geo?.demand) {
+    summary.nearestDemandZoneId = location.enrichment?.geo.demand.nearestZoneId;
+    summary.nearestDemandDistanceMi = location.enrichment?.geo.demand.nearestDistanceMi;
   }
   return summary;
 }
@@ -114,12 +114,12 @@ export interface FleetSiteQuery {
   center?: { lat: number; lng: number };
   radiusM?: number;
   minStalls?: number;
-  surfaceType?: 'surface' | 'structured';
-  gateType?: 'lpr' | 'manual' | 'automatic' | 'gateless';
+  surface_type?: 'surface' | 'structured';
+  gate_type?: 'lpr' | 'manual' | 'automatic' | 'gateless';
   /** Explicit asks only: true requires a pass, false requires a confirmed fail. Absent = no constraint. */
-  access247?: boolean;
-  fenced?: boolean;
-  lit?: boolean;
+  is_24_7?: boolean;
+  is_fenced?: boolean;
+  is_lit?: boolean;
   /**
    * Operator management: true = managed by a parking operator only (LAZ,
    * InterPark, ...), false = no management company only, undefined = no
@@ -141,7 +141,7 @@ export interface FleetSiteQuery {
  * Wide-net rule (Greg): unknown is never a fail. A filter applies ONLY when
  * explicitly requested; an absent constraint returns everything including
  * sites with unknown data. The one exception: an explicit `=true` ask
- * (e.g. fenced=true) does exclude unknowns — the fleet asked for confirmed.
+ * (e.g. is_fenced=true) does exclude unknowns — the fleet asked for confirmed.
  *
  * Waymo ODD is NOT optional — this API only ever returns sites inside the
  * live Waymo ODD (isInWaymoOdd). Sites without coords are dropped too.
@@ -158,20 +158,20 @@ export function filterFleetSites(
       if (haversineMeters(query.center.lat, query.center.lng, loc.lat, loc.lng) > radiusM) return false;
     }
     if (query.minStalls !== undefined) {
-      if (typeof loc.stallsTotal !== 'number' || loc.stallsTotal < query.minStalls) return false;
+      if (typeof loc.stall_count !== 'number' || loc.stall_count < query.minStalls) return false;
     }
-    if (query.surfaceType !== undefined && (loc.surfaceType ?? null) !== query.surfaceType) return false;
-    if (query.gateType !== undefined && (loc.gateType ?? null) !== query.gateType) return false;
-    if (query.access247 !== undefined && loc.access247 !== query.access247) return false;
-    if (query.fenced !== undefined && loc.fenced !== query.fenced) return false;
-    if (query.lit !== undefined && loc.lit !== query.lit) return false;
+    if (query.surface_type !== undefined && (loc.surface_type ?? null) !== query.surface_type) return false;
+    if (query.gate_type !== undefined && (loc.gate_type ?? null) !== query.gate_type) return false;
+    if (query.is_24_7 !== undefined && loc.is_24_7 !== query.is_24_7) return false;
+    if (query.is_fenced !== undefined && loc.is_fenced !== query.is_fenced) return false;
+    if (query.is_lit !== undefined && loc.is_lit !== query.is_lit) return false;
     if (query.managed !== undefined && (deriveOperator(loc) !== null) !== query.managed) return false;
     if (query.maxDistToDemandMi !== undefined) {
-      const dist = loc.geoContext?.demand?.nearestDistanceMi;
+      const dist = loc.enrichment?.geo?.demand?.nearestDistanceMi;
       if (typeof dist !== 'number' || dist > query.maxDistToDemandMi) return false;
     }
     if (query.maxDistToZone !== undefined) {
-      const dist = loc.geoContext?.demand?.distancesMiByZoneId?.[query.maxDistToZone.zoneId];
+      const dist = loc.enrichment?.geo?.demand?.distancesMiByZoneId?.[query.maxDistToZone.zoneId];
       if (typeof dist !== 'number' || dist > query.maxDistToZone.maxMi) return false;
     }
     return true;
@@ -182,11 +182,11 @@ export function filterFleetSites(
   const sorted = query.sortBy
     ? [...filtered].sort((a, b) => {
         const da = query.sortBy === 'nearest'
-          ? a.geoContext?.demand?.nearestDistanceMi
-          : a.geoContext?.demand?.distancesMiByZoneId?.[query.sortBy!];
+          ? a.enrichment?.geo?.demand?.nearestDistanceMi
+          : a.enrichment?.geo?.demand?.distancesMiByZoneId?.[query.sortBy!];
         const db = query.sortBy === 'nearest'
-          ? b.geoContext?.demand?.nearestDistanceMi
-          : b.geoContext?.demand?.distancesMiByZoneId?.[query.sortBy!];
+          ? b.enrichment?.geo?.demand?.nearestDistanceMi
+          : b.enrichment?.geo?.demand?.distancesMiByZoneId?.[query.sortBy!];
         return (da ?? Infinity) - (db ?? Infinity);
       })
     : filtered;
@@ -228,10 +228,10 @@ export function parseFleetQuery(sp: URLSearchParams): { ok: true; value: ParsedF
   const minStalls = num('minStalls');
   if (minStalls !== undefined && (isNaN(minStalls) || minStalls < 0)) return { ok: false, error: 'minStalls must be a non-negative number' };
 
-  const surfaceType = sp.get('surfaceType');
-  if (surfaceType !== null && surfaceType !== 'surface' && surfaceType !== 'structured') return { ok: false, error: 'surfaceType must be surface or structured' };
-  const gateType = sp.get('gateType');
-  if (gateType !== null && gateType !== 'lpr' && gateType !== 'manual' && gateType !== 'automatic' && gateType !== 'gateless') return { ok: false, error: 'gateType must be lpr, manual, automatic, or gateless' };
+  const surface_type = sp.get('surface_type');
+  if (surface_type !== null && surface_type !== 'surface' && surface_type !== 'structured') return { ok: false, error: 'surface_type must be surface or structured' };
+  const gate_type = sp.get('gate_type');
+  if (gate_type !== null && gate_type !== 'lpr' && gate_type !== 'manual' && gate_type !== 'automatic' && gate_type !== 'gateless') return { ok: false, error: 'gate_type must be lpr, manual, automatic, or gateless' };
 
   const status = sp.get('status');
   if (status !== null && status !== 'draft' && status !== 'saved') return { ok: false, error: 'status must be draft or saved' };
@@ -251,12 +251,12 @@ export function parseFleetQuery(sp: URLSearchParams): { ok: true; value: ParsedF
     center: lat !== undefined && lng !== undefined ? { lat, lng } : undefined,
     radiusM,
     minStalls,
-    surfaceType: surfaceType ?? undefined,
-    gateType: gateType ?? undefined,
+    surface_type: surface_type ?? undefined,
+    gate_type: gate_type ?? undefined,
     managed,
     limit,
   };
-  for (const key of ['access247', 'fenced', 'lit'] as const) {
+  for (const key of ['is_24_7', 'is_fenced', 'is_lit'] as const) {
     const v = sp.get(key);
     if (v === null) continue;
     if (v !== 'true' && v !== 'false') return { ok: false, error: `${key} must be true or false` };
@@ -297,7 +297,7 @@ export function parseFleetQuery(sp: URLSearchParams): { ok: true; value: ParsedF
 }
 
 /** Fields that must never leave the building via the fleet detail endpoint. */
-const INTERNAL_FIELDS = ['rawInput', 'claimedBy', 'addedBy', 'fieldProvenance', 'evidence'] as const;
+const INTERNAL_FIELDS = ['raw_input', 'claimed_by', 'added_by', 'field_sources', 'evidence'] as const;
 
 /**
  * Full fleet-facing detail: the summary plus geo context,

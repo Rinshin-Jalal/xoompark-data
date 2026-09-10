@@ -15,7 +15,7 @@
 // operator's receipt sits at their office address, not at each lot.
 import type { SourcedParkingLocation } from './types.ts';
 
-export type LbtContext = NonNullable<SourcedParkingLocation['lbtContext']>;
+export type LbtContext = NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['business_license']>;
 
 export const LBT_LAYER_URL =
   'https://gisweb.miamidade.gov/arcgis/rest/services/MD_LandInformation/MapServer/23/query';

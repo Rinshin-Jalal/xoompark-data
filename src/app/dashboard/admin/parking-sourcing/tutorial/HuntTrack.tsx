@@ -395,9 +395,9 @@ export function HuntTrack({ locations }: { locations: SourcedParkingLocation[] }
                   {localityLots.map((l) => (
                     <tr key={l.id}>
                       <td className="px-3 py-2 text-[#0e1c36]">{l.name}</td>
-                      <td className="px-3 py-2 text-[#0e1c36]/50 whitespace-nowrap">{l.source}</td>
+                      <td className="px-3 py-2 text-[#0e1c36]/50 whitespace-nowrap">{l.source_name}</td>
                       <td className="px-3 py-2 text-[#0e1c36]/50 truncate max-w-[16rem]">{l.address || '—'}</td>
-                      <td className="px-3 py-2 text-[#0e1c36]/50 whitespace-nowrap">{l.addedBy || '—'}</td>
+                      <td className="px-3 py-2 text-[#0e1c36]/50 whitespace-nowrap">{l.added_by || '—'}</td>
                     </tr>
                   ))}
                 </tbody>

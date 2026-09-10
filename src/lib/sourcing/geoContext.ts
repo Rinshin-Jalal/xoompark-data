@@ -175,7 +175,7 @@ async function enrichOne(record: SourcedParkingLocation, residentialVertices: La
   if (lat === undefined || lng === undefined) throw new Error('missing lat/lng (should have been filtered out)');
 
   const flood = await fetchFemaFlood(lat, lng);
-  const geoContext: NonNullable<SourcedParkingLocation['geoContext']> = {
+  const geoContext: NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['geo']> = {
     floodZone: flood.floodZone,
     floodHazardArea: flood.floodHazardArea,
     checkedAt: new Date().toISOString(),

@@ -1,0 +1,780 @@
+[
+  {
+    "id": "102105",
+    "notes": null,
+    "lng": -80.143086,
+    "city": "Aventura",
+    "dcFastPorts": 35,
+    "afdcId": 102105,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954414,
+      "nanoseconds": 171000000
+    },
+    "maxPowerKw": 75,
+    "ownerName": null,
+    "streetAddress": "19501 Biscayne Boulevard",
+    "name": "Aventura, FL - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.959389,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954414,
+      "nanoseconds": 171000000
+    }
+  },
+  {
+    "id": "102117",
+    "notes": null,
+    "lng": -80.194725,
+    "city": "Miami",
+    "dcFastPorts": 14,
+    "afdcId": 102117,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954172,
+      "nanoseconds": 711000000
+    },
+    "maxPowerKw": 75,
+    "ownerName": null,
+    "streetAddress": "90 NE 41st Street",
+    "name": "Miami, FL - NE 41st Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.813886,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954172,
+      "nanoseconds": 711000000
+    }
+  },
+  {
+    "id": "149328",
+    "notes": null,
+    "lng": -80.194231,
+    "city": "Miami",
+    "dcFastPorts": 4,
+    "afdcId": 149328,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954401,
+      "nanoseconds": 755000000
+    },
+    "maxPowerKw": 75,
+    "ownerName": null,
+    "streetAddress": "900 S Miami Ave",
+    "name": "Miami, FL - Mary Brickell Village - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.764726,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954401,
+      "nanoseconds": 755000000
+    }
+  },
+  {
+    "id": "149330",
+    "notes": null,
+    "lng": -80.194492,
+    "city": "Miami",
+    "dcFastPorts": 10,
+    "afdcId": 149330,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954177,
+      "nanoseconds": 63000000
+    },
+    "maxPowerKw": 75,
+    "ownerName": null,
+    "streetAddress": "701 South Miami Avenue",
+    "name": "Miami, FL - SW 8th Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.766811,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954177,
+      "nanoseconds": 63000000
+    }
+  },
+  {
+    "id": "153253",
+    "notes": null,
+    "lng": -80.308014,
+    "city": "Miami",
+    "dcFastPorts": 8,
+    "afdcId": 153253,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954406,
+      "nanoseconds": 110000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "6971 SW 24th Street",
+    "name": "Miami, FL - SW 24th Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.748483,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954406,
+      "nanoseconds": 110000000
+    }
+  },
+  {
+    "id": "163346",
+    "notes": null,
+    "lng": -80.30482,
+    "city": "Miami",
+    "dcFastPorts": 12,
+    "afdcId": 163346,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954174,
+      "nanoseconds": 319000000
+    },
+    "maxPowerKw": 75,
+    "ownerName": null,
+    "streetAddress": "8312 South Dixie Highway",
+    "name": "Miami, FL - South Dixie Highway - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.693618,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954174,
+      "nanoseconds": 319000000
+    }
+  },
+  {
+    "id": "194060",
+    "notes": null,
+    "lng": -80.141688,
+    "city": "Miami Beach",
+    "dcFastPorts": 18,
+    "afdcId": 194060,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954402,
+      "nanoseconds": 968000000
+    },
+    "maxPowerKw": 72,
+    "ownerName": null,
+    "streetAddress": "959 West Avenue",
+    "name": "Miami Beach, FL - West Avenue - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.780139,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954402,
+      "nanoseconds": 968000000
+    }
+  },
+  {
+    "id": "203265",
+    "notes": null,
+    "lng": -80.337781,
+    "city": "Doral",
+    "dcFastPorts": 8,
+    "afdcId": 203265,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954408,
+      "nanoseconds": 248000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "3300 Northwest 87th Avenue",
+    "name": "Doral, FL - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.806232,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954408,
+      "nanoseconds": 248000000
+    }
+  },
+  {
+    "id": "214076",
+    "notes": null,
+    "lng": -80.134022,
+    "city": "Miami Beach",
+    "dcFastPorts": 10,
+    "afdcId": 214076,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954403,
+      "nanoseconds": 430000000
+    },
+    "maxPowerKw": 72,
+    "ownerName": null,
+    "streetAddress": "1661 Pennsylvania Avenue",
+    "name": "Miami Beach, FL - Pennsylvania Avenue - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.791545,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954403,
+      "nanoseconds": 430000000
+    }
+  },
+  {
+    "id": "227379",
+    "notes": null,
+    "lng": -96.807834,
+    "city": "Dallas",
+    "dcFastPorts": 34,
+    "afdcId": 227379,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1787836457,
+      "nanoseconds": 850000000
+    },
+    "maxPowerKw": 325,
+    "streetAddress": "801 S Riverfront Blvd",
+    "name": "Dallas, TX - South Riverfront Boulevard - Tesla Supercharger",
+    "clearance": null,
+    "state": "TX",
+    "lat": 32.767263,
+    "savedBy": "greg@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787836457,
+      "nanoseconds": 850000000
+    }
+  },
+  {
+    "id": "227386",
+    "notes": null,
+    "lng": -80.393767,
+    "city": "Miami",
+    "dcFastPorts": 30,
+    "afdcId": 227386,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954412,
+      "nanoseconds": 666000000
+    },
+    "maxPowerKw": 325,
+    "ownerName": null,
+    "streetAddress": "8659 Southwest 124th Avenue",
+    "name": "Miami, FL - SW 124th Avenue - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.689294,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954412,
+      "nanoseconds": 666000000
+    }
+  },
+  {
+    "id": "227392",
+    "notes": null,
+    "lng": -80.158094,
+    "city": "North Miami Beach",
+    "dcFastPorts": 12,
+    "afdcId": 227392,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954409,
+      "nanoseconds": 397000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "14075 Biscayne Boulevard",
+    "name": "North Miami Beach, FL - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.906924,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954409,
+      "nanoseconds": 397000000
+    }
+  },
+  {
+    "id": "241146",
+    "notes": null,
+    "lng": -80.306185,
+    "city": "Miami",
+    "dcFastPorts": 12,
+    "afdcId": 241146,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954175,
+      "nanoseconds": 516000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "6848 Bird Road",
+    "name": "Miami, FL - Bird Road - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.732307,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954175,
+      "nanoseconds": 516000000
+    }
+  },
+  {
+    "id": "254093",
+    "notes": null,
+    "lng": -80.141112,
+    "city": "Aventura",
+    "dcFastPorts": 8,
+    "afdcId": 254093,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954414,
+      "nanoseconds": 604000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "21005 Biscayne Blvd",
+    "name": "Aventura, FL - Biscayne Boulevard - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.970516,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954414,
+      "nanoseconds": 604000000
+    }
+  },
+  {
+    "id": "302960",
+    "notes": null,
+    "lng": -80.353751,
+    "city": "Doral",
+    "dcFastPorts": 8,
+    "afdcId": 302960,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954409,
+      "nanoseconds": 823000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "9700 NW 25th St",
+    "name": "Doral, FL - Northwest 25th Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.79653,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954409,
+      "nanoseconds": 823000000
+    }
+  },
+  {
+    "id": "312518",
+    "notes": null,
+    "lng": -80.338044,
+    "city": "Miami",
+    "dcFastPorts": 20,
+    "afdcId": 312518,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954411,
+      "nanoseconds": 32000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "8888 SW 136th St",
+    "name": "Miami, FL - Southwest 136th Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.646127,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954411,
+      "nanoseconds": 32000000
+    }
+  },
+  {
+    "id": "314464",
+    "notes": null,
+    "lng": -80.246417,
+    "city": "Miami Gardens",
+    "dcFastPorts": 8,
+    "afdcId": 314464,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954411,
+      "nanoseconds": 465000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "2700 NW 183rd St",
+    "name": "Miami Gardens, FL - Northwest 183rd Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.939939,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954411,
+      "nanoseconds": 465000000
+    }
+  },
+  {
+    "id": "326662",
+    "notes": null,
+    "lng": -80.188366,
+    "city": "Miami",
+    "dcFastPorts": 8,
+    "afdcId": 326662,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954404,
+      "nanoseconds": 481000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "7636 NE 4th Ct",
+    "name": "Miami, FL - NE 4th Ct - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.845956,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954404,
+      "nanoseconds": 481000000
+    }
+  },
+  {
+    "id": "356466",
+    "notes": null,
+    "lng": -80.287637,
+    "city": "Miami",
+    "dcFastPorts": 8,
+    "afdcId": 356466,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954404,
+      "nanoseconds": 962000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "5600 Blue Lagoon Dr",
+    "name": "Miami, FL - Blue Lagoon Drive - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.781445,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954404,
+      "nanoseconds": 962000000
+    }
+  },
+  {
+    "id": "368024",
+    "notes": null,
+    "lng": -80.324013,
+    "city": "Miami",
+    "dcFastPorts": 8,
+    "afdcId": 368024,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954406,
+      "nanoseconds": 622000000
+    },
+    "maxPowerKw": 250,
+    "ownerName": null,
+    "streetAddress": "7880 W Flagler St",
+    "name": "Miami, FL - West Flagler Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.769171,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954406,
+      "nanoseconds": 622000000
+    }
+  },
+  {
+    "id": "388775",
+    "notes": null,
+    "lng": -96.7705,
+    "city": "Dallas",
+    "dcFastPorts": 8,
+    "afdcId": 388775,
+    "network": "HYPERFUEL",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1787790700,
+      "nanoseconds": 246000000
+    },
+    "maxPowerKw": 400,
+    "streetAddress": "10433 N Central Expy",
+    "name": "10433 N Central Expy",
+    "clearance": null,
+    "state": "TX",
+    "lat": 32.88929,
+    "savedBy": "greg@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787790700,
+      "nanoseconds": 246000000
+    }
+  },
+  {
+    "id": "422570",
+    "notes": null,
+    "lng": -80.377764,
+    "city": "Hialeah Gardens",
+    "dcFastPorts": 8,
+    "afdcId": 422570,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954415,
+      "nanoseconds": 692000000
+    },
+    "maxPowerKw": 325,
+    "ownerName": null,
+    "streetAddress": "13891 Okeechobee Rd",
+    "name": "Hialeah Gardens, FL - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.896925,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954415,
+      "nanoseconds": 692000000
+    }
+  },
+  {
+    "id": "440444",
+    "notes": null,
+    "lng": -80.337014,
+    "city": "Doral",
+    "dcFastPorts": 8,
+    "afdcId": 440444,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954407,
+      "nanoseconds": 762000000
+    },
+    "maxPowerKw": 325,
+    "ownerName": null,
+    "streetAddress": "1380 NW 87th Ave",
+    "name": "Doral, FL - Northwest 87th Avenue - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.786333,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954407,
+      "nanoseconds": 762000000
+    }
+  },
+  {
+    "id": "450789",
+    "notes": null,
+    "lng": -80.297834,
+    "city": "Miami",
+    "dcFastPorts": 16,
+    "afdcId": 450789,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954413,
+      "nanoseconds": 6000000
+    },
+    "maxPowerKw": 325,
+    "ownerName": null,
+    "streetAddress": "5750 NW 183rd St",
+    "name": "Miami, FL - Northwest 183rd Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.938437,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954413,
+      "nanoseconds": 6000000
+    }
+  },
+  {
+    "id": "455731",
+    "notes": null,
+    "lng": -97.739266,
+    "city": "Austin",
+    "dcFastPorts": 8,
+    "afdcId": 455731,
+    "network": "CHARGELAB",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1787416622,
+      "nanoseconds": 88000000
+    },
+    "maxPowerKw": 120,
+    "streetAddress": "301 E 8th St",
+    "name": "301 E 8th St",
+    "clearance": null,
+    "state": "TX",
+    "lat": 30.269034,
+    "savedBy": "greg@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787416622,
+      "nanoseconds": 88000000
+    }
+  },
+  {
+    "id": "461323",
+    "notes": null,
+    "lng": -80.192393,
+    "city": "Miami",
+    "dcFastPorts": 13,
+    "afdcId": 461323,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954173,
+      "nanoseconds": 915000000
+    },
+    "maxPowerKw": 75,
+    "ownerName": null,
+    "streetAddress": "21 SE 7th St",
+    "name": "Miami, FL - SW 7th Street - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.767573,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954173,
+      "nanoseconds": 915000000
+    }
+  },
+  {
+    "id": "463500",
+    "notes": null,
+    "lng": -80.176424,
+    "city": "Miami",
+    "dcFastPorts": 12,
+    "afdcId": 463500,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954175,
+      "nanoseconds": 903000000
+    },
+    "maxPowerKw": 325,
+    "ownerName": null,
+    "streetAddress": "1111 NE 125th St",
+    "name": "The Gardens - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.891442,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954175,
+      "nanoseconds": 903000000
+    }
+  },
+  {
+    "id": "466131",
+    "notes": null,
+    "lng": -80.399667,
+    "city": "Miami",
+    "dcFastPorts": 12,
+    "afdcId": 466131,
+    "network": "Tesla",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788954416,
+      "nanoseconds": 153000000
+    },
+    "maxPowerKw": null,
+    "ownerName": null,
+    "streetAddress": "12300 SW 127th Ave",
+    "name": "Kendall Breeze Shopping Center - Tesla Supercharger",
+    "portMounting": null,
+    "clearance": null,
+    "state": "FL",
+    "lat": 25.653971,
+    "savedBy": "tesla-supercharger-verify (script)",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788954416,
+      "nanoseconds": 153000000
+    }
+  }
+]

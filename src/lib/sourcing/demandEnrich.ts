@@ -28,7 +28,7 @@ export async function enrichDemandZonesBatch(force = false): Promise<{
       skipped++;
       continue;
     }
-    const existing = loc.geoContext?.demand;
+    const existing = loc.enrichment?.geo?.demand;
     if (!force && existing?.configHash === currentHash && existing?.schemaVersion === DEMAND_ZONES_SCHEMA_VERSION) {
       skipped++;
       continue;

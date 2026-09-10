@@ -2,7 +2,7 @@
 // under plain `node --experimental-strip-types` (see __tests__/hours.test.ts).
 
 /**
- * hoursText comes in two shapes: plain text ("24/7", "Mon-Sun - All day")
+ * hours_text comes in two shapes: plain text ("24/7", "Mon-Sun - All day")
  * and raw SpotHero JSON ({"periods":[{first_day,last_day,start_time,...}]}).
  * Plain text passes through; JSON is formatted to "Mon–Fri 7 AM–11 PM".
  * Returns undefined when nothing human-readable can be produced.

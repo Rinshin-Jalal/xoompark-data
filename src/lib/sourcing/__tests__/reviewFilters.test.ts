@@ -21,15 +21,15 @@ function makeLocation(overrides: Partial<SourcedParkingLocation> = {}): SourcedP
   return {
     id: `loc-${seq}`,
     name: `Lot ${seq}`,
-    source: 'spothero',
-    sourceUrl: 'https://example.com',
+    source_name: 'spothero',
+    source_url: 'https://example.com',
     evidence: [],
-    fieldProvenance: {},
-    capturedBy: 'scraped',
+    field_sources: {},
+    captured_by: 'scraped',
     status: 'draft',
-    rawInput: null,
-    createdAt: '2026-08-23T00:00:00.000Z',
-    updatedAt: '2026-08-23T00:00:00.000Z',
+    raw_input: null,
+    created_at: '2026-08-23T00:00:00.000Z',
+    updated_at: '2026-08-23T00:00:00.000Z',
     // Real Waymo-Phoenix coordinates by default (isInWaymoOdd computes
     // true here — see odd.test.ts) so the pre-existing dimension tests
     // below (none of which care about ODD) aren't silently filtered out by
@@ -76,13 +76,13 @@ test('applyReviewFilters locality: exact match only', () => {
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
 
-// --- addedBy --------------------------------------------------------------
+// --- added_by --------------------------------------------------------------
 
-test('applyReviewFilters addedBy: exact match only', () => {
-  const a = makeLocation({ addedBy: 'Priya' });
-  const b = makeLocation({ addedBy: 'Sam' });
+test('applyReviewFilters added_by: exact match only', () => {
+  const a = makeLocation({ added_by: 'Priya' });
+  const b = makeLocation({ added_by: 'Sam' });
   const c = makeLocation();
-  const result = applyReviewFilters([a, b, c], filters({ addedBy: 'Priya' }));
+  const result = applyReviewFilters([a, b, c], filters({ added_by: 'Priya' }));
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
 
@@ -97,17 +97,17 @@ test('applyReviewFilters status: draft/saved', () => {
 
 // --- source -------------------------------------------------------------
 
-test('applyReviewFilters source: matches an explicit known source', () => {
-  const a = makeLocation({ source: 'laz' });
-  const b = makeLocation({ source: 'spothero' });
-  const result = applyReviewFilters([a, b], filters({ source: 'laz' }));
+test('applyReviewFilters source_name: matches an explicit known source', () => {
+  const a = makeLocation({ source_name: 'laz' });
+  const b = makeLocation({ source_name: 'spothero' });
+  const result = applyReviewFilters([a, b], filters({ source_name: 'laz' }));
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
 
-test('applyReviewFilters source: other catches non-listed sources', () => {
-  const a = makeLocation({ source: 'extension' });
-  const b = makeLocation({ source: 'spothero' });
-  const result = applyReviewFilters([a, b], filters({ source: 'other' }));
+test('applyReviewFilters source_name: other catches non-listed sources', () => {
+  const a = makeLocation({ source_name: 'extension' });
+  const b = makeLocation({ source_name: 'spothero' });
+  const result = applyReviewFilters([a, b], filters({ source_name: 'other' }));
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
 
@@ -227,12 +227,12 @@ test('applyReviewFilters: two+ filters combine with AND, not OR', () => {
 });
 
 test('applyReviewFilters: three combined filters narrow further than any subset', () => {
-  const a = makeLocation({ name: 'Brickell Garage', locality: 'Brickell', status: 'saved', source: 'laz' });
-  const b = makeLocation({ name: 'Brickell Garage', locality: 'Brickell', status: 'saved', source: 'spothero' });
+  const a = makeLocation({ name: 'Brickell Garage', locality: 'Brickell', status: 'saved', source_name: 'laz' });
+  const b = makeLocation({ name: 'Brickell Garage', locality: 'Brickell', status: 'saved', source_name: 'spothero' });
 
   const result = applyReviewFilters(
     [a, b],
-    filters({ search: 'brickell', locality: 'Brickell', status: 'saved', source: 'laz' }),
+    filters({ search: 'brickell', locality: 'Brickell', status: 'saved', source_name: 'laz' }),
   );
   assert.deepEqual(result.map((l) => l.id), [a.id]);
 });
@@ -253,10 +253,10 @@ test('hasActiveReviewFilters: true when any single dimension is non-default', ()
   assert.equal(hasActiveReviewFilters(filters({ search: 'x' })), true);
   assert.equal(hasActiveReviewFilters(filters({ locality: 'Brickell' })), true);
   assert.equal(hasActiveReviewFilters(filters({ status: 'saved' })), true);
-  assert.equal(hasActiveReviewFilters(filters({ source: 'laz' })), true);
+  assert.equal(hasActiveReviewFilters(filters({ source_name: 'laz' })), true);
   assert.equal(hasActiveReviewFilters(filters({ flood: 'pass' })), true);
   assert.equal(hasActiveReviewFilters(filters({ residential: 'fail' })), true);
-  assert.equal(hasActiveReviewFilters(filters({ addedBy: 'Priya' })), true);
+  assert.equal(hasActiveReviewFilters(filters({ added_by: 'Priya' })), true);
   assert.equal(hasActiveReviewFilters(filters({ odd: 'all' })), true);
   assert.equal(hasActiveReviewFilters(filters({ hasCoords: 'yes' })), true);
 });

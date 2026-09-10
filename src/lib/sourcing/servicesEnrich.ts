@@ -25,7 +25,7 @@ export async function enrichServicesBatch(): Promise<{
   for (const loc of all) {
     try {
       const { services, resources } = deriveServicesResources(loc);
-      const same = loc.derivedAt
+      const same = loc.derived_at
         && (loc.services ?? []).join() === services.join()
         && (loc.resources ?? []).join() === resources.join();
       if (same) {

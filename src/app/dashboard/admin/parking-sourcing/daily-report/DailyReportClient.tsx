@@ -28,16 +28,16 @@ export function DailyReportClient({ rows }: { rows: Row[] }) {
   // counts by state
   const counts = OUTREACH_STATES.reduce(
     (acc, s) => {
-      acc[s] = rows.filter((r) => r.outreach.outreachState === s).length;
+      acc[s] = rows.filter((r) => r.outreach.status === s).length;
       return acc;
     },
     {} as Record<string, number>,
   );
 
   const total = rows.length;
-  const inquiryCount = rows.filter((r) => r.outreach.inquirySent).length;
-  const callCount = rows.filter((r) => r.outreach.callMade).length;
-  const formCount = rows.filter((r) => r.outreach.formSubmitted).length;
+  const inquiryCount = rows.filter((r) => r.outreach.email_sent).length;
+  const callCount = rows.filter((r) => r.outreach.call_completed).length;
+  const formCount = rows.filter((r) => r.outreach.form_submitted).length;
 
   async function handleDownload() {
     setDownloading(true);
@@ -132,7 +132,7 @@ export function DailyReportClient({ rows }: { rows: Row[] }) {
                 <tr key={r.outreach.id} className="border-b border-[#0e1c36]/6 last:border-b-0 hover:bg-[#0e1c36]/[.02]">
                   <td className="px-3 py-2">
                     <a
-                      href={r.lot.sourceUrl}
+                      href={r.lot.source_url}
                       target="_blank"
                       rel="noreferrer"
                       className="text-[#0e1c36] hover:text-[#1a3a7a] hover:underline font-medium max-w-[14rem] truncate block"
@@ -140,38 +140,38 @@ export function DailyReportClient({ rows }: { rows: Row[] }) {
                     >
                       {r.lot.name}
                     </a>
-                    <span className="text-[10px] text-[#0e1c36]/40">{r.lot.locality ?? r.lot.source}</span>
+                    <span className="text-[10px] text-[#0e1c36]/40">{r.lot.locality ?? r.lot.source_name}</span>
                   </td>
                   <td className="px-3 py-2">
-                    <span className="text-[#0e1c36]/80">{r.outreach.contactName || '—'}</span>
-                    {r.outreach.contactRole && (
-                      <span className="text-[10px] text-[#0e1c36]/40 ml-1">({r.outreach.contactRole})</span>
+                    <span className="text-[#0e1c36]/80">{r.outreach.contact_name || '—'}</span>
+                    {r.outreach.contact_title && (
+                      <span className="text-[10px] text-[#0e1c36]/40 ml-1">({r.outreach.contact_title})</span>
                     )}
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex gap-1.5">
-                      {r.outreach.inquirySent && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#EAF7F0] text-[#16805A]">email</span>}
-                      {r.outreach.callMade && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#EAF7F0] text-[#16805A]">call</span>}
-                      {r.outreach.formSubmitted && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#EAF7F0] text-[#16805A]">form</span>}
-                      {!r.outreach.inquirySent && !r.outreach.callMade && !r.outreach.formSubmitted && (
+                      {r.outreach.email_sent && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#EAF7F0] text-[#16805A]">email</span>}
+                      {r.outreach.call_completed && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#EAF7F0] text-[#16805A]">call</span>}
+                      {r.outreach.form_submitted && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#EAF7F0] text-[#16805A]">form</span>}
+                      {!r.outreach.email_sent && !r.outreach.call_completed && !r.outreach.form_submitted && (
                         <span className="text-[#0e1c36]/30">—</span>
                       )}
                     </div>
                   </td>
                   <td className="px-3 py-2">
                     <span
-                      className={`text-[10px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border whitespace-nowrap ${STATE_COLORS[r.outreach.outreachState] ?? ''}`}
+                      className={`text-[10px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border whitespace-nowrap ${STATE_COLORS[r.outreach.status] ?? ''}`}
                     >
-                      {OUTREACH_STATE_LABELS[r.outreach.outreachState]}
+                      {OUTREACH_STATE_LABELS[r.outreach.status]}
                     </span>
                   </td>
                   <td className="px-3 py-2 text-xs text-[#0e1c36]/70">
-                    {r.outreach.offerSpaces != null ? `${r.outreach.offerSpaces} spaces` : '—'}
-                    {r.outreach.offerPrice && <span className="ml-1">· {r.outreach.offerPrice}</span>}
+                    {r.outreach.offered_spaces != null ? `${r.outreach.offered_spaces} spaces` : '—'}
+                    {r.outreach.offered_price && <span className="ml-1">· {r.outreach.offered_price}</span>}
                   </td>
-                  <td className="px-3 py-2 text-xs text-[#0e1c36]/70">{r.outreach.bdrOwner || '—'}</td>
-                  <td className="px-3 py-2 text-xs text-[#0e1c36]/50" title={r.outreach.updatedAt}>
-                    {formatWhen(r.outreach.updatedAt)}
+                  <td className="px-3 py-2 text-xs text-[#0e1c36]/70">{r.outreach.assigned_to || '—'}</td>
+                  <td className="px-3 py-2 text-xs text-[#0e1c36]/50" title={r.outreach.updated_at}>
+                    {formatWhen(r.outreach.updated_at)}
                   </td>
                 </tr>
               ))}

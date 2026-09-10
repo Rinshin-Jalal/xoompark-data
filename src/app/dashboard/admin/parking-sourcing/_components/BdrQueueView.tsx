@@ -64,9 +64,9 @@ function ChecklistDots({ location }: { location: SourcedParkingLocation }) {
 const WHY_IT_MATTERS: Record<string, string> = {
   capacity: '50+ stalls is the working minimum — the hard filter fails below that.',
   open247: '24/7 access is a hard requirement for round-the-clock robotaxi ops.',
-  fenced: 'Security signal — an unfenced lot is a likely hard-filter no.',
-  lit: 'Needed for safe night operation — another hard filter.',
-  ingressEgress: 'Separate one-way in/out avoids robotaxi conflict points at the gate.',
+  is_fenced: 'Security signal — an unfenced lot is a likely hard-filter no.',
+  is_lit: 'Needed for safe night operation — another hard filter.',
+  ingress_egress: 'Separate one-way in/out avoids robotaxi conflict points at the gate.',
   clearance: "Under-clearance garages physically can't take the vehicle — a hard stop.",
   ratesHours: 'Usually the easiest field to close — almost always stated right on the listing.',
 };
@@ -91,18 +91,18 @@ function OutreachPanel({
   const [isPending, startTransition] = useTransition();
 
   // form state
-  const [contactName, setContactName] = useState('');
-  const [contactRole, setContactRole] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  const [contactPhone, setContactPhone] = useState('');
-  const [inquirySent, setInquirySent] = useState(false);
-  const [callMade, setCallMade] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [offerSpaces, setOfferSpaces] = useState('');
-  const [offerPrice, setOfferPrice] = useState('');
-  const [offerStart, setOfferStart] = useState('');
-  const [quoteSource, setQuoteSource] = useState('');
-  const [bdrOwner, setBdrOwner] = useState('');
+  const [contact_name, setContactName] = useState('');
+  const [contact_title, setContactRole] = useState('');
+  const [contact_email, setContactEmail] = useState('');
+  const [contact_phone, setContactPhone] = useState('');
+  const [email_sent, setInquirySent] = useState(false);
+  const [call_completed, setCallMade] = useState(false);
+  const [form_submitted, setFormSubmitted] = useState(false);
+  const [offered_spaces, setOfferSpaces] = useState('');
+  const [offered_price, setOfferPrice] = useState('');
+  const [offered_start_date, setOfferStart] = useState('');
+  const [quote_source, setQuoteSource] = useState('');
+  const [assigned_to, setBdrOwner] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -110,18 +110,18 @@ function OutreachPanel({
       if (cancelled) return;
       setRecord(r);
       if (r) {
-        setContactName(r.contactName);
-        setContactRole(r.contactRole);
-        setContactEmail(r.contactEmail);
-        setContactPhone(r.contactPhone);
-        setInquirySent(r.inquirySent);
-        setCallMade(r.callMade);
-        setFormSubmitted(r.formSubmitted);
-        setOfferSpaces(r.offerSpaces != null ? String(r.offerSpaces) : '');
-        setOfferPrice(r.offerPrice);
-        setOfferStart(r.offerStart);
-        setQuoteSource(r.quoteSource);
-        setBdrOwner(r.bdrOwner);
+        setContactName(r.contact_name);
+        setContactRole(r.contact_title);
+        setContactEmail(r.contact_email);
+        setContactPhone(r.contact_phone);
+        setInquirySent(r.email_sent);
+        setCallMade(r.call_completed);
+        setFormSubmitted(r.form_submitted);
+        setOfferSpaces(r.offered_spaces != null ? String(r.offered_spaces) : '');
+        setOfferPrice(r.offered_price);
+        setOfferStart(r.offered_start_date);
+        setQuoteSource(r.quote_source);
+        setBdrOwner(r.assigned_to);
       }
       setLoading(false);
     });
@@ -130,13 +130,13 @@ function OutreachPanel({
 
   function buildData(): OutreachInput {
     return {
-      contactName, contactRole, contactEmail, contactPhone,
-      inquirySent, callMade, formSubmitted,
-      offerSpaces: offerSpaces.trim() === '' ? null : Number(offerSpaces),
-      offerPrice, offerStart,
-      outreachState: record?.outreachState ?? 'ready',
-      responseDate: record?.responseDate ?? null,
-      quoteSource, bdrOwner,
+      contact_name, contact_title, contact_email, contact_phone,
+      email_sent, call_completed, form_submitted,
+      offered_spaces: offered_spaces.trim() === '' ? null : Number(offered_spaces),
+      offered_price, offered_start_date,
+      status: record?.status ?? 'ready',
+      response_date: record?.response_date ?? null,
+      quote_source, assigned_to,
     };
   }
 
@@ -176,7 +176,7 @@ function OutreachPanel({
     );
   }
 
-  const currentState = record?.outreachState ?? 'ready';
+  const currentState = record?.status ?? 'ready';
   const inputCls = 'w-full mt-1 px-2 py-1.5 border border-[#0e1c36]/20 rounded text-sm focus:outline-none focus:border-[#1a3a7a]';
   const labelCls = 'text-[10px] font-medium text-[#0e1c36]/60';
 
@@ -212,34 +212,34 @@ function OutreachPanel({
       <div className="grid grid-cols-2 gap-2 mb-3">
         <div>
           <label className={labelCls}>Contact name</label>
-          <input value={contactName} onChange={(e) => setContactName(e.target.value)} className={inputCls} />
+          <input value={contact_name} onChange={(e) => setContactName(e.target.value)} className={inputCls} />
         </div>
         <div>
           <label className={labelCls}>Role</label>
-          <input value={contactRole} onChange={(e) => setContactRole(e.target.value)} className={inputCls} />
+          <input value={contact_title} onChange={(e) => setContactRole(e.target.value)} className={inputCls} />
         </div>
         <div>
           <label className={labelCls}>Email</label>
-          <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} className={inputCls} />
+          <input value={contact_email} onChange={(e) => setContactEmail(e.target.value)} className={inputCls} />
         </div>
         <div>
           <label className={labelCls}>Phone</label>
-          <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} className={inputCls} />
+          <input value={contact_phone} onChange={(e) => setContactPhone(e.target.value)} className={inputCls} />
         </div>
       </div>
 
       {/* Inquiry checkboxes */}
       <div className="flex flex-wrap gap-3 mb-3">
         <label className="flex items-center gap-1.5 text-xs text-[#0e1c36]/70 cursor-pointer">
-          <input type="checkbox" checked={inquirySent} onChange={(e) => setInquirySent(e.target.checked)} className="rounded" />
+          <input type="checkbox" checked={email_sent} onChange={(e) => setInquirySent(e.target.checked)} className="rounded" />
           Inquiry sent
         </label>
         <label className="flex items-center gap-1.5 text-xs text-[#0e1c36]/70 cursor-pointer">
-          <input type="checkbox" checked={callMade} onChange={(e) => setCallMade(e.target.checked)} className="rounded" />
+          <input type="checkbox" checked={call_completed} onChange={(e) => setCallMade(e.target.checked)} className="rounded" />
           Call made
         </label>
         <label className="flex items-center gap-1.5 text-xs text-[#0e1c36]/70 cursor-pointer">
-          <input type="checkbox" checked={formSubmitted} onChange={(e) => setFormSubmitted(e.target.checked)} className="rounded" />
+          <input type="checkbox" checked={form_submitted} onChange={(e) => setFormSubmitted(e.target.checked)} className="rounded" />
           Form submitted
         </label>
       </div>
@@ -248,15 +248,15 @@ function OutreachPanel({
       <div className="grid grid-cols-3 gap-2 mb-3">
         <div>
           <label className={labelCls}>Offer spaces</label>
-          <input type="number" min={0} value={offerSpaces} onChange={(e) => setOfferSpaces(e.target.value)} className={inputCls} />
+          <input type="number" min={0} value={offered_spaces} onChange={(e) => setOfferSpaces(e.target.value)} className={inputCls} />
         </div>
         <div>
           <label className={labelCls}>Price</label>
-          <input value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)} placeholder="$10/day" className={inputCls} />
+          <input value={offered_price} onChange={(e) => setOfferPrice(e.target.value)} placeholder="$10/day" className={inputCls} />
         </div>
         <div>
           <label className={labelCls}>Start date</label>
-          <input type="date" value={offerStart} onChange={(e) => setOfferStart(e.target.value)} className={inputCls} />
+          <input type="date" value={offered_start_date} onChange={(e) => setOfferStart(e.target.value)} className={inputCls} />
         </div>
       </div>
 
@@ -264,11 +264,11 @@ function OutreachPanel({
       <div className="grid grid-cols-2 gap-2 mb-3">
         <div>
           <label className={labelCls}>BDR owner</label>
-          <input value={bdrOwner} onChange={(e) => setBdrOwner(e.target.value)} className={inputCls} />
+          <input value={assigned_to} onChange={(e) => setBdrOwner(e.target.value)} className={inputCls} />
         </div>
         <div>
           <label className={labelCls}>Quote source</label>
-          <input value={quoteSource} onChange={(e) => setQuoteSource(e.target.value)} className={inputCls} />
+          <input value={quote_source} onChange={(e) => setQuoteSource(e.target.value)} className={inputCls} />
         </div>
       </div>
 
@@ -290,21 +290,21 @@ function OutreachPanel({
 function buildConfirmEdits(location: SourcedParkingLocation, key: string): SourcedLocationEdits | null {
   switch (key) {
     case 'capacity':
-      return typeof location.stallsTotal === 'number' ? { stallsTotal: location.stallsTotal } : null;
+      return typeof location.stall_count === 'number' ? { stall_count: location.stall_count } : null;
     case 'open247':
-      return location.access247 !== undefined ? { access247: location.access247 } : null;
-    case 'fenced':
-      return location.fenced !== undefined ? { fenced: location.fenced } : null;
-    case 'lit':
-      return location.lit !== undefined ? { lit: location.lit } : null;
-    case 'ingressEgress':
-      return location.ingressEgress ? { ingressEgress: location.ingressEgress } : null;
+      return location.is_24_7 !== undefined ? { is_24_7: location.is_24_7 } : null;
+    case 'is_fenced':
+      return location.is_fenced !== undefined ? { is_fenced: location.is_fenced } : null;
+    case 'is_lit':
+      return location.is_lit !== undefined ? { is_lit: location.is_lit } : null;
+    case 'ingress_egress':
+      return location.ingress_egress ? { ingress_egress: location.ingress_egress } : null;
     case 'clearance':
-      return location.clearanceText ? { clearanceText: location.clearanceText } : null;
+      return location.clearance_text ? { clearance_text: location.clearance_text } : null;
     case 'ratesHours': {
       const edits: SourcedLocationEdits = {};
-      if (location.priceText) edits.priceText = location.priceText;
-      if (location.hoursText) edits.hoursText = location.hoursText;
+      if (location.price_text) edits.price_text = location.price_text;
+      if (location.hours_text) edits.hours_text = location.hours_text;
       return Object.keys(edits).length > 0 ? edits : null;
     }
     default:
@@ -440,7 +440,7 @@ export function BdrQueueView({ locations, practiceRecord }: { locations: Sourced
               <span className="truncate text-[#0e1c36]">
                 {l.id === warmUpRecord?.id && <span className="text-[10px] text-[#8a6d1a] mr-1">[warm-up]</span>}
                 {l.name}
-                {l.claimedBy && <span className="text-[#0e1c36]/40"> · claimed by {l.claimedBy}</span>}
+                {l.claimed_by && <span className="text-[#0e1c36]/40"> · claimed by {l.claimed_by}</span>}
               </span>
               <ChecklistDots location={l} />
             </button>
@@ -537,19 +537,19 @@ function BdrCard({
   const [fieldStatusOverride, setFieldStatusOverride] = useState<Record<string, FieldStatus>>({});
   const [fieldPending, startFieldTransition] = useTransition();
 
-  // Who's currently working this lot — separate from addedBy (whoever
+  // Who's currently working this lot — separate from added_by (whoever
   // originally created the record via Hunt/+Add Location). Editable here
   // any time, on any lot (including scraped ones that never had an
-  // addedBy), unlike addedBy which is only ever set once at creation.
-  const [claimedByInput, setClaimedByInput] = useState(location.claimedBy ?? '');
+  // added_by), unlike added_by which is only ever set once at creation.
+  const [claimed_byInput, setClaimedByInput] = useState(location.claimed_by ?? '');
   const [claimPending, startClaimTransition] = useTransition();
 
   function handleSaveClaim() {
-    const trimmed = claimedByInput.trim();
-    if (trimmed === (location.claimedBy ?? '')) return;
+    const trimmed = claimed_byInput.trim();
+    if (trimmed === (location.claimed_by ?? '')) return;
     startClaimTransition(async () => {
       try {
-        await updateSourcedLocation(location.id, { claimedBy: trimmed || undefined });
+        await updateSourcedLocation(location.id, { claimed_by: trimmed || undefined });
         showToast({ type: 'success', message: trimmed ? 'Claimed' : 'Claim cleared' });
         refresh();
       } catch (err) {
@@ -559,7 +559,7 @@ function BdrCard({
   }
 
   // Property name — editable inline (same on-blur-save pattern as
-  // claimedByInput above). A blank/whitespace-only name is silently
+  // claimed_byInput above). A blank/whitespace-only name is silently
   // rejected and reverted rather than written, matching the +Add Location
   // form's "name is required" rule.
   const [nameInput, setNameInput] = useState(location.name);
@@ -671,7 +671,7 @@ function BdrCard({
         </label>
         <input
           id={`claimed-by-${location.id}`}
-          value={claimedByInput}
+          value={claimed_byInput}
           onChange={(e) => setClaimedByInput(e.target.value)}
           onBlur={handleSaveClaim}
           disabled={claimPending}
@@ -684,7 +684,7 @@ function BdrCard({
 
       <div className="flex flex-wrap gap-2 mb-5">
         <a
-          href={location.sourceUrl}
+          href={location.source_url}
           target="_blank"
           rel="noreferrer"
           className="px-3 py-1.5 text-xs font-mono uppercase tracking-[.06em] border border-[#0e1c36]/20 rounded hover:bg-[#0e1c36]/5"
@@ -901,23 +901,23 @@ function WizardStep({
   // ("Wrong" — status: 'wrong', state.captured false — we deliberately don't
   // pre-fill the rejected value back in).
   const [numberRaw, setNumberRaw] = useState(() =>
-    state.captured && typeof location.stallsTotal === 'number' ? String(location.stallsTotal) : '',
+    state.captured && typeof location.stall_count === 'number' ? String(location.stall_count) : '',
   );
   const [triValue, setTriValue] = useState<boolean | null | undefined>(() => {
     if (!state.captured) return undefined;
-    if (fieldKey === 'open247') return location.access247;
-    if (fieldKey === 'fenced') return location.fenced;
-    if (fieldKey === 'lit') return location.lit;
+    if (fieldKey === 'open247') return location.is_24_7;
+    if (fieldKey === 'is_fenced') return location.is_fenced;
+    if (fieldKey === 'is_lit') return location.is_lit;
     return undefined;
   });
   const [textValue, setTextValue] = useState(() => {
     if (!state.captured) return '';
-    if (fieldKey === 'ingressEgress') return location.ingressEgress ?? '';
-    if (fieldKey === 'clearance') return location.clearanceText ?? '';
+    if (fieldKey === 'ingress_egress') return location.ingress_egress ?? '';
+    if (fieldKey === 'clearance') return location.clearance_text ?? '';
     return '';
   });
-  const [priceValue, setPriceValue] = useState(() => (state.captured ? location.priceText ?? '' : ''));
-  const [hoursValue, setHoursValue] = useState(() => (state.captured ? location.hoursText ?? '' : ''));
+  const [priceValue, setPriceValue] = useState(() => (state.captured ? location.price_text ?? '' : ''));
+  const [hoursValue, setHoursValue] = useState(() => (state.captured ? location.hours_text ?? '' : ''));
 
   let manualInput: React.ReactNode;
   let canSave: boolean;
@@ -926,12 +926,12 @@ function WizardStep({
   if (fieldKey === 'capacity') {
     const n = numberRaw.trim() === '' ? undefined : Number(numberRaw);
     canSave = n !== undefined && !Number.isNaN(n);
-    buildEdits = () => ({ stallsTotal: n });
+    buildEdits = () => ({ stall_count: n });
     manualInput = (
       <div>
-        <label htmlFor="wizard-stallsTotal" className="text-xs font-medium text-[#0e1c36]/70">Stall count</label>
+        <label htmlFor="wizard-stall_count" className="text-xs font-medium text-[#0e1c36]/70">Stall count</label>
         <input
-          id="wizard-stallsTotal"
+          id="wizard-stall_count"
           type="number"
           min={0}
           value={numberRaw}
@@ -940,24 +940,24 @@ function WizardStep({
           className="w-full mt-1 px-3 py-2 border border-[#0e1c36]/20 rounded text-sm"
         />
         <p className="text-[10px] text-[#0e1c36]/40 mt-0.5">Only if a source states an exact number — never estimate.</p>
-        {location.capacityText && (
-          <p className="text-xs text-[#0e1c36]/50 mt-1">Scraped text (not a confirmed number): &ldquo;{location.capacityText}&rdquo;</p>
+        {location.capacity_text && (
+          <p className="text-xs text-[#0e1c36]/50 mt-1">Scraped text (not a confirmed number): &ldquo;{location.capacity_text}&rdquo;</p>
         )}
       </div>
     );
-  } else if (fieldKey === 'open247' || fieldKey === 'fenced' || fieldKey === 'lit') {
+  } else if (fieldKey === 'open247' || fieldKey === 'is_fenced' || fieldKey === 'is_lit') {
     canSave = triValue !== undefined;
     buildEdits = () => {
-      if (fieldKey === 'open247') return { access247: triValue };
-      if (fieldKey === 'fenced') return { fenced: triValue };
-      return { lit: triValue };
+      if (fieldKey === 'open247') return { is_24_7: triValue };
+      if (fieldKey === 'is_fenced') return { is_fenced: triValue };
+      return { is_lit: triValue };
     };
     manualInput = (
       <TriStateControl id={`wizard-${fieldKey}`} label={fieldLabel(fieldKey)} value={triValue} onChange={setTriValue} />
     );
-  } else if (fieldKey === 'ingressEgress' || fieldKey === 'clearance') {
+  } else if (fieldKey === 'ingress_egress' || fieldKey === 'clearance') {
     canSave = textValue.trim() !== '';
-    buildEdits = () => (fieldKey === 'ingressEgress' ? { ingressEgress: textValue.trim() } : { clearanceText: textValue.trim() });
+    buildEdits = () => (fieldKey === 'ingress_egress' ? { ingress_egress: textValue.trim() } : { clearance_text: textValue.trim() });
     manualInput = (
       <div>
         <label htmlFor={`wizard-${fieldKey}`} className="text-xs font-medium text-[#0e1c36]/70">{fieldLabel(fieldKey)}</label>
@@ -965,7 +965,7 @@ function WizardStep({
           id={`wizard-${fieldKey}`}
           value={textValue}
           onChange={(e) => setTextValue(e.target.value)}
-          placeholder={fieldKey === 'ingressEgress' ? 'e.g. one-way in, separate exit on SE 2nd St' : 'e.g. 6\'8"'}
+          placeholder={fieldKey === 'ingress_egress' ? 'e.g. one-way in, separate exit on SE 2nd St' : 'e.g. 6\'8"'}
           className="w-full mt-1 px-3 py-2 border border-[#0e1c36]/20 rounded text-sm"
         />
       </div>
@@ -975,15 +975,15 @@ function WizardStep({
     // & hours" section and the checklist row that requires both.
     canSave = priceValue.trim() !== '' || hoursValue.trim() !== '';
     buildEdits = () => ({
-      ...(priceValue.trim() ? { priceText: priceValue.trim() } : {}),
-      ...(hoursValue.trim() ? { hoursText: hoursValue.trim() } : {}),
+      ...(priceValue.trim() ? { price_text: priceValue.trim() } : {}),
+      ...(hoursValue.trim() ? { hours_text: hoursValue.trim() } : {}),
     });
     manualInput = (
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="wizard-priceText" className="text-xs font-medium text-[#0e1c36]/70">Price</label>
+          <label htmlFor="wizard-price_text" className="text-xs font-medium text-[#0e1c36]/70">Price</label>
           <input
-            id="wizard-priceText"
+            id="wizard-price_text"
             value={priceValue}
             onChange={(e) => setPriceValue(e.target.value)}
             placeholder="e.g. $10/day"
@@ -991,9 +991,9 @@ function WizardStep({
           />
         </div>
         <div>
-          <label htmlFor="wizard-hoursText" className="text-xs font-medium text-[#0e1c36]/70">Hours</label>
+          <label htmlFor="wizard-hours_text" className="text-xs font-medium text-[#0e1c36]/70">Hours</label>
           <input
-            id="wizard-hoursText"
+            id="wizard-hours_text"
             value={hoursValue}
             onChange={(e) => setHoursValue(e.target.value)}
             placeholder="e.g. 24/7"

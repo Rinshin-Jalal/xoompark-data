@@ -21,12 +21,12 @@ const spotheroInput: SourcedLocationInput = {
   address: '1320 NW 12th St, Miami, FL',
   lat: 25.789,
   lng: -80.226,
-  source: 'spothero',
-  sourceUrl: 'https://spothero.com/listing/94167',
-  sourceListingId: '94167',
-  priceText: '$10/day',
-  capturedBy: 'scraped',
-  rawInput: { raw: 'spothero' },
+  source_name: 'spothero',
+  source_url: 'https://spothero.com/listing/94167',
+  source_listing_id: '94167',
+  price_text: '$10/day',
+  captured_by: 'scraped',
+  raw_input: { raw: 'spothero' },
 };
 
 const parkopediaInput: SourcedLocationInput = {
@@ -34,12 +34,12 @@ const parkopediaInput: SourcedLocationInput = {
   address: 'Municipal Lot 18',
   lat: 25.78901,
   lng: -80.22601,
-  source: 'parkopedia',
-  sourceUrl: 'https://en.parkopedia.com/parking/lot/401186',
-  sourceListingId: '401186',
-  hoursText: 'Mon-Sun 00:00-24:00',
-  capturedBy: 'scraped',
-  rawInput: { raw: 'parkopedia' },
+  source_name: 'parkopedia',
+  source_url: 'https://en.parkopedia.com/parking/lot/401186',
+  source_listing_id: '401186',
+  hours_text: 'Mon-Sun 00:00-24:00',
+  captured_by: 'scraped',
+  raw_input: { raw: 'parkopedia' },
 };
 
 test('merge: fills empty fields on primary from secondary', () => {
@@ -48,10 +48,10 @@ test('merge: fills empty fields on primary from secondary', () => {
 
   const { mergedPrimary } = mergeSourcedLocationsPure(primary, secondary, admin, '2026-08-23T01:00:00.000Z');
 
-  assert.equal(mergedPrimary.hoursText, 'Mon-Sun 00:00-24:00'); // filled from secondary
-  assert.equal(mergedPrimary.priceText, '$10/day'); // primary's own value kept
-  assert.equal(mergedPrimary.fieldProvenance.hoursText, 'verified'); // admin-approved fill
-  assert.equal(mergedPrimary.capturedBy, 'admin');
+  assert.equal(mergedPrimary.hours_text, 'Mon-Sun 00:00-24:00'); // filled from secondary
+  assert.equal(mergedPrimary.price_text, '$10/day'); // primary's own value kept
+  assert.equal(mergedPrimary.field_sources.hours_text, 'verified'); // admin-approved fill
+  assert.equal(mergedPrimary.captured_by, 'admin');
 });
 
 test('merge: conflicting field logged as a note, primary value wins', () => {
@@ -82,7 +82,7 @@ test('merge: evidence appended exactly once, not duplicated if source already pr
   // Re-merging a secondary whose source is already in primary's evidence
   // (simulated by merging again with the same already-merged-once primary)
   // must not add a second parkopedia evidence entry.
-  const secondaryAgain = buildUpsertDoc(null, { ...parkopediaInput, priceText: '$5/day' }, '2026-08-23T00:00:00.000Z');
+  const secondaryAgain = buildUpsertDoc(null, { ...parkopediaInput, price_text: '$5/day' }, '2026-08-23T00:00:00.000Z');
   const { mergedPrimary: mergedTwice } = mergeSourcedLocationsPure(
     mergedPrimary,
     secondaryAgain,
@@ -92,15 +92,15 @@ test('merge: evidence appended exactly once, not duplicated if source already pr
   assert.equal(mergedTwice.evidence.length, 2, 'evidence must not duplicate the same source');
 });
 
-test('merge: secondary keeps all its own data and additionally gains mergedInto', () => {
+test('merge: secondary keeps all its own data and additionally gains merged_into_lot_id', () => {
   const primary = buildUpsertDoc(null, spotheroInput, '2026-08-23T00:00:00.000Z');
   const secondary = buildUpsertDoc(null, parkopediaInput, '2026-08-23T00:00:00.000Z');
 
   const { markedSecondary } = mergeSourcedLocationsPure(primary, secondary, admin, '2026-08-23T01:00:00.000Z');
 
-  assert.equal(markedSecondary.mergedInto, primary.id);
+  assert.equal(markedSecondary.merged_into_lot_id, primary.id);
   assert.equal(markedSecondary.name, secondary.name);
-  assert.equal(markedSecondary.hoursText, secondary.hoursText);
+  assert.equal(markedSecondary.hours_text, secondary.hours_text);
   assert.equal(markedSecondary.status, secondary.status, "status: 'draft' unchanged");
   assert.equal(markedSecondary.id, secondary.id);
   assert.deepEqual(markedSecondary.evidence, secondary.evidence, 'secondary itself is untouched otherwise');
@@ -110,7 +110,7 @@ test('merge: rejects merging an already-merged secondary', () => {
   const primary = buildUpsertDoc(null, spotheroInput, '2026-08-23T00:00:00.000Z');
   const otherPrimary = buildUpsertDoc(
     null,
-    { ...spotheroInput, sourceListingId: '99999', sourceUrl: 'https://spothero.com/listing/99999' },
+    { ...spotheroInput, source_listing_id: '99999', source_url: 'https://spothero.com/listing/99999' },
     '2026-08-23T00:00:00.000Z',
   );
   const secondary = buildUpsertDoc(null, parkopediaInput, '2026-08-23T00:00:00.000Z');

@@ -84,7 +84,7 @@ function LocationDetailPopup({
   onSave?: () => void;
   onClearanceSave?: (v: { inches: number; status: ClearanceStatus; measuredBy?: string; measuredAt?: string } | null) => void;
   onNotesSave?: (notes: string) => void;
-  onOwnerNameSave?: (ownerName: string) => void;
+  onOwnerNameSave?: (owner_name: string) => void;
   onDelete?: () => void;
   onClose: () => void;
 }) {
@@ -95,15 +95,15 @@ function LocationDetailPopup({
   const [measuredBy, setMeasuredBy] = useState(existing?.measuredBy ?? '');
   const [measuredAt, setMeasuredAt] = useState(existing?.measuredAt ?? '');
   const [notes, setNotes] = useState(location?.notes ?? '');
-  const [ownerName, setOwnerName] = useState(location?.ownerName ?? '');
+  const [owner_name, setOwnerName] = useState(location?.owner_name ?? '');
 
   const name = site?.name ?? location?.name ?? '';
-  const network = site?.network ?? location?.network ?? null;
-  const streetAddress = site?.streetAddress ?? location?.streetAddress ?? null;
+  const network_name = site?.network_name ?? location?.network_name ?? null;
+  const streetAddress = site?.street_address ?? location?.street_address ?? null;
   const city = site?.city ?? location?.city ?? null;
   const state = site?.state ?? location?.state ?? null;
-  const dcFastPorts = site?.dcFastPorts ?? location?.dcFastPorts ?? 0;
-  const maxPowerKw = site?.maxPowerKw ?? location?.maxPowerKw ?? null;
+  const dc_fast_port_count = site?.dc_fast_port_count ?? location?.dc_fast_port_count ?? 0;
+  const max_power_kw = site?.max_power_kw ?? location?.max_power_kw ?? null;
 
   const handleClearanceSave = () => {
     const ft = feet === '' ? 0 : Number.parseInt(feet, 10);
@@ -125,19 +125,19 @@ function LocationDetailPopup({
         </p>
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-2 p-3 bg-[#0e1c36]/[.03] rounded border border-[#0e1c36]/8">
-          <DetailRow label="Network" value={network || '—'} />
-          <DetailRow label="AFDC ID" value={String(site?.afdcId ?? location?.afdcId ?? '—')} />
-          <DetailRow label="DC fast ports" value={String(dcFastPorts)} />
-          <DetailRow label="Max power" value={maxPowerKw !== null ? `${maxPowerKw} kW` : '—'} />
+          <DetailRow label="Network" value={network_name || '—'} />
+          <DetailRow label="AFDC ID" value={String(site?.source_id ?? location?.source_id ?? '—')} />
+          <DetailRow label="DC fast ports" value={String(dc_fast_port_count)} />
+          <DetailRow label="Max power" value={max_power_kw !== null ? `${max_power_kw} kW` : '—'} />
           {site && (
             <>
-              <DetailRow label="Level 2 ports" value={String(site.level2Ports)} />
+              <DetailRow label="Level 2 ports" value={String(site.level_2_ports)} />
               <DetailRow label="Connectors" value={site.connectors.join(', ') || '—'} />
               <DetailRow label="Access" value={site.access} />
-              <DetailRow label="Hours" value={site.is247 ? '24/7' : site.accessHours || '—'} />
+              <DetailRow label="Hours" value={site.is_24_7 ? '24/7' : site.access_hours || '—'} />
               <DetailRow label="Pricing" value={site.pricing || '—'} />
-              <DetailRow label="Facility type" value={site.facilityType || '—'} />
-              <DetailRow label="Distance" value={site.distanceMiles !== null ? `${site.distanceMiles.toFixed(1)} mi` : '—'} />
+              <DetailRow label="Facility type" value={site.facility_type || '—'} />
+              <DetailRow label="Distance" value={site.distance_miles !== null ? `${site.distance_miles.toFixed(1)} mi` : '—'} />
             </>
           )}
           <div className="col-span-2">
@@ -245,9 +245,9 @@ function LocationDetailPopup({
             <div>
               <label className="text-xs font-medium text-[#0e1c36]/70">Owner name (from assessor)</label>
               <input
-                value={ownerName}
+                value={owner_name}
                 onChange={(e) => setOwnerName(e.target.value)}
-                onBlur={() => onOwnerNameSave?.(ownerName)}
+                onBlur={() => onOwnerNameSave?.(owner_name)}
                 placeholder="Not looked up yet"
                 className="w-full mt-1 px-3 py-2 border border-[#0e1c36]/20 rounded text-sm"
               />
@@ -256,9 +256,9 @@ function LocationDetailPopup({
 
           <div>
             <div className="text-xs font-medium text-[#0e1c36]/70 mb-1">2. LinkedIn — pick the best profile to pitch</div>
-            {ownerName ? (
-              <a href={linkedInSearchUrl(ownerName)} target="_blank" rel="noreferrer" className="text-xs text-[#1a3a7a] underline">
-                Search LinkedIn for &quot;{ownerName}&quot; ↗
+            {owner_name ? (
+              <a href={linkedInSearchUrl(owner_name)} target="_blank" rel="noreferrer" className="text-xs text-[#1a3a7a] underline">
+                Search LinkedIn for &quot;{owner_name}&quot; ↗
               </a>
             ) : (
               <p className="text-xs text-[#0e1c36]/35">Fill in the owner name from step 1 first.</p>
@@ -338,7 +338,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
   const [outreachOnly, setOutreachOnly] = useState(false);
   const [showMap, setShowMap] = useState(false);
 
-  const savedIds = useMemo(() => new Set(saved.map((s) => s.afdcId)), [saved]);
+  const savedIds = useMemo(() => new Set(saved.map((s) => s.source_id)), [saved]);
 
   const filteredResults = useMemo(() => {
     const effLimitToOdd = limitToOdd || outreachOnly;
@@ -346,9 +346,9 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
     const minDcPorts = outreachOnly ? 4 : 0;
     return results
       .filter((s) => (effLimitToOdd ? isInOdd(s.lat, s.lng, fleet) : true))
-      .filter((s) => (effExcludeTesla ? !isTeslaNetwork(s.network) : true))
-      .filter((s) => s.dcFastPorts >= minDcPorts)
-      .sort((a, b) => b.dcFastPorts - a.dcFastPorts);
+      .filter((s) => (effExcludeTesla ? !isTeslaNetwork(s.network_name) : true))
+      .filter((s) => s.dc_fast_port_count >= minDcPorts)
+      .sort((a, b) => b.dc_fast_port_count - a.dc_fast_port_count);
   }, [results, fleet, limitToOdd, excludeTesla, outreachOnly]);
 
   const showToast = (t: Toast) => {
@@ -391,38 +391,38 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
   const handleSave = (site: ChargingSite) => {
     startTransition(async () => {
       try {
-        await saveChargingLocation(site.afdcId, {
+        await saveChargingLocation(site.source_id, {
           name: site.name,
           lat: site.lat,
           lng: site.lng,
-          network: site.network,
-          streetAddress: site.streetAddress,
+          network_name: site.network_name,
+          street_address: site.street_address,
           city: site.city,
           state: site.state,
-          dcFastPorts: site.dcFastPorts,
-          maxPowerKw: site.maxPowerKw,
+          dc_fast_port_count: site.dc_fast_port_count,
+          max_power_kw: site.max_power_kw,
         });
         setSaved((prev) => {
-          const next = prev.filter((s) => s.afdcId !== site.afdcId);
+          const next = prev.filter((s) => s.source_id !== site.source_id);
           next.push({
-            id: String(site.afdcId),
-            afdcId: site.afdcId,
+            id: String(site.source_id),
+            source_id: site.source_id,
             name: site.name,
             lat: site.lat,
             lng: site.lng,
-            network: site.network,
-            streetAddress: site.streetAddress,
+            network_name: site.network_name,
+            street_address: site.street_address,
             city: site.city,
             state: site.state,
-            dcFastPorts: site.dcFastPorts,
-            maxPowerKw: site.maxPowerKw,
-            clearance: prev.find((s) => s.afdcId === site.afdcId)?.clearance ?? null,
-            portMounting: prev.find((s) => s.afdcId === site.afdcId)?.portMounting ?? null,
-            notes: prev.find((s) => s.afdcId === site.afdcId)?.notes ?? null,
-            ownerName: prev.find((s) => s.afdcId === site.afdcId)?.ownerName ?? null,
-            savedBy: '',
-            createdAt: undefined as never,
-            updatedAt: undefined as never,
+            dc_fast_port_count: site.dc_fast_port_count,
+            max_power_kw: site.max_power_kw,
+            clearance: prev.find((s) => s.source_id === site.source_id)?.clearance ?? null,
+            mounting_type: prev.find((s) => s.source_id === site.source_id)?.mounting_type ?? null,
+            notes: prev.find((s) => s.source_id === site.source_id)?.notes ?? null,
+            owner_name: prev.find((s) => s.source_id === site.source_id)?.owner_name ?? null,
+            saved_by: '',
+            created_at: undefined as never,
+            updated_at: undefined as never,
           });
           return next.sort((a, b) => a.name.localeCompare(b.name));
         });
@@ -434,14 +434,14 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
   };
 
   const handleClearanceSave = (
-    afdcId: number,
+    source_id: number,
     value: { inches: number; status: ClearanceStatus; measuredBy?: string; measuredAt?: string } | null,
   ) => {
-    setSaved((prev) => prev.map((s) => (s.afdcId === afdcId ? { ...s, clearance: value } : s)));
-    setDetailSaved((prev) => (prev && prev.afdcId === afdcId ? { ...prev, clearance: value } : prev));
+    setSaved((prev) => prev.map((s) => (s.source_id === source_id ? { ...s, clearance: value } : s)));
+    setDetailSaved((prev) => (prev && prev.source_id === source_id ? { ...prev, clearance: value } : prev));
     startTransition(async () => {
       try {
-        await updateChargingLocationClearance(afdcId, value);
+        await updateChargingLocationClearance(source_id, value);
         showToast({ type: 'success', message: 'Clearance saved' });
       } catch (err) {
         showToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to save clearance' });
@@ -449,36 +449,36 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
     });
   };
 
-  const handleNotesBlur = (afdcId: number, notes: string) => {
-    setSaved((prev) => prev.map((s) => (s.afdcId === afdcId ? { ...s, notes } : s)));
-    setDetailSaved((prev) => (prev && prev.afdcId === afdcId ? { ...prev, notes } : prev));
+  const handleNotesBlur = (source_id: number, notes: string) => {
+    setSaved((prev) => prev.map((s) => (s.source_id === source_id ? { ...s, notes } : s)));
+    setDetailSaved((prev) => (prev && prev.source_id === source_id ? { ...prev, notes } : prev));
     startTransition(async () => {
       try {
-        await updateChargingLocationNotes(afdcId, notes);
+        await updateChargingLocationNotes(source_id, notes);
       } catch (err) {
         showToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to save notes' });
       }
     });
   };
 
-  const handleOwnerNameSave = (afdcId: number, ownerName: string) => {
-    setSaved((prev) => prev.map((s) => (s.afdcId === afdcId ? { ...s, ownerName: ownerName || null } : s)));
-    setDetailSaved((prev) => (prev && prev.afdcId === afdcId ? { ...prev, ownerName: ownerName || null } : prev));
+  const handleOwnerNameSave = (source_id: number, owner_name: string) => {
+    setSaved((prev) => prev.map((s) => (s.source_id === source_id ? { ...s, owner_name: owner_name || null } : s)));
+    setDetailSaved((prev) => (prev && prev.source_id === source_id ? { ...prev, owner_name: owner_name || null } : prev));
     startTransition(async () => {
       try {
-        await updateChargingLocationOwnerName(afdcId, ownerName);
+        await updateChargingLocationOwnerName(source_id, owner_name);
       } catch (err) {
         showToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to save owner name' });
       }
     });
   };
 
-  const handleDelete = (afdcId: number) => {
-    setSaved((prev) => prev.filter((s) => s.afdcId !== afdcId));
+  const handleDelete = (source_id: number) => {
+    setSaved((prev) => prev.filter((s) => s.source_id !== source_id));
     setDetailSaved(null);
     startTransition(async () => {
       try {
-        await deleteSavedChargingLocation(afdcId);
+        await deleteSavedChargingLocation(source_id);
       } catch (err) {
         showToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to delete' });
       }
@@ -502,7 +502,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
         const byId = new Map(rows.map((r) => [r.afdcId, r]));
         setSaved((prev) =>
           prev.map((s) => {
-            const row = updated.includes(s.afdcId) ? byId.get(s.afdcId) : undefined;
+            const row = updated.includes(s.source_id) ? byId.get(s.source_id) : undefined;
             return row
               ? { ...s, clearance: { inches: row.inches, status: row.status, measuredBy: row.measuredBy, measuredAt: row.measuredAt } }
               : s;
@@ -531,11 +531,11 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
         header: 'City',
         cell: ({ getValue }) => <span className="text-xs text-[#0e1c36]/60">{getValue() || '—'}</span>,
       }),
-      savedColumnHelper.accessor('dcFastPorts', {
+      savedColumnHelper.accessor('dc_fast_port_count', {
         header: 'DC Ports',
         cell: ({ getValue }) => <span className="font-mono text-xs text-[#0e1c36]/60">{getValue()}</span>,
       }),
-      savedColumnHelper.accessor('maxPowerKw', {
+      savedColumnHelper.accessor('max_power_kw', {
         header: 'Max kW',
         cell: ({ getValue }) => <span className="font-mono text-xs text-[#0e1c36]/60">{getValue() !== null ? `${getValue()} kW` : '—'}</span>,
       }),
@@ -564,7 +564,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
         cell: ({ row }) => (
           <input
             defaultValue={row.original.notes ?? ''}
-            onBlur={(e) => handleNotesBlur(row.original.afdcId, e.target.value)}
+            onBlur={(e) => handleNotesBlur(row.original.source_id, e.target.value)}
             onClick={(e) => e.stopPropagation()}
             placeholder="—"
             className="w-full max-w-xs bg-transparent border-b border-transparent hover:border-[#0e1c36]/15 focus:border-[#0e1c36]/40 focus:outline-none text-xs"
@@ -578,7 +578,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(row.original.afdcId);
+              handleDelete(row.original.source_id);
             }}
             disabled={isPending}
             className="px-2 py-1 text-[#7a1a1a] bg-[#ffe1e1]/60 border border-[#ffcccc] rounded text-[9px] hover:bg-[#ffe1e1] disabled:opacity-50"
@@ -604,7 +604,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
 
   return (
     <>
-      {detailSite && !savedIds.has(detailSite.afdcId) && (
+      {detailSite && !savedIds.has(detailSite.source_id) && (
         <LocationDetailPopup
           site={detailSite}
           onSave={() => {
@@ -617,11 +617,11 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
       {detailSaved && (
         <LocationDetailPopup
           location={detailSaved}
-          onClearanceSave={(v) => handleClearanceSave(detailSaved.afdcId, v)}
-          onNotesSave={(notes) => handleNotesBlur(detailSaved.afdcId, notes)}
-          onOwnerNameSave={(ownerName) => handleOwnerNameSave(detailSaved.afdcId, ownerName)}
+          onClearanceSave={(v) => handleClearanceSave(detailSaved.source_id, v)}
+          onNotesSave={(notes) => handleNotesBlur(detailSaved.source_id, notes)}
+          onOwnerNameSave={(owner_name) => handleOwnerNameSave(detailSaved.source_id, owner_name)}
           onDelete={() => {
-            handleDelete(detailSaved.afdcId);
+            handleDelete(detailSaved.source_id);
             setDetailSaved(null);
           }}
           onClose={() => setDetailSaved(null)}
@@ -695,7 +695,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
               </label>
               <label className="flex items-center gap-1.5">
                 <input type="checkbox" checked={excludeTesla} onChange={(e) => setExcludeTesla(e.target.checked)} />
-                Exclude Tesla network
+                Exclude Tesla network_name
               </label>
               <label className="flex items-center gap-1.5">
                 <input type="checkbox" checked={outreachOnly} onChange={(e) => setOutreachOnly(e.target.checked)} />
@@ -732,24 +732,24 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
                 <tbody className="divide-y divide-[#0e1c36]/8">
                   {filteredResults.map((s) => (
                     <tr
-                      key={s.afdcId}
+                      key={s.source_id}
                       onClick={() => setDetailSite(s)}
                       className="cursor-pointer hover:bg-[#0e1c36]/[.02]"
                       title="Click to view full detail"
                     >
                       <td className="px-3 py-2 text-xs text-[#0e1c36] whitespace-nowrap">{s.name}</td>
-                      <td className="px-3 py-2 text-xs text-[#0e1c36]/60 whitespace-nowrap">{s.network || '—'}</td>
-                      <td className="px-3 py-2 text-xs text-[#0e1c36]/60 whitespace-nowrap">{s.streetAddress || '—'}</td>
+                      <td className="px-3 py-2 text-xs text-[#0e1c36]/60 whitespace-nowrap">{s.network_name || '—'}</td>
+                      <td className="px-3 py-2 text-xs text-[#0e1c36]/60 whitespace-nowrap">{s.street_address || '—'}</td>
                       <td className="px-3 py-2 text-xs text-[#0e1c36]/60 whitespace-nowrap">{s.city || '—'}</td>
-                      <td className="px-3 py-2 font-mono text-xs text-[#0e1c36]/60 whitespace-nowrap">{s.dcFastPorts}</td>
+                      <td className="px-3 py-2 font-mono text-xs text-[#0e1c36]/60 whitespace-nowrap">{s.dc_fast_port_count}</td>
                       <td className="px-3 py-2 font-mono text-xs text-[#0e1c36]/60 whitespace-nowrap">
-                        {s.maxPowerKw !== null ? `${s.maxPowerKw} kW` : '—'}
+                        {s.max_power_kw !== null ? `${s.max_power_kw} kW` : '—'}
                       </td>
                       <td className="px-3 py-2 font-mono text-xs text-[#0e1c36]/60 whitespace-nowrap">
-                        {s.distanceMiles !== null ? `${s.distanceMiles.toFixed(1)} mi` : '—'}
+                        {s.distance_miles !== null ? `${s.distance_miles.toFixed(1)} mi` : '—'}
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">
-                        {savedIds.has(s.afdcId) ? (
+                        {savedIds.has(s.source_id) ? (
                           <span className="text-[9px] font-mono uppercase tracking-wide text-[#1a5a2a] bg-[#dff5e1] border border-[#c8ecc9] px-2 py-0.5 rounded-full">
                             saved
                           </span>
@@ -806,7 +806,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
             Import clearance CSV
           </button>
           <p className="text-[10px] text-[#0e1c36]/35 mt-1">
-            Columns: afdcId,inches,status,measuredBy,measuredAt — only updates locations already saved below.
+            Columns: source_id,inches,status,measuredBy,measuredAt — only updates locations already saved below.
           </p>
         </div>
         <div className="flex items-end gap-3">
@@ -880,7 +880,7 @@ export function ChargingSitesClient({ initialSaved }: { initialSaved: SavedCharg
                 const fit = requiredHeightInches !== null ? clearanceFit(s.clearance, requiredHeightInches) : null;
                 return (
                   <tr
-                    key={s.afdcId}
+                    key={s.source_id}
                     onClick={() => setDetailSaved(s)}
                     className="cursor-pointer hover:bg-[#0e1c36]/[.02]"
                     title="Click to view / edit"

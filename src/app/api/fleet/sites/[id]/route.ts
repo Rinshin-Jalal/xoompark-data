@@ -6,8 +6,8 @@ import { getSourcedLocation } from '@/lib/sourcing/store';
 
 /**
  * GET /api/fleet/sites/:id — the bring-up package for one site. Everything
- * we hold except internal workflow fields (rawInput, claimedBy, addedBy,
- * fieldProvenance, evidence) — see toFleetSiteDetail for the allowlist
+ * we hold except internal workflow fields (raw_input, claimed_by, added_by,
+ * field_sources, evidence) — see toFleetSiteDetail for the allowlist
  * discipline.
  */
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
   const { id } = await params;
   const location = await getSourcedLocation(id);
-  if (!location || location.mergedInto) {
+  if (!location || location.merged_into_lot_id) {
     return NextResponse.json({ error: 'Site not found' }, { status: 404 });
   }
 

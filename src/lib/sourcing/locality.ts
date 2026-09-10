@@ -216,22 +216,22 @@ import type { SourcedParkingLocation } from './types.ts';
 // excludes identity fields (name/address/lat/lng) since those aren't BDR
 // enrichment work. Empty-check per field matches the same conventions
 // already established in bdrView.ts's CHECKLIST_FIELDS: tri-state booleans
-// (access247/fenced/lit) treat only `undefined` as empty (`null` = "checked,
-// couldn't tell", a real recorded fact); stallsTotal requires an actual
-// number; surfaceType/gateType treat their `null` default (buildUpsertDoc's
+// (is_24_7/is_fenced/is_lit) treat only `undefined` as empty (`null` = "checked,
+// couldn't tell", a real recorded fact); stall_count requires an actual
+// number; surface_type/gate_type treat their `null` default (buildUpsertDoc's
 // untouched-field default) as empty, unlike the tri-state booleans above.
 const ENRICHMENT_FIELD_EMPTY: Record<string, (l: SourcedParkingLocation) => boolean> = {
-  priceText: (l) => !l.priceText,
-  hoursText: (l) => !l.hoursText,
-  capacityText: (l) => !l.capacityText,
-  surfaceType: (l) => l.surfaceType == null,
-  gateType: (l) => l.gateType == null,
-  clearanceText: (l) => !l.clearanceText,
-  access247: (l) => l.access247 === undefined,
-  fenced: (l) => l.fenced === undefined,
-  lit: (l) => l.lit === undefined,
-  ingressEgress: (l) => !l.ingressEgress,
-  stallsTotal: (l) => typeof l.stallsTotal !== 'number',
+  price_text: (l) => !l.price_text,
+  hours_text: (l) => !l.hours_text,
+  capacity_text: (l) => !l.capacity_text,
+  surface_type: (l) => l.surface_type == null,
+  gate_type: (l) => l.gate_type == null,
+  clearance_text: (l) => !l.clearance_text,
+  is_24_7: (l) => l.is_24_7 === undefined,
+  is_fenced: (l) => l.is_fenced === undefined,
+  is_lit: (l) => l.is_lit === undefined,
+  ingress_egress: (l) => !l.ingress_egress,
+  stall_count: (l) => typeof l.stall_count !== 'number',
 };
 
 export const ENRICHMENT_FIELDS: string[] = Object.keys(ENRICHMENT_FIELD_EMPTY);

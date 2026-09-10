@@ -18,7 +18,7 @@ import { SourcingReviewTable } from './SourcingReviewTable';
 // Query param names, one per ReviewFilters dimension. A param is omitted
 // entirely from the URL when it's at its default ('all'/null/'') to keep
 // shared links clean.
-const PARAM_KEYS = ['search', 'locality', 'status', 'source', 'flood', 'residential', 'addedBy', 'odd', 'hasCoords'] as const;
+const PARAM_KEYS = ['search', 'locality', 'status', 'source', 'flood', 'residential', 'added_by', 'odd', 'hasCoords'] as const;
 
 function filtersFromSearchParams(params: URLSearchParams): ReviewFilters {
   return {
@@ -28,7 +28,7 @@ function filtersFromSearchParams(params: URLSearchParams): ReviewFilters {
     source: (params.get('source') as ReviewFilters['source']) ?? 'all',
     flood: (params.get('flood') as ReviewFilters['flood']) ?? 'all',
     residential: (params.get('residential') as ReviewFilters['residential']) ?? 'all',
-    addedBy: params.get('addedBy'),
+    added_by: params.get('added_by'),
     odd: (params.get('odd') as ReviewFilters['odd']) ?? 'in',
     hasCoords: (params.get('hasCoords') as ReviewFilters['hasCoords']) ?? 'all',
   };
@@ -49,8 +49,8 @@ function ParkingSourcingModeViewContent({
   const searchParams = useSearchParams();
 
   const filters = useMemo(() => filtersFromSearchParams(searchParams), [searchParams]);
-  const addedByOptions = useMemo(
-    () => [...new Set(locations.map((l) => l.addedBy).filter((v): v is string => !!v))].sort(),
+  const added_byOptions = useMemo(
+    () => [...new Set(locations.map((l) => l.added_by).filter((v): v is string => !!v))].sort(),
     [locations],
   );
 
@@ -106,7 +106,7 @@ function ParkingSourcingModeViewContent({
             filters={filters}
             onChange={updateFilters}
             locations={sortedLocations}
-            addedByOptions={addedByOptions}
+            added_byOptions={added_byOptions}
           />
         }
         actions={

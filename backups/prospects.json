@@ -1,0 +1,2023 @@
+[
+  {
+    "id": "0mCKt5wgHmHiDtxIQULe",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Envoy (electric car share)",
+    "contactName": "Matthew Silva",
+    "contactTitle": "",
+    "contactPhone": "",
+    "website": "",
+    "city": "Culver City, California",
+    "description": "Carshare fleet — property-tied",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Warm"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786980049,
+      "nanoseconds": 91000000
+    },
+    "contactEmail": "matthew@envoythere.com",
+    "assignedTo": "",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786980119,
+      "nanoseconds": 666000000
+    }
+  },
+  {
+    "id": "3H86MJSITt4H4fAMj2eI",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "The Parking Spot",
+    "contactName": "Tim O'Malley",
+    "contactTitle": "President and CEO",
+    "contactEmail": "tomalley@theparkingspot.com",
+    "contactPhone": "",
+    "website": "https://www.theparkingspot.com/",
+    "city": "Chicago, IL",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786979464,
+      "nanoseconds": 746000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786979483,
+      "nanoseconds": 486000000
+    },
+    "assignedTo": "tom.sivak@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787203035,
+      "nanoseconds": 488000000
+    }
+  },
+  {
+    "id": "5kJHmehtpx84deEdVI3O",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Lyft",
+    "contactName": "Brandon Haddock",
+    "contactTitle": "",
+    "contactEmail": "bhaddock@lyft.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Francisco, California",
+    "description": "Fleet/driver ops angle TBD",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Upcoming"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786979593,
+      "nanoseconds": 251000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713394,
+      "nanoseconds": 468000000
+    }
+  },
+  {
+    "id": "6CczUvBns2nJpzTVwvT4",
+    "side": "provider",
+    "stage": "CONTACTED",
+    "companyName": "Towne",
+    "contactName": "Lon Hettrick",
+    "contactTitle": "District Manager",
+    "contactEmail": "lhettrick@towne.com",
+    "contactPhone": "408.508.0998",
+    "website": "https://towne.com/",
+    "city": "San Francisco CA",
+    "description": "",
+    "source": "COLD_OUTREACH",
+    "assignedTo": "Greg",
+    "nextFollowUp": null,
+    "tags": [
+      "interested"
+    ],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788440767,
+      "nanoseconds": 236000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1788440853,
+      "nanoseconds": 168000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788440853,
+      "nanoseconds": 168000000
+    }
+  },
+  {
+    "id": "CSBkU1NJKA5j9sciuAee",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Reimagined Parking (Impark)",
+    "contactName": "David Blosser",
+    "contactTitle": "Strategy & Relationships",
+    "contactEmail": "david.blosser@reimaginedparking.com",
+    "contactPhone": "",
+    "website": "https://reimaginedparking.com/",
+    "city": "New York, NY",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786978803,
+      "nanoseconds": 920000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786978810,
+      "nanoseconds": 443000000
+    },
+    "assignedTo": "tom.sivak@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787202910,
+      "nanoseconds": 111000000
+    }
+  },
+  {
+    "id": "EptHcPnMyWtSHpwPHzjR",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "World Center Parking",
+    "contactName": "",
+    "contactTitle": "",
+    "contactEmail": "",
+    "contactPhone": "",
+    "website": "",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786978050,
+      "nanoseconds": 78000000
+    },
+    "city": "Miami",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786978104,
+      "nanoseconds": 283000000
+    },
+    "assignedTo": "tom.sivak@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787202669,
+      "nanoseconds": 677000000
+    }
+  },
+  {
+    "id": "FJhdLOaPYqTVNtHXvOr1",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Power Structure",
+    "contactName": "Brett Bouthillier",
+    "contactTitle": "CEO & Co-Founder",
+    "contactEmail": "brett@powershelter.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "",
+    "description": "PowerShelter builds battery locker and swap systems. Developed in the Netherlands, deployed across the EU and UK, now entering the US and looking for site partners.",
+    "source": "",
+    "assignedTo": "Greg",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786639530,
+      "nanoseconds": 833000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786639581,
+      "nanoseconds": 216000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786639581,
+      "nanoseconds": 216000000
+    }
+  },
+  {
+    "id": "HYfFyLsqzzFSurZ80oIL",
+    "side": "operator",
+    "stage": "QUALIFYING",
+    "companyName": "Freebee",
+    "contactName": "Brandon Fernandez",
+    "contactTitle": "VP - Operations",
+    "contactEmail": "brandon@ridefreebee.com",
+    "contactPhone": "",
+    "website": "https://ridefreebee.com",
+    "city": "Miami, FL",
+    "description": "Freebee is a Miami-based on-demand microtransit operator providing community transportation services across South Florida and other Florida markets. The company operates an electric vehicle fleet and provides on-demand and fixed-route services for municipalities and communities. Brandon Fernandez, VP Operations, has expressed interest in learning more about XoomPark. He specifically asked whether XoomPark operates physical depots/micro-depots rather than providing only software, indicating that the physical fleet infrastructure model is the key point to clarify.",
+    "source": "COLD_OUTREACH",
+    "assignedTo": "greg@xoompark.co",
+    "nextFollowUp": null,
+    "tags": [
+      "priority",
+      "big fleet provider"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "OTHER",
+      "fleetSize": 300,
+      "servicesNeeded": [],
+      "operatingMarkets": "Miami / South Florida + multiple Florida markets",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "greg@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786469376,
+      "nanoseconds": 951000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786470257,
+      "nanoseconds": 265000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786470257,
+      "nanoseconds": 265000000
+    }
+  },
+  {
+    "id": "HiCnLDMaNOtlkZnu6Z8r",
+    "side": "provider",
+    "companyName": "Acme Parking LLC",
+    "contactName": "Sarah Chen",
+    "contactTitle": "CEO",
+    "contactEmail": "sarah@acmeparking.com",
+    "contactPhone": "+1 415 555 0123",
+    "website": "https://acmeparking.com",
+    "city": "San Francisco, CA",
+    "description": "3-story parking structure in SoMa. 280 stalls, currently ~60% utilised nights and weekends. Sarah is the VP of Operations and is interested in passive revenue from their underused inventory. Has existing monthly tenants she doesn't want to displace. Warm intro from Greg.",
+    "source": "REFERRAL",
+    "assignedTo": "zack@xoompark.co",
+    "lastContactedAt": null,
+    "nextFollowUp": "2026-08-06",
+    "tags": [
+      "priority"
+    ],
+    "providerDetails": {
+      "providerType": "PARKING_OPERATOR",
+      "infraType": "PARKING_GARAGE",
+      "estimatedSpaces": 100,
+      "estimatedLocations": null,
+      "servicesInterested": [
+        "STAGE",
+        "CHARGE"
+      ],
+      "currentlyMonetized": true
+    },
+    "operatorDetails": null,
+    "createdBy": "blah@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786126895,
+      "nanoseconds": 578000000
+    },
+    "stage": "QUALIFYING",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786375038,
+      "nanoseconds": 137000000
+    }
+  },
+  {
+    "id": "Id0iPqfTBY0LP46yRHNV",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "PMC (Parking Management Co)",
+    "contactName": "T. Ellis",
+    "contactTitle": "",
+    "contactEmail": "tellis@parkingmgt.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "Nashville, TN",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786979958,
+      "nanoseconds": 620000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786979979,
+      "nanoseconds": 676000000
+    },
+    "assignedTo": "tom.sivak@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787203116,
+      "nanoseconds": 43000000
+    }
+  },
+  {
+    "id": "KF5ximun02no9LJrqWJr",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Upshift Cars",
+    "contactName": "Ezra Goldman",
+    "contactTitle": "",
+    "contactEmail": "ezra@upshiftcars.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Francisco, California",
+    "description": "Teledriving fleet — first API customer",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Active"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786979854,
+      "nanoseconds": 705000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713367,
+      "nanoseconds": 892000000
+    }
+  },
+  {
+    "id": "KR8VVG6WOn3KkAdCTHNq",
+    "side": "provider",
+    "companyName": "Towne",
+    "contactName": "Adam Martinez",
+    "contactTitle": "Senior Vice President, Enterprise Growth & Technology Strategy",
+    "contactEmail": "amartinez@townepark.com",
+    "contactPhone": "+1 305-562-8903",
+    "website": "https://towne.com/",
+    "city": "Miami",
+    "description": "",
+    "source": "",
+    "assignedTo": "greg@xoompark.co",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788271435,
+      "nanoseconds": 5000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1788271453,
+      "nanoseconds": 495000000
+    },
+    "stage": "CONTACTED",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788448724,
+      "nanoseconds": 11000000
+    }
+  },
+  {
+    "id": "LFmWR3Gtc32muMRuU33N",
+    "side": "provider",
+    "stage": "QUALIFYING",
+    "contactName": "Mike Gaulin",
+    "contactTitle": "VP",
+    "contactEmail": "mgaulin@aceparking.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Diego",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786487224,
+      "nanoseconds": 381000000
+    },
+    "description": "Ace Parking has a facility at 925 Waterfront Place, San Diego, CA 92101. That can accommodate level 2 charging.",
+    "companyName": "ACE Parking - 925 Waterfront Place",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786724823,
+      "nanoseconds": 894000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713792,
+      "nanoseconds": 714000000
+    }
+  },
+  {
+    "id": "LircUZ0lMABCkpBZda1u",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Paradise Parking",
+    "contactName": "Danny Radrizzani",
+    "contactTitle": "",
+    "contactEmail": "danny@paradiseparking.net",
+    "contactPhone": "",
+    "website": "",
+    "city": "Miami Florida",
+    "description": "Wynwood 40-50 spaces $20K/mo + 16 SoFla condo/hotel sites + 4-5 MARTA ATL lots (2,508 spaces)",
+    "source": "",
+    "assignedTo": "tom.sivak@xoompark.co",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786538205,
+      "nanoseconds": 202000000
+    },
+    "tags": [
+      "Active"
+    ],
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786538981,
+      "nanoseconds": 364000000
+    }
+  },
+  {
+    "id": "MgyYFJQysSNdaECVzJNa",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "contactName": "Mike Gaulin",
+    "contactTitle": "VP",
+    "contactEmail": "",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Diego",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786487760,
+      "nanoseconds": 697000000
+    },
+    "description": "ACE Parking has a lot @ 3rd and Ash",
+    "companyName": "ACE Parking - 3rd and Ash",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786724860,
+      "nanoseconds": 167000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713773,
+      "nanoseconds": 875000000
+    }
+  },
+  {
+    "id": "NBmqxMCy9V5RPkvvGZjd",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Avis (Dallas)",
+    "contactName": "Eric Ashley",
+    "contactTitle": "",
+    "contactEmail": "epmoto18@gmail.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "Dallas",
+    "description": "Waymo Dallas depot operator — SOW questions open",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Active"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786538926,
+      "nanoseconds": 192000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713509,
+      "nanoseconds": 560000000
+    }
+  },
+  {
+    "id": "NYTs7HwoJ56QVoDDAOwd",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Platinum Parking",
+    "contactName": "Matt Adey / Paul Lindenberger",
+    "contactTitle": "President / Regional Vice President",
+    "contactEmail": "matt@platinumparking.com",
+    "contactPhone": "",
+    "website": "https://platinumparking.com/",
+    "city": "Dallas, Texas",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786980195,
+      "nanoseconds": 869000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786980202,
+      "nanoseconds": 872000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713603,
+      "nanoseconds": 468000000
+    }
+  },
+  {
+    "id": "NvdgcFSrFGP4OItAQVJ5",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Eminent Valet",
+    "contactName": "Mubashar Allaudin",
+    "contactTitle": "",
+    "contactEmail": "mubashar@eminentvalet.com",
+    "contactPhone": "",
+    "website": "",
+    "description": "Valet operator — revive if LA/valet-dense model needed",
+    "source": "",
+    "assignedTo": "tom.sivak@xoompark.co",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Dormant"
+    ],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786978076,
+      "nanoseconds": 152000000
+    },
+    "city": "Mississauga, Ontario, Canada",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786979082,
+      "nanoseconds": 184000000
+    }
+  },
+  {
+    "id": "Nxx5ojkb82wWnrjbBcZW",
+    "side": "provider",
+    "companyName": "North Beach Parking",
+    "contactName": "",
+    "contactTitle": "",
+    "contactEmail": "info@northbeachparking.com",
+    "contactPhone": "4156322150",
+    "website": "northbeachparking.com",
+    "city": "San Francisco",
+    "description": "",
+    "source": "OTHER",
+    "assignedTo": "Greg",
+    "nextFollowUp": null,
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788958992,
+      "nanoseconds": 722000000
+    },
+    "tags": [
+      "interested"
+    ],
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1788959733,
+      "nanoseconds": 261000000
+    },
+    "stage": "CONTACTED",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788960058,
+      "nanoseconds": 953000000
+    }
+  },
+  {
+    "id": "RT0ReIc1X4SPonp3L5zh",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "LAZ Parking",
+    "contactName": "Steve Mooney",
+    "contactTitle": "Regional Vice President",
+    "contactEmail": "smooney@lazparking.com",
+    "contactPhone": "",
+    "website": "https://www.lazparking.com/",
+    "city": "Northern California",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786978598,
+      "nanoseconds": 736000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786978605,
+      "nanoseconds": 902000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713649,
+      "nanoseconds": 694000000
+    }
+  },
+  {
+    "id": "SB4E25b2s9DsTIfx0RDU",
+    "side": "provider",
+    "stage": "QUALIFYING",
+    "companyName": "City of Phoenix and Related",
+    "contactName": "Dominic Papa",
+    "contactTitle": "Senior Director",
+    "contactEmail": "dpapa@dtphx.org",
+    "contactPhone": "",
+    "website": "",
+    "city": "Phoenix",
+    "description": "Phoenix Community Alliance - Supports and Improves the Phoenix Area",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786724622,
+      "nanoseconds": 46000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786724741,
+      "nanoseconds": 829000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713801,
+      "nanoseconds": 161000000
+    }
+  },
+  {
+    "id": "SPPCcP92WcgoiOKrl8og",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Zoox",
+    "contactTitle": "",
+    "contactPhone": "",
+    "website": "",
+    "description": "SF 350 2nd St, Oct 1 start, 6-mo firm proposed",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Active"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786978910,
+      "nanoseconds": 62000000
+    },
+    "city": "San Francisco, California",
+    "contactEmail": "cmacdonald@zoox.com",
+    "contactName": "C. MacDonald",
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713429,
+      "nanoseconds": 586000000
+    }
+  },
+  {
+    "id": "TMC0pzxlewGRJXhkZmxh",
+    "side": "operator",
+    "companyName": "Curo Charging - Chicago - Fleet 2 - Primarily Gas",
+    "contactName": "Andrew Krulewitz",
+    "contactTitle": "",
+    "contactEmail": "",
+    "contactPhone": "",
+    "website": "",
+    "city": "Chicago",
+    "description": "75-100 vehicles; ICE to start transitioning to EV over time\n24/7 access, primarily out driving during daytime and evening hours and parked overnight\nInitial term: 12-24 months\nSurface lots preferred\nAbility to perform light maintenance on site (oil changes, tire rotations, waterless cleaning, etc.) is a plus\nBathrooms + small office is a bonus, or ability to bring on site",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786408341,
+      "nanoseconds": 992000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786461720,
+      "nanoseconds": 275000000
+    },
+    "stage": "IDENTIFIED",
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787715698,
+      "nanoseconds": 530000000
+    }
+  },
+  {
+    "id": "TiU8LPXo9sHxAS0XsgQA",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "LA Valet Parking",
+    "contactTitle": "",
+    "contactEmail": "",
+    "contactPhone": "",
+    "website": "",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786980632,
+      "nanoseconds": 241000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786980637,
+      "nanoseconds": 897000000
+    },
+    "city": "LA",
+    "contactName": "Erwin",
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713469,
+      "nanoseconds": 31000000
+    }
+  },
+  {
+    "id": "VTd3Bv9Y7PfzJE0eoT9A",
+    "side": "provider",
+    "stage": "CONTACTED",
+    "companyName": "Universal Parking",
+    "contactName": "Guelmi Gonzalez",
+    "contactTitle": "",
+    "contactEmail": "ggonzalez@universalparking.com",
+    "contactPhone": "",
+    "website": "https://universalparking.com",
+    "city": "",
+    "description": "",
+    "source": "COLD_OUTREACH",
+    "assignedTo": "greg@xoompark.co",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "greg@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788285790,
+      "nanoseconds": 430000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788285790,
+      "nanoseconds": 430000000
+    }
+  },
+  {
+    "id": "VW2KQMNVivTx5CZeY0RU",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "City of Austin and Related",
+    "contactName": "",
+    "contactTitle": "",
+    "contactEmail": "",
+    "contactPhone": "",
+    "website": "",
+    "city": "Austin",
+    "description": "Managing the PUDO and Staging of Av's",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786640018,
+      "nanoseconds": 530000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786640522,
+      "nanoseconds": 367000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713820,
+      "nanoseconds": 655000000
+    }
+  },
+  {
+    "id": "VqvD7gQqKT6rju6f9f1o",
+    "side": "provider",
+    "stage": "CONTACTED",
+    "companyName": "Propark Mobility",
+    "contactName": "Mark Osorio",
+    "contactTitle": "Regional Manager",
+    "contactEmail": "Mark.Osorio@propark.com",
+    "contactPhone": "",
+    "website": "propark.com",
+    "city": "San Francisco",
+    "description": "",
+    "source": "COLD_OUTREACH",
+    "assignedTo": "Greg",
+    "nextFollowUp": null,
+    "tags": [
+      "interested"
+    ],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788959888,
+      "nanoseconds": 935000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1788960041,
+      "nanoseconds": 810000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788960041,
+      "nanoseconds": 810000000
+    }
+  },
+  {
+    "id": "Vvh6Pa1OvgeZw5Wu6NGV",
+    "side": "provider",
+    "stage": "QUALIFYING",
+    "companyName": "ProPark",
+    "contactName": "Christiansen Zamora",
+    "contactTitle": "Vice President - Mobility",
+    "contactEmail": "christiansen.zamora@propark.com",
+    "contactPhone": "",
+    "website": "https://www.propark.com",
+    "city": "",
+    "description": "",
+    "source": "",
+    "assignedTo": "greg@xoompark.co",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "PARKING_OPERATOR",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "greg@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786625397,
+      "nanoseconds": 336000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786625397,
+      "nanoseconds": 336000000
+    }
+  },
+  {
+    "id": "Yf4snMQiGri1xOr6gA84",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Inspiration Mobility",
+    "contactName": "Andrew Krulewitz",
+    "contactTitle": "",
+    "contactEmail": "andrewk@curocharging.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Diego",
+    "description": "Need 10 EV Spaces dedicated",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786491126,
+      "nanoseconds": 377000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786491262,
+      "nanoseconds": 824000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787715661,
+      "nanoseconds": 93000000
+    }
+  },
+  {
+    "id": "ZU4jlShKRl767jtHuMvz",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Parking Concepts (PCI)",
+    "contactName": "Victor Alistar",
+    "contactTitle": "Vice President Mobility and Transportation | Industry Executive",
+    "contactEmail": "valistar@parkingconcepts.com",
+    "contactPhone": "",
+    "website": "https://parkingconcepts.com/",
+    "city": "Irvine, CA",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786980345,
+      "nanoseconds": 710000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786980359,
+      "nanoseconds": 747000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713574,
+      "nanoseconds": 604000000
+    }
+  },
+  {
+    "id": "akOwLCJCYRA0tuhCb1cQ",
+    "side": "provider",
+    "stage": "QUALIFYING",
+    "companyName": "Brick Dynamics",
+    "contactEmail": "tj@brickdynamics.com",
+    "website": "",
+    "city": "Various",
+    "description": "Brick Dynamics can supply labor for our Pit Stops",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786490290,
+      "nanoseconds": 652000000
+    },
+    "contactTitle": "Co-Founder, Brick Dynamics & Director of Partnerships",
+    "contactName": "TJ Hennessy & Nick Dalessandro",
+    "contactPhone": "(310) 962-7388 & (310) 850-5859",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786725383,
+      "nanoseconds": 756000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713671,
+      "nanoseconds": 475000000
+    }
+  },
+  {
+    "id": "cf9QGWwGXcHbKkoIBTKU",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Universal Parking",
+    "contactName": "Nadia Fernandez",
+    "contactTitle": "Area Manager",
+    "contactEmail": "nfernandez@universalparking.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "Miami",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788963939,
+      "nanoseconds": 346000000
+    },
+    "assignedTo": "greg",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1788963978,
+      "nanoseconds": 273000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788963978,
+      "nanoseconds": 273000000
+    }
+  },
+  {
+    "id": "drKUCrpw0E9pkfwQ1Mdt",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Dallas fleet ops (indep.)",
+    "contactName": "Ryan",
+    "contactTitle": "",
+    "contactEmail": "rrany72@gmail.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "Dallas",
+    "description": "Confirm company name",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Active"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786980235,
+      "nanoseconds": 666000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713411,
+      "nanoseconds": 757000000
+    }
+  },
+  {
+    "id": "g0jA8sLrjUG0h04S3EWo",
+    "side": "operator",
+    "stage": "QUALIFYING",
+    "companyName": "Curo Charging - Miami - Fleet 2 - Primarily Gas",
+    "contactName": "Andrew Krulewitz",
+    "contactTitle": "",
+    "contactEmail": "",
+    "contactPhone": "",
+    "website": "",
+    "city": "Miami",
+    "description": "75-100 vehicles; ICE to start transitioning to EV over time\n24/7 access, primarily out driving during daytime and evening hours and parked overnight\nInitial term: 12-24 months\nSurface lots preferred\nAbility to perform light maintenance on site (oil changes, tire rotations, waterless cleaning, etc.) is a plus",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786408163,
+      "nanoseconds": 420000000
+    },
+    "assignedTo": "tom.sivak@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786486064,
+      "nanoseconds": 506000000
+    }
+  },
+  {
+    "id": "gAMQekD84E7ev1ZAXCq2",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Spiffy",
+    "contactName": "Aaron Freeman",
+    "contactTitle": "COO",
+    "contactEmail": "afreeman@getspiffy.com",
+    "contactPhone": "919-619-4042",
+    "website": "",
+    "city": "Various",
+    "description": "Spiffy can provide labor for our Pit Stops",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786489183,
+      "nanoseconds": 936000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786489429,
+      "nanoseconds": 897000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787715671,
+      "nanoseconds": 338000000
+    }
+  },
+  {
+    "id": "haeTG3y7feRErqv3Rg24",
+    "side": "operator",
+    "stage": "QUALIFYING",
+    "companyName": "Curo Charging - San Diego - Fleet 2 - Primarily Gas",
+    "contactName": "Andrew Krulewitz",
+    "contactTitle": "",
+    "contactEmail": "andrewk@curocharging.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Diego",
+    "description": "75-100 vehicles; ICE to start transitioning to EV over time\n24/7 access, primarily out driving during daytime and evening hours and parked overnight\nInitial term: 12-24 months\nSurface lots preferred\nAbility to perform light maintenance on site (oil changes, tire rotations, waterless cleaning, etc.) is a plus\nBathrooms + small office is a bonus, or ability to bring on site",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786407734,
+      "nanoseconds": 968000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786725013,
+      "nanoseconds": 317000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713700,
+      "nanoseconds": 187000000
+    }
+  },
+  {
+    "id": "iTXsVRBScKNrSTdNtdhP",
+    "side": "operator",
+    "stage": "QUALIFYING",
+    "contactName": "Andrew Krulewitz",
+    "contactTitle": "",
+    "contactEmail": "andrewk@curocharging.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Diego",
+    "description": "Up to 40 EVs, can be clustered in groups of 10\n24/7 access, most vehicles out during the day, Level 2 charging needed overnight \nInitial term: 6-12 months\nProfessional drivers only — not random gig workers\n8ft clearance at the stalls, ideally >6’7” at entrance\nAbility to perform basic reconditioning (ie: waterless cleaning) as well as sensor maintenance done from time-to-time\nBathrooms + small office is a bonus, or ability to bring on site",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786407377,
+      "nanoseconds": 653000000
+    },
+    "companyName": "Curo Charging - San Diego - Fleet 1 - All EV",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786724946,
+      "nanoseconds": 824000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713753,
+      "nanoseconds": 45000000
+    }
+  },
+  {
+    "id": "keSY9RVCMUvJBxBrJbg2",
+    "side": "provider",
+    "stage": "CONTACTED",
+    "companyName": "Douglas Parking",
+    "contactName": "Nick Roth",
+    "contactTitle": "Business Development and Operations Manager",
+    "contactEmail": "nick@douglasparking.com",
+    "contactPhone": "303-472-4808",
+    "website": "https://www.douglasparking.com/",
+    "city": "San Francisco",
+    "description": "",
+    "source": "OUTBOUND",
+    "assignedTo": "greg",
+    "nextFollowUp": null,
+    "tags": [
+      "contacted",
+      "interested"
+    ],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788276683,
+      "nanoseconds": 361000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1788276762,
+      "nanoseconds": 382000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788276762,
+      "nanoseconds": 382000000
+    }
+  },
+  {
+    "id": "nt6vknckcH9o1jST88FS",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "InterPark",
+    "contactName": "Brian DeBock",
+    "contactTitle": "Sr. Vice President",
+    "contactEmail": "brian.debock@intpark.com",
+    "contactPhone": "",
+    "website": "https://www.interparkholdings.com/#/",
+    "city": "Chicago, IL",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786980484,
+      "nanoseconds": 60000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786980490,
+      "nanoseconds": 480000000
+    },
+    "assignedTo": "tom.sivak@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787203370,
+      "nanoseconds": 504000000
+    }
+  },
+  {
+    "id": "oAPUeQfGTbotuM8bg1sY",
+    "side": "operator",
+    "stage": "QUALIFYING",
+    "contactPhone": "",
+    "website": "",
+    "description": "",
+    "source": "",
+    "assignedTo": "Greg",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786639277,
+      "nanoseconds": 259000000
+    },
+    "contactTitle": "Executive Director, Urban Robotics Foundation CEO, Pudocity Inc.",
+    "contactEmail": "bern@pudocity.com",
+    "contactName": "Burn Grush",
+    "companyName": "Waymo - Austin",
+    "city": "Austin",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786639860,
+      "nanoseconds": 917000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786639860,
+      "nanoseconds": 917000000
+    }
+  },
+  {
+    "id": "qRR1sLuB7kw9Q0jnhRdZ",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Moove (moove.io)",
+    "contactName": "Jason Walter",
+    "contactTitle": "",
+    "contactEmail": "jason.walter@moove.io",
+    "contactPhone": "",
+    "website": "",
+    "description": "Waymo fleet ops Phoenix/Miami — 10-stall Miami pitch pending",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [
+      "Active"
+    ],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786978441,
+      "nanoseconds": 759000000
+    },
+    "city": "San Francisco, California",
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713447,
+      "nanoseconds": 785000000
+    }
+  },
+  {
+    "id": "rE00B0m9e7lk2rQ2eF4I",
+    "side": "provider",
+    "stage": "CONTACTED",
+    "companyName": "Premium parking",
+    "contactName": "Tim Hoppenrath, CPP",
+    "contactTitle": "Vice President, Retail Parking Solutions",
+    "contactEmail": "Thoppenrath@premiumparking.com",
+    "contactPhone": "",
+    "website": "www.premiumparking.com",
+    "city": "New Orleans, LA",
+    "description": "",
+    "source": "COLD_OUTREACH",
+    "assignedTo": "greg@xoompark.co",
+    "lastContactedAt": null,
+    "nextFollowUp": "2026-09-07",
+    "tags": [],
+    "providerDetails": {
+      "providerType": "PARKING_OPERATOR",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "greg@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788346241,
+      "nanoseconds": 289000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788346241,
+      "nanoseconds": 289000000
+    }
+  },
+  {
+    "id": "rj9FqXqadX5i3WFvNKoi",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "AirGarage",
+    "contactName": "James",
+    "contactTitle": "",
+    "contactEmail": "james@airgarage.com",
+    "contactPhone": "",
+    "website": "",
+    "description": "Gateless tech operator",
+    "source": "",
+    "assignedTo": "tom.sivak@xoompark.co",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "tom.sivak@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786538727,
+      "nanoseconds": 402000000
+    },
+    "city": "Various",
+    "tags": [
+      "Active"
+    ],
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1786539049,
+      "nanoseconds": 931000000
+    }
+  },
+  {
+    "id": "tNxNkXGPLZ6ndK6ydXKG",
+    "side": "provider",
+    "stage": "CONTACTED",
+    "companyName": "ABM",
+    "contactName": "",
+    "contactTitle": "",
+    "contactEmail": "ContactParking@abm.com",
+    "contactPhone": "",
+    "website": "abm.com",
+    "city": "San Francisco",
+    "description": "",
+    "source": "COLD_OUTREACH",
+    "assignedTo": "Greg",
+    "nextFollowUp": null,
+    "tags": [
+      "warm-lead"
+    ],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1788960144,
+      "nanoseconds": 484000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1788960210,
+      "nanoseconds": 532000000
+    },
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1788960210,
+      "nanoseconds": 532000000
+    }
+  },
+  {
+    "id": "ux47CCNg81exCMRhOZ0d",
+    "side": "provider",
+    "stage": "IDENTIFIED",
+    "companyName": "Mobility Places",
+    "contactName": "Rachel Allen",
+    "contactPhone": "",
+    "description": "",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786980722,
+      "nanoseconds": 295000000
+    },
+    "website": "https://mobilityplaces.com/",
+    "city": "Florida",
+    "contactEmail": "rachel@mobilityplaces.com",
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786980816,
+      "nanoseconds": 615000000
+    },
+    "contactTitle": "CEO/Founder",
+    "assignedTo": "tom.sivak@xoompark.co",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787203620,
+      "nanoseconds": 139000000
+    }
+  },
+  {
+    "id": "viRRfmAvzUBNcHG12J7T",
+    "side": "operator",
+    "stage": "IDENTIFIED",
+    "companyName": "Curo Charging - Chicago - Fleet 1 - All EV",
+    "contactName": "Andrew Krulewitz",
+    "contactTitle": "",
+    "contactEmail": "",
+    "contactPhone": "",
+    "website": "",
+    "city": "Chicago",
+    "description": "Up to 40 EVs, can be clustered in groups of 10\n24/7 access, most vehicles out during the day, Level 2 charging needed overnight \nInitial term: 6-12 months\nProfessional drivers only — not random gig workers\n8ft clearance at the stalls, ideally >6’7” at entrance\nAbility to perform basic reconditioning (ie: waterless cleaning) as well as sensor maintenance done from time-to-time\nBathrooms + small office is a bonus, or ability to bring on site",
+    "source": "",
+    "lastContactedAt": null,
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": null,
+    "operatorDetails": {
+      "fleetType": "",
+      "fleetSize": null,
+      "servicesNeeded": [],
+      "operatingMarkets": "",
+      "currentSolution": "",
+      "apiReady": null,
+      "estimatedMonthlyVolume": null,
+      "targetGoLive": ""
+    },
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786408260,
+      "nanoseconds": 133000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787715712,
+      "nanoseconds": 181000000
+    }
+  },
+  {
+    "id": "xZFMoK250W43z7I0oP1X",
+    "side": "provider",
+    "stage": "QUALIFYING",
+    "companyName": "ACE Parking - 350 2nd Street",
+    "contactName": "Joe Braucher",
+    "contactTitle": "Vice President, Northern California",
+    "contactEmail": "jbraucher@aceparking.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Francisco",
+    "description": "ACE Parking has a lot at 350 2nd Street",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786488706,
+      "nanoseconds": 536000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786488975,
+      "nanoseconds": 769000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787715682,
+      "nanoseconds": 120000000
+    }
+  },
+  {
+    "id": "zQyvTnMJ4XsCqqLVnVeI",
+    "side": "provider",
+    "stage": "QUALIFYING",
+    "companyName": "ACE Parking - 1814 S. 32nd Street",
+    "contactName": "Mike Gaulin",
+    "contactTitle": "VP",
+    "contactEmail": "mgaulin@aceparking.com",
+    "contactPhone": "",
+    "website": "",
+    "city": "San Diego",
+    "description": "ACE Parking has a lot at 1814 S. 32nd Street San Diego, CA 92136",
+    "source": "",
+    "nextFollowUp": null,
+    "tags": [],
+    "providerDetails": {
+      "providerType": "",
+      "infraType": "",
+      "estimatedSpaces": null,
+      "estimatedLocations": null,
+      "servicesInterested": [],
+      "currentlyMonetized": null
+    },
+    "operatorDetails": null,
+    "createdBy": "jeff.miller@xoompark.co",
+    "createdAt": {
+      "__type": "timestamp",
+      "seconds": 1786488163,
+      "nanoseconds": 690000000
+    },
+    "lastContactedAt": {
+      "__type": "timestamp",
+      "seconds": 1786724843,
+      "nanoseconds": 850000000
+    },
+    "assignedTo": "Greg",
+    "updatedAt": {
+      "__type": "timestamp",
+      "seconds": 1787713783,
+      "nanoseconds": 542000000
+    }
+  }
+]

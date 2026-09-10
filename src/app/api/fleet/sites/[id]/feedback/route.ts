@@ -24,7 +24,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const { id } = await params;
   const location = await getSourcedLocation(id);
-  if (!location || location.mergedInto) {
+  if (!location || location.merged_into_lot_id) {
     return NextResponse.json({ error: 'Site not found' }, { status: 404 });
   }
 

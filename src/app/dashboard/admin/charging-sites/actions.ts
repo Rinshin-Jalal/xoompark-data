@@ -20,27 +20,27 @@ export async function findChargingSites(params: AfdcSearchParams) {
  * same rule pitstop_findings already applies to manual fields.
  */
 export async function saveChargingLocation(
-  afdcId: number,
+  source_id: number,
   snapshot: Pick<
     SavedChargingLocation,
-    'name' | 'lat' | 'lng' | 'network' | 'streetAddress' | 'city' | 'state' | 'dcFastPorts' | 'maxPowerKw'
+    'name' | 'lat' | 'lng' | 'network_name' | 'street_address' | 'city' | 'state' | 'dc_fast_port_count' | 'max_power_kw'
   >,
 ) {
   const admin = await requireAdmin();
   const db = getDb();
-  const ref = db.collection('charging_sites').doc(String(afdcId));
+  const ref = db.collection('charging_sites').doc(String(source_id));
   const existing = await ref.get();
 
   await ref.set(
     {
-      id: String(afdcId),
-      afdcId,
+      id: String(source_id),
+      source_id,
       ...snapshot,
       clearance: existing.exists ? undefined : null,
       notes: existing.exists ? undefined : null,
-      ownerName: existing.exists ? undefined : null,
-      portMounting: existing.exists ? undefined : null,
-      savedBy: existing.exists ? undefined : admin.email,
+      owner_name: existing.exists ? undefined : null,
+      mounting_type: existing.exists ? undefined : null,
+      saved_by: existing.exists ? undefined : admin.email,
       createdAt: existing.exists ? undefined : FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     },
@@ -56,49 +56,49 @@ export async function listSavedChargingLocations(): Promise<SavedChargingLocatio
 }
 
 export async function updateChargingLocationClearance(
-  afdcId: number,
+  source_id: number,
   clearance: { inches: number; status: ClearanceStatus; measuredBy?: string; measuredAt?: string } | null,
 ) {
   await requireAdmin();
   const db = getDb();
   const value: Clearance | null = clearance;
-  await db.collection('charging_sites').doc(String(afdcId)).update({
+  await db.collection('charging_sites').doc(String(source_id)).update({
     clearance: value,
     updatedAt: FieldValue.serverTimestamp(),
   });
 }
 
-export async function updateChargingLocationNotes(afdcId: number, notes: string) {
+export async function updateChargingLocationNotes(source_id: number, notes: string) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('charging_sites').doc(String(afdcId)).update({
+  await db.collection('charging_sites').doc(String(source_id)).update({
     notes: notes || null,
     updatedAt: FieldValue.serverTimestamp(),
   });
 }
 
-export async function updateChargingLocationOwnerName(afdcId: number, ownerName: string) {
+export async function updateChargingLocationOwnerName(source_id: number, owner_name: string) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('charging_sites').doc(String(afdcId)).update({
-    ownerName: ownerName || null,
+  await db.collection('charging_sites').doc(String(source_id)).update({
+    owner_name: owner_name || null,
     updatedAt: FieldValue.serverTimestamp(),
   });
 }
 
-export async function updateChargingLocationPortMounting(afdcId: number, portMounting: PortMounting | null) {
+export async function updateChargingLocationPortMounting(source_id: number, mounting_type: PortMounting | null) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('charging_sites').doc(String(afdcId)).update({
-    portMounting,
+  await db.collection('charging_sites').doc(String(source_id)).update({
+    mounting_type,
     updatedAt: FieldValue.serverTimestamp(),
   });
 }
 
-export async function deleteSavedChargingLocation(afdcId: number) {
+export async function deleteSavedChargingLocation(source_id: number) {
   await requireAdmin();
   const db = getDb();
-  await db.collection('charging_sites').doc(String(afdcId)).delete();
+  await db.collection('charging_sites').doc(String(source_id)).delete();
 }
 
 /**
@@ -112,13 +112,13 @@ export async function bulkImportClearance(rows: ClearanceImportRow[]) {
   const db = getDb();
 
   const updated: number[] = [];
-  const skipped: { afdcId: number; reason: string }[] = [];
+  const skipped: { source_id: number; reason: string }[] = [];
 
   for (const row of rows) {
     const ref = db.collection('charging_sites').doc(String(row.afdcId));
     const existing = await ref.get();
     if (!existing.exists) {
-      skipped.push({ afdcId: row.afdcId, reason: 'not a saved location — save it from a search first' });
+      skipped.push({ source_id: row.afdcId, reason: 'not a saved location — save it from a search first' });
       continue;
     }
 

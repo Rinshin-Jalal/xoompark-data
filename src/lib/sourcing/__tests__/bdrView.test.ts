@@ -38,15 +38,15 @@ function makeLocation(overrides: Partial<SourcedParkingLocation> = {}): SourcedP
   return {
     id: `loc-${seq}`,
     name: `Lot ${seq}`,
-    source: 'spothero',
-    sourceUrl: 'https://example.com',
+    source_name: 'spothero',
+    source_url: 'https://example.com',
     evidence: [],
-    fieldProvenance: {},
-    capturedBy: 'scraped',
+    field_sources: {},
+    captured_by: 'scraped',
     status: 'draft',
-    rawInput: null,
-    createdAt: '2026-08-23T00:00:00.000Z',
-    updatedAt: '2026-08-23T00:00:00.000Z',
+    raw_input: null,
+    created_at: '2026-08-23T00:00:00.000Z',
+    updated_at: '2026-08-23T00:00:00.000Z',
     ...overrides,
   };
 }
@@ -54,32 +54,32 @@ function makeLocation(overrides: Partial<SourcedParkingLocation> = {}): SourcedP
 // --- checklist generation ---------------------------------------------------
 
 test('deriveBdrChecklist: lists only the fields still empty', () => {
-  const loc = makeLocation({ priceText: '$10/day', hoursText: '9-5', clearanceText: undefined, capacityText: undefined });
+  const loc = makeLocation({ price_text: '$10/day', hours_text: '9-5', clearance_text: undefined, capacity_text: undefined });
   const rows = deriveBdrChecklist(loc);
   const keys = rows.map((r) => r.key);
-  // ratesHours is filled (both priceText and hoursText present) so it's absent.
+  // ratesHours is filled (both price_text and hours_text present) so it's absent.
   assert.ok(!keys.includes('ratesHours'));
-  // capacity/clearance/open247/fenced/lit/ingressEgress are all still empty.
-  assert.deepEqual(keys.sort(), ['capacity', 'clearance', 'fenced', 'ingressEgress', 'lit', 'open247'].sort());
+  // capacity/clearance/open247/is_fenced/is_lit/ingress_egress are all still empty.
+  assert.deepEqual(keys.sort(), ['capacity', 'clearance', 'is_fenced', 'ingress_egress', 'is_lit', 'open247'].sort());
 });
 
 test('deriveBdrChecklist: ratesHours only collapses when BOTH price and hours are present', () => {
-  const priceOnly = makeLocation({ priceText: '$10/day' });
+  const priceOnly = makeLocation({ price_text: '$10/day' });
   assert.ok(deriveBdrChecklist(priceOnly).some((r) => r.key === 'ratesHours'));
-  const hoursOnly = makeLocation({ hoursText: '9-5' });
+  const hoursOnly = makeLocation({ hours_text: '9-5' });
   assert.ok(deriveBdrChecklist(hoursOnly).some((r) => r.key === 'ratesHours'));
 });
 
 test('deriveBdrChecklist: collapses to nothing once every field is filled', () => {
   const loc = makeLocation({
-    priceText: '$10/day',
-    hoursText: '24/7',
-    capacityText: '200 spaces',
-    clearanceText: "6'8\"",
-    access247: true,
-    fenced: true,
-    lit: true,
-    ingressEgress: 'one-way in, separate exit',
+    price_text: '$10/day',
+    hours_text: '24/7',
+    capacity_text: '200 spaces',
+    clearance_text: "6'8\"",
+    is_24_7: true,
+    is_fenced: true,
+    is_lit: true,
+    ingress_egress: 'one-way in, separate exit',
   });
   assert.deepEqual(deriveBdrChecklist(loc), []);
 });
@@ -93,7 +93,7 @@ test('bdrChecklistRows: always returns all 7 rows, tagged done/not-done', () => 
 });
 
 test('missingChecklistCount: counts only empty fields', () => {
-  const loc = makeLocation({ priceText: '$10/day', hoursText: '24/7' });
+  const loc = makeLocation({ price_text: '$10/day', hours_text: '24/7' });
   // ratesHours filled -> 6 remaining of the 7.
   assert.equal(missingChecklistCount(loc), 6);
 });
@@ -101,14 +101,14 @@ test('missingChecklistCount: counts only empty fields', () => {
 // --- queue ordering ----------------------------------------------------------
 
 test('buildBdrQueue: a record missing more critical fields sorts before one missing fewer', () => {
-  const missingLots = makeLocation({ id: 'missing-lots', createdAt: '2026-08-01T00:00:00.000Z' });
+  const missingLots = makeLocation({ id: 'missing-lots', created_at: '2026-08-01T00:00:00.000Z' });
   const missingFew = makeLocation({
     id: 'missing-few',
-    createdAt: '2026-08-01T00:00:00.000Z',
-    priceText: '$10/day',
-    hoursText: '24/7',
-    capacityText: '200',
-    clearanceText: "6'8\"",
+    created_at: '2026-08-01T00:00:00.000Z',
+    price_text: '$10/day',
+    hours_text: '24/7',
+    capacity_text: '200',
+    clearance_text: "6'8\"",
   });
   const sorted = buildBdrQueue([missingFew, missingLots]);
   assert.deepEqual(sorted.map((l) => l.id), ['missing-lots', 'missing-few']);
@@ -117,14 +117,14 @@ test('buildBdrQueue: a record missing more critical fields sorts before one miss
 test('buildBdrQueue: a flood-failed record sorts last regardless of how much else it is missing', () => {
   const floodFailedButComplete = makeLocation({
     id: 'flood-complete',
-    priceText: '$10/day',
-    hoursText: '24/7',
-    capacityText: '200',
-    clearanceText: "6'8\"",
-    access247: true,
-    fenced: true,
-    lit: true,
-    ingressEgress: 'one-way in, separate exit',
+    price_text: '$10/day',
+    hours_text: '24/7',
+    capacity_text: '200',
+    clearance_text: "6'8\"",
+    is_24_7: true,
+    is_fenced: true,
+    is_lit: true,
+    ingress_egress: 'one-way in, separate exit',
     geoContext: { floodHazardArea: true, floodZone: 'AE', checkedAt: 'x' },
   });
   const missingEverything = makeLocation({ id: 'missing-everything' });
@@ -134,7 +134,7 @@ test('buildBdrQueue: a flood-failed record sorts last regardless of how much els
 
 test('buildBdrQueue: excludes saved and merged-away records', () => {
   const saved = makeLocation({ id: 'saved', status: 'saved' });
-  const merged = makeLocation({ id: 'merged', mergedInto: 'other-id' });
+  const merged = makeLocation({ id: 'merged', merged_into_lot_id: 'other-id' });
   const draft = makeLocation({ id: 'draft' });
   const sorted = buildBdrQueue([saved, merged, draft]);
   assert.deepEqual(sorted.map((l) => l.id), ['draft']);
@@ -144,7 +144,7 @@ test('buildBdrQueue: with a seed, ties are broken reproducibly and differently f
   const a = makeLocation({ id: 'tie-a' });
   const b = makeLocation({ id: 'tie-b' });
   // Same missing-count (both fully empty) and same flood status -> a pure
-  // tie, so unseeded falls back to createdAt (both equal here -> stable
+  // tie, so unseeded falls back to created_at (both equal here -> stable
   // relative order), seeded reorders by hash instead.
   const seeded1 = buildBdrQueue([a, b], 42).map((l) => l.id);
   const seeded2 = buildBdrQueue([a, b], 42).map((l) => l.id);
@@ -178,14 +178,14 @@ test('filterByOdd: includeOutsideOdd=true keeps everything, including unknown', 
   );
 });
 
-test('contextStripLabel: appends "added by" only when addedBy is set', () => {
+test('contextStripLabel: appends "added by" only when added_by is set', () => {
   assert.ok(!contextStripLabel(makeLocation()).includes('added by'));
-  assert.ok(contextStripLabel(makeLocation({ addedBy: 'Priya' })).includes('added by Priya'));
+  assert.ok(contextStripLabel(makeLocation({ added_by: 'Priya' })).includes('added by Priya'));
 });
 
 test('isBdrVisible: false for saved or merged-away, true for plain draft', () => {
   assert.equal(isBdrVisible(makeLocation({ status: 'saved' })), false);
-  assert.equal(isBdrVisible(makeLocation({ mergedInto: 'x' })), false);
+  assert.equal(isBdrVisible(makeLocation({ merged_into_lot_id: 'x' })), false);
   assert.equal(isBdrVisible(makeLocation()), true);
 });
 
@@ -209,7 +209,7 @@ test('STATUS_LABEL: every SourcingStatus has a non-empty translation, no stray k
 });
 
 test('hasConflictNote: true only when notes contains the conflict: marker', () => {
-  assert.equal(hasConflictNote(makeLocation({ notes: 'conflict:priceText:$5|$10' })), true);
+  assert.equal(hasConflictNote(makeLocation({ notes: 'conflict:price_text:$5|$10' })), true);
   assert.equal(hasConflictNote(makeLocation({ notes: 'clean note, no issues' })), false);
   assert.equal(hasConflictNote(makeLocation()), false);
 });
@@ -224,30 +224,30 @@ test('floodBanner: null when not flood-failed, includes zone letter when known',
 
 // --- #34: checklist/queue read the real schema fields ------------------------
 
-test('checklist: stallsTotal alone satisfies the capacity row; tri-state fields satisfy their rows', () => {
-  const loc = makeLocation({ stallsTotal: 62, access247: true, fenced: null, lit: false, ingressEgress: 'one-way in' });
+test('checklist: stall_count alone satisfies the capacity row; tri-state fields satisfy their rows', () => {
+  const loc = makeLocation({ stall_count: 62, is_24_7: true, is_fenced: null, is_lit: false, ingress_egress: 'one-way in' });
   const rows = bdrChecklistRows(loc);
   const byKey = Object.fromEntries(rows.map((r) => [r.key, r.done]));
-  assert.equal(byKey.capacity, true, 'stallsTotal is a stated number');
+  assert.equal(byKey.capacity, true, 'stall_count is a stated number');
   assert.equal(byKey.open247, true);
-  assert.equal(byKey.fenced, true, 'null = checked/could not tell = done');
-  assert.equal(byKey.lit, true, 'false = affirmatively recorded = done');
-  assert.equal(byKey.ingressEgress, true);
+  assert.equal(byKey.is_fenced, true, 'null = checked/could not tell = done');
+  assert.equal(byKey.is_lit, true, 'false = affirmatively recorded = done');
+  assert.equal(byKey.ingress_egress, true);
 });
 
 test('queue ordering: a record with the new fields filled sorts after one missing them', () => {
-  const thin = makeLocation({ id: 'thin', createdAt: '2026-08-23T00:00:00.000Z' });
+  const thin = makeLocation({ id: 'thin', created_at: '2026-08-23T00:00:00.000Z' });
   const rich = makeLocation({
     id: 'rich',
-    createdAt: '2026-08-22T00:00:00.000Z', // older — would sort first on createdAt alone
-    stallsTotal: 55,
-    access247: true,
-    fenced: true,
-    lit: true,
-    ingressEgress: 'separate exit',
-    priceText: '$10',
-    hoursText: '24/7',
-    clearanceText: "6'8\"",
+    created_at: '2026-08-22T00:00:00.000Z', // older — would sort first on created_at alone
+    stall_count: 55,
+    is_24_7: true,
+    is_fenced: true,
+    is_lit: true,
+    ingress_egress: 'separate exit',
+    price_text: '$10',
+    hours_text: '24/7',
+    clearance_text: "6'8\"",
   });
   const queue = buildBdrQueue([rich, thin]);
   assert.equal(queue[0].id, 'thin');

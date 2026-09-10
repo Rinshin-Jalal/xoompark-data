@@ -9,18 +9,18 @@ import type { MetroCode } from '@/lib/types';
 
 export interface OwnerInfo {
   ownerName: string | null;
-  ownerMailingAddress: string | null;
+  owner_mailing_addressAddress: string | null;
   folio: string | null;
-  landUse: string | null;
-  zoning: string | null;
+  land_use_code: string | null;
+  zoning_code: string | null;
 }
 
-const EMPTY: OwnerInfo = { ownerName: null, ownerMailingAddress: null, folio: null, landUse: null, zoning: null };
+const EMPTY: OwnerInfo = { ownerName: null, owner_mailing_addressAddress: null, folio: null, land_use_code: null, zoning_code: null };
 
-async function arcgisPointQuery(url: string, lat: number, lon: number, outFields: string[]): Promise<Record<string, unknown> | null> {
+async function arcgisPointQuery(url: string, lat: number, lng: number, outFields: string[]): Promise<Record<string, unknown> | null> {
   const params = new URLSearchParams({
     f: 'json',
-    geometry: `${lon},${lat}`,
+    geometry: `${lng},${lat}`,
     geometryType: 'esriGeometryPoint',
     inSR: '4326',
     spatialRel: 'esriSpatialRelIntersects',
@@ -33,10 +33,10 @@ async function arcgisPointQuery(url: string, lat: number, lon: number, outFields
   return json.features?.[0]?.attributes ?? null;
 }
 
-async function lookupMiamiOwner(lat: number, lon: number): Promise<OwnerInfo> {
+async function lookupMiamiOwner(lat: number, lng: number): Promise<OwnerInfo> {
   const attrs = await arcgisPointQuery(
     'https://gisweb.miamidade.gov/arcgis/rest/services/MD_LandInformation/MapServer/26/query',
-    lat, lon,
+    lat, lng,
     ['TRUE_OWNER1', 'TRUE_MAILING_ADDR1', 'TRUE_MAILING_CITY', 'TRUE_MAILING_STATE', 'TRUE_MAILING_ZIP_CODE', 'FOLIO', 'DOR_DESC', 'PRIMARY_ZONE'],
   );
   if (!attrs) return EMPTY;
@@ -44,40 +44,40 @@ async function lookupMiamiOwner(lat: number, lon: number): Promise<OwnerInfo> {
     .filter(Boolean).join(', ');
   return {
     ownerName: (attrs.TRUE_OWNER1 as string) || null,
-    ownerMailingAddress: mailing || null,
+    owner_mailing_addressAddress: mailing || null,
     folio: (attrs.FOLIO as string) || null,
-    landUse: (attrs.DOR_DESC as string) || null,
-    zoning: (attrs.PRIMARY_ZONE as string) || null,
+    land_use_code: (attrs.DOR_DESC as string) || null,
+    zoning_code: (attrs.PRIMARY_ZONE as string) || null,
   };
 }
 
-async function lookupSanDiegoOwner(lat: number, lon: number): Promise<OwnerInfo> {
+async function lookupSanDiegoOwner(lat: number, lng: number): Promise<OwnerInfo> {
   const attrs = await arcgisPointQuery(
     'https://geo.sandag.org/server/rest/services/Hosted/Parcels/FeatureServer/0/query',
-    lat, lon,
+    lat, lng,
     ['OWN_NAME1', 'OWN_ADDR1', 'OWN_ADDR2', 'OWN_ZIP', 'APN', 'NUCLEUS_USE_CD', 'NUCLEUS_ZONE_CD'],
   );
   if (!attrs) return EMPTY;
   const mailing = [attrs.OWN_ADDR1, attrs.OWN_ADDR2, attrs.OWN_ZIP].filter(Boolean).join(', ');
   return {
     ownerName: (attrs.OWN_NAME1 as string) || null,
-    ownerMailingAddress: mailing || null,
+    owner_mailing_addressAddress: mailing || null,
     folio: (attrs.APN as string) || null,
-    landUse: (attrs.NUCLEUS_USE_CD as string) || null,
-    zoning: (attrs.NUCLEUS_ZONE_CD as string) || null,
+    land_use_code: (attrs.NUCLEUS_USE_CD as string) || null,
+    zoning_code: (attrs.NUCLEUS_ZONE_CD as string) || null,
   };
 }
 
-const LOOKUPS: Partial<Record<MetroCode, (lat: number, lon: number) => Promise<OwnerInfo>>> = {
+const LOOKUPS: Partial<Record<MetroCode, (lat: number, lng: number) => Promise<OwnerInfo>>> = {
   miami: lookupMiamiOwner,
   sd: lookupSanDiegoOwner,
 };
 
-export async function lookupOwner(metro: MetroCode, lat: number, lon: number): Promise<OwnerInfo> {
-  const fn = LOOKUPS[metro];
+export async function lookupOwner(metro_id: MetroCode, lat: number, lng: number): Promise<OwnerInfo> {
+  const fn = LOOKUPS[metro_id];
   if (!fn) return EMPTY;
   try {
-    return await fn(lat, lon);
+    return await fn(lat, lng);
   } catch {
     return EMPTY;
   }

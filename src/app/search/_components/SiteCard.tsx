@@ -79,10 +79,10 @@ export function SiteCard({
 
   const summary = sourced
     ? [
-        site.surfaceType === 'structured' ? 'Garage' : site.surfaceType === 'surface' ? 'Surface lot' : null,
+        site.surface_type === 'structured' ? 'Garage' : site.surface_type === 'surface' ? 'Surface lot' : null,
         site.clearanceInches !== undefined ? formatClearance(site.clearanceInches) : null,
-        site.stallsTotal ? `${site.stallsTotal.toLocaleString()} stalls` : null,
-        site.access247 === true ? '24/7' : null,
+        site.stall_count ? `${site.stall_count.toLocaleString()} stalls` : null,
+        site.is_24_7 === true ? '24/7' : null,
       ]
         .filter(Boolean)
         .join(' · ')
@@ -146,11 +146,11 @@ export function SiteCard({
           {sourced ? (
             <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
               <Meta icon={Ruler} label="Clearance" value={site.clearanceInches !== undefined ? formatClearance(site.clearanceInches) : 'Unverified'} />
-              <Meta icon={Clock} label="Hours" value={site.access247 === true ? '24/7' : site.hoursText} />
-              <Meta icon={Layers} label="" value={site.stallsTotal ? `${site.stallsTotal.toLocaleString()} stalls` : undefined} />
-              {locked ? <LockedValue label="Rates" /> : <Meta icon={Layers} label="" value={site.priceText} />}
-              <Meta icon={Fence} label="" value={site.fenced === true ? 'Fenced' : undefined} />
-              <Meta icon={Lightbulb} label="" value={site.lit === true ? 'Lit' : undefined} />
+              <Meta icon={Clock} label="Hours" value={site.is_24_7 === true ? '24/7' : site.hours_text} />
+              <Meta icon={Layers} label="" value={site.stall_count ? `${site.stall_count.toLocaleString()} stalls` : undefined} />
+              {locked ? <LockedValue label="Rates" /> : <Meta icon={Layers} label="" value={site.price_text} />}
+              <Meta icon={Fence} label="" value={site.is_fenced === true ? 'Fenced' : undefined} />
+              <Meta icon={Lightbulb} label="" value={site.is_lit === true ? 'Lit' : undefined} />
               {/* Straight-line proximity to the nearest demand anchor — not
                   driving distance, not a demand score. Rounded for display. */}
               <Meta

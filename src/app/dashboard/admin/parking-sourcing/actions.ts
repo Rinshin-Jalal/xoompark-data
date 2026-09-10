@@ -26,19 +26,19 @@ export type SourcedLocationEdits = Partial<
     SourcedParkingLocation,
     | 'name'
     | 'address'
-    | 'priceText'
-    | 'hoursText'
+    | 'price_text'
+    | 'hours_text'
     | 'notes'
-    | 'clearanceText'
-    | 'access247'
-    | 'fenced'
-    | 'lit'
-    | 'ingressEgress'
-    | 'stallsTotal'
-    | 'surfaceType'
+    | 'clearance_text'
+    | 'is_24_7'
+    | 'is_fenced'
+    | 'is_lit'
+    | 'ingress_egress'
+    | 'stall_count'
+    | 'surface_type'
     | 'lat'
     | 'lng'
-    | 'claimedBy'
+    | 'claimed_by'
   >
 >;
 
@@ -50,15 +50,15 @@ export type SourcedLocationEdits = Partial<
 const EDITABLE_PROVENANCE_FIELDS = [
   'name',
   'address',
-  'priceText',
-  'hoursText',
-  'clearanceText',
-  'access247',
-  'fenced',
-  'lit',
-  'ingressEgress',
-  'stallsTotal',
-  'surfaceType',
+  'price_text',
+  'hours_text',
+  'clearance_text',
+  'is_24_7',
+  'is_fenced',
+  'is_lit',
+  'ingress_egress',
+  'stall_count',
+  'surface_type',
   'lat',
   'lng',
 ] as const;
@@ -70,7 +70,7 @@ const EDITABLE_PROVENANCE_FIELDS = [
  * (keeps the old value, just logs a note), which is correct for reconciling
  * two scraped sources disagreeing but wrong here: an admin's correction is
  * authoritative and must apply, not get parked in a conflict note. Dot-path
- * keys update only the touched fieldProvenance entries, leaving the rest of
+ * keys update only the touched field_sources entries, leaving the rest of
  * the map (and any existing conflict notes) untouched.
  */
 export async function updateSourcedLocation(
@@ -82,23 +82,23 @@ export async function updateSourcedLocation(
   if (!existing) throw new Error('Sourced location not found');
 
   const update: Record<string, unknown> = {
-    capturedBy: 'admin',
+    captured_by: 'admin',
     updatedAt: new Date().toISOString(),
   };
   for (const field of EDITABLE_PROVENANCE_FIELDS) {
     if (edits[field] === undefined) continue;
     update[field] = edits[field];
-    update[`fieldProvenance.${field}`] = 'verified';
+    update[`field_sources.${field}`] = 'verified';
   }
   if (edits.notes !== undefined) update.notes = edits.notes;
-  if (edits.claimedBy !== undefined) update.claimedBy = edits.claimedBy;
+  if (edits.claimed_by !== undefined) update.claimed_by = edits.claimed_by;
 
   // Same physical-impossibility rule buildUpsertDoc enforces (see
   // stripClearanceIfSurface in sourcing/types.ts) — surface + clearance can
   // never coexist. Rejected rather than silently nulled here because this is
   // a human correction: the admin should see the conflict and resolve it.
-  const finalSurface = edits.surfaceType !== undefined ? edits.surfaceType : existing.surfaceType;
-  const finalClearance = edits.clearanceText !== undefined ? edits.clearanceText : existing.clearanceText;
+  const finalSurface = edits.surface_type !== undefined ? edits.surface_type : existing.surface_type;
+  const finalClearance = edits.clearance_text !== undefined ? edits.clearance_text : existing.clearance_text;
   if (finalSurface === 'surface' && finalClearance) {
     throw new Error('A surface lot cannot have a clearance — clear the clearance or set the surface type to structured.');
   }
@@ -239,7 +239,7 @@ export type ImportPastedFacilitiesResult =
  * the Parse step instead of a single hand-typed form. No new write path —
  * every row still goes through upsertSourcedLocation, same as every other
  * adapter (see buildManualPasteImportInput in extensionCapture.ts for the
- * source:'manual'/capturedBy:'admin' shape this builds).
+ * source:'manual'/captured_by:'admin' shape this builds).
  */
 export async function importPastedFacilities(
   facilities: ExtractedFacility[],
@@ -348,7 +348,7 @@ export async function importParsedSourceLocations(
 
 // ── Outreach actions ─────────────────────────────────────────────────────
 
-export type OutreachInput = Omit<OutreachRecord, 'id' | 'lotId' | 'createdAt' | 'updatedAt'>;
+export type OutreachInput = Omit<OutreachRecord, 'id' | 'lot_id' | 'created_at' | 'updated_at'>;
 
 export async function getOutreach(lotId: string): Promise<OutreachRecord | null> {
   await requireAdmin();
@@ -404,7 +404,7 @@ export async function exportOutreachCsv(): Promise<string> {
   const rows: string[][] = [];
   for (const lotDoc of lotsSnap.docs) {
     const lot = lotDoc.data() as SourcedParkingLocation;
-    if (lot.mergedInto) continue;
+    if (lot.merged_into_lot_id) continue;
     const outreachSnap = await db
       .collection('parking_lots')
       .doc(lotDoc.id)
@@ -414,11 +414,11 @@ export async function exportOutreachCsv(): Promise<string> {
     if (outreachSnap.empty) continue;
     const o = outreachSnap.docs[0].data() as OutreachRecord;
     rows.push([
-      lot.name, lot.address ?? '', lot.locality ?? '', lot.source,
-      o.contactName, o.contactRole, o.contactEmail, o.contactPhone,
-      String(o.inquirySent), String(o.callMade), String(o.formSubmitted),
-      o.outreachState, o.responseDate ?? '', o.quoteSource, o.bdrOwner,
-      String(o.offerSpaces ?? ''), o.offerPrice, o.offerStart,
+      lot.name, lot.address ?? '', lot.locality ?? '', lot.source_name,
+      o.contact_name, o.contact_title, o.contact_email, o.contact_phone,
+      String(o.email_sent), String(o.call_completed), String(o.form_submitted),
+      o.status, o.response_date ?? '', o.quote_source, o.assigned_to,
+      String(o.offered_spaces ?? ''), o.offered_price, o.offered_start_date,
     ]);
   }
 

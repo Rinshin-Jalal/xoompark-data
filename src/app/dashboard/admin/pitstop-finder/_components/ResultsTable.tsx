@@ -23,19 +23,19 @@ interface Site {
   name: string;
   type: string;
   capacity?: number;
-  capacityActual?: number;
-  clearanceHeight?: string;
-  powerAvailable?: boolean;
-  notesInternal?: string;
+  stall_count_actual?: number;
+  clearance_height_inches?: string;
+  has_power_available?: boolean;
+  internal_notes?: string;
   storageScore: number;
   stagingScore: number;
   status?: 'new' | 'walk-list' | 'walked' | 'contacted' | 'rejected' | 'signed';
   address?: string;
   owner?: string;
-  ownerMailing?: string;
-  landUse?: string;
-  parcelId?: string;
-  zoning?: string;
+  owner_mailing_address?: string;
+  land_use_code?: string;
+  parcel_id?: string;
+  zoning_code?: string;
   ownerDirectCandidate?: boolean;
   nearestAnchor?: string;
   depotMi?: number;
@@ -62,16 +62,16 @@ interface RowEditFields {
   type: string;
   capacity?: number;
   status: SiteStatus;
-  capacityActual?: number;
-  clearanceHeight?: string;
-  powerAvailable?: boolean;
-  notesInternal?: string;
+  stall_count_actual?: number;
+  clearance_height_inches?: string;
+  has_power_available?: boolean;
+  internal_notes?: string;
   address?: string;
   owner?: string;
-  ownerMailing?: string;
-  landUse?: string;
-  parcelId?: string;
-  zoning?: string;
+  owner_mailing_address?: string;
+  land_use_code?: string;
+  parcel_id?: string;
+  zoning_code?: string;
 }
 
 interface RowEditPopupProps {
@@ -112,16 +112,16 @@ function RowEditPopup({ site, onSave, onCancel }: RowEditPopupProps) {
   const [type, setType] = useState(site.type ?? '');
   const [capacity, setCapacity] = useState(String(site.capacity ?? ''));
   const [status, setStatus] = useState<SiteStatus>(site.status || 'new');
-  const [capacityActual, setCapacityActual] = useState(String(site.capacityActual ?? ''));
-  const [clearanceHeight, setClearanceHeight] = useState(site.clearanceHeight ?? '');
-  const [powerAvailable, setPowerAvailable] = useState(!!site.powerAvailable);
-  const [notesInternal, setNotesInternal] = useState(site.notesInternal ?? '');
+  const [stall_count_actual, setCapacityActual] = useState(String(site.stall_count_actual ?? ''));
+  const [clearance_height_inches, setClearanceHeight] = useState(site.clearance_height_inches ?? '');
+  const [has_power_available, setPowerAvailable] = useState(!!site.has_power_available);
+  const [internal_notes, setNotesInternal] = useState(site.internal_notes ?? '');
   const [address, setAddress] = useState(site.address ?? '');
   const [owner, setOwner] = useState(site.owner ?? '');
-  const [ownerMailing, setOwnerMailing] = useState(site.ownerMailing ?? '');
-  const [landUse, setLandUse] = useState(site.landUse ?? '');
-  const [parcelId, setParcelId] = useState(site.parcelId ?? '');
-  const [zoning, setZoning] = useState(site.zoning ?? '');
+  const [owner_mailing_address, setOwnerMailing] = useState(site.owner_mailing_address ?? '');
+  const [land_use_code, setLandUse] = useState(site.land_use_code ?? '');
+  const [parcel_id, setParcelId] = useState(site.parcel_id ?? '');
+  const [zoning_code, setZoning] = useState(site.zoning_code ?? '');
 
   const handleSave = () => {
     onSave({
@@ -129,16 +129,16 @@ function RowEditPopup({ site, onSave, onCancel }: RowEditPopupProps) {
       type,
       capacity: capacity === '' ? undefined : parseFloat(capacity),
       status,
-      capacityActual: capacityActual === '' ? undefined : parseFloat(capacityActual),
-      clearanceHeight: clearanceHeight || undefined,
-      powerAvailable,
-      notesInternal: notesInternal || undefined,
+      stall_count_actual: stall_count_actual === '' ? undefined : parseFloat(stall_count_actual),
+      clearance_height_inches: clearance_height_inches || undefined,
+      has_power_available,
+      internal_notes: internal_notes || undefined,
       address: address || undefined,
       owner: owner || undefined,
-      ownerMailing: ownerMailing || undefined,
-      landUse: landUse || undefined,
-      parcelId: parcelId || undefined,
-      zoning: zoning || undefined,
+      owner_mailing_address: owner_mailing_address || undefined,
+      land_use_code: land_use_code || undefined,
+      parcel_id: parcel_id || undefined,
+      zoning_code: zoning_code || undefined,
     });
   };
 
@@ -207,10 +207,10 @@ function RowEditPopup({ site, onSave, onCancel }: RowEditPopupProps) {
         <SectionLabel>Owner &amp; Parcel</SectionLabel>
         <div className="space-y-3">
           <Field label="Owner" value={owner} onChange={setOwner} />
-          <Field label="Owner mailing address" value={ownerMailing} onChange={setOwnerMailing} />
-          <Field label="Land use" value={landUse} onChange={setLandUse} />
-          <Field label="Zoning" value={zoning} onChange={setZoning} />
-          <Field label="Parcel ID" value={parcelId} onChange={setParcelId} />
+          <Field label="Owner mailing address" value={owner_mailing_address} onChange={setOwnerMailing} />
+          <Field label="Land use" value={land_use_code} onChange={setLandUse} />
+          <Field label="Zoning" value={zoning_code} onChange={setZoning} />
+          <Field label="Parcel ID" value={parcel_id} onChange={setParcelId} />
         </div>
 
         <SectionLabel>Workflow</SectionLabel>
@@ -230,13 +230,13 @@ function RowEditPopup({ site, onSave, onCancel }: RowEditPopupProps) {
             </select>
           </div>
 
-          <Field label="Capacity (actual)" value={capacityActual} onChange={setCapacityActual} type="number" />
-          <Field label="Clearance height" value={clearanceHeight} onChange={setClearanceHeight} placeholder={`e.g. 6'8"`} />
+          <Field label="Capacity (actual)" value={stall_count_actual} onChange={setCapacityActual} type="number" />
+          <Field label="Clearance height" value={clearance_height_inches} onChange={setClearanceHeight} placeholder={`e.g. 6'8"`} />
 
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
-              checked={powerAvailable}
+              checked={has_power_available}
               onChange={(e) => setPowerAvailable(e.target.checked)}
               className="w-4 h-4"
             />
@@ -246,7 +246,7 @@ function RowEditPopup({ site, onSave, onCancel }: RowEditPopupProps) {
           <div>
             <label className="text-xs font-medium text-[#0e1c36]/70">Notes</label>
             <textarea
-              value={notesInternal}
+              value={internal_notes}
               onChange={(e) => setNotesInternal(e.target.value)}
               rows={3}
               className="w-full mt-1 px-3 py-2 border border-[#0e1c36]/20 rounded text-sm resize-none"
@@ -411,16 +411,16 @@ export function ResultsTable({ sites, metro }: ResultsTableProps) {
           name: fields.name || null,
           type: fields.type || null,
           capacity: fields.capacity ?? null,
-          capacityActual: fields.capacityActual ?? null,
-          clearanceHeight: fields.clearanceHeight ?? null,
-          powerAvailable: fields.powerAvailable ?? null,
-          notesInternal: fields.notesInternal ?? null,
+          stall_count_actual: fields.stall_count_actual ?? null,
+          clearance_height_inches: fields.clearance_height_inches ?? null,
+          has_power_available: fields.has_power_available ?? null,
+          internal_notes: fields.internal_notes ?? null,
           address: fields.address ?? null,
           owner: fields.owner ?? null,
-          ownerMailing: fields.ownerMailing ?? null,
-          landUse: fields.landUse ?? null,
-          parcelId: fields.parcelId ?? null,
-          zoning: fields.zoning ?? null,
+          owner_mailing_address: fields.owner_mailing_address ?? null,
+          land_use_code: fields.land_use_code ?? null,
+          parcel_id: fields.parcel_id ?? null,
+          zoning_code: fields.zoning_code ?? null,
         });
       } catch (err) {
         showToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to save' });
@@ -495,7 +495,7 @@ export function ResultsTable({ sites, metro }: ResultsTableProps) {
     </span>
   );
 
-  // Lean column set — everything cut here (owner/parcel/zoning/clearance/
+  // Lean column set — everything cut here (owner/parcel/zoning_code/clearance/
   // hours/coords/…) is already in the RowEditPopup's read-only snapshot,
   // one double-click away. Add a column back only when it earns the width.
   const columns = useMemo(
@@ -516,13 +516,13 @@ export function ResultsTable({ sites, metro }: ResultsTableProps) {
         ),
       }),
       columnHelper.accessor('type', { header: 'Type' }),
-      columnHelper.accessor((s) => s.capacityActual ?? s.capacity, {
+      columnHelper.accessor((s) => s.stall_count_actual ?? s.capacity, {
         id: 'capacity',
         header: 'Cap.',
         cell: ({ row }) => (
           <span className="font-mono text-xs text-[#0e1c36]/50">
-            {row.original.capacityActual ?? row.original.capacity ?? '—'}
-            {row.original.capacityActual != null && row.original.capacity != null && row.original.capacityActual !== row.original.capacity && (
+            {row.original.stall_count_actual ?? row.original.capacity ?? '—'}
+            {row.original.stall_count_actual != null && row.original.capacity != null && row.original.stall_count_actual !== row.original.capacity && (
               <span className="text-[#0e1c36]/35" title={`estimated ${row.original.capacity}`}> ({row.original.capacity})</span>
             )}
           </span>
@@ -533,7 +533,7 @@ export function ResultsTable({ sites, metro }: ResultsTableProps) {
         header: 'Flags',
         cell: ({ row }) => handleFlagsCell(row.original),
       }),
-      columnHelper.accessor('notesInternal', {
+      columnHelper.accessor('internal_notes', {
         header: 'Notes',
         cell: ({ getValue }) => (
           <span className="text-xs text-[#0e1c36]/60 max-w-[12rem] truncate block" title={getValue() ?? ''}>
@@ -667,7 +667,7 @@ export function ResultsTable({ sites, metro }: ResultsTableProps) {
     </div>
 
     <p className="mb-2 text-xs text-[#0e1c36]/40">
-      {filteredSites.length} of {localSites.length} sites · click column headers to sort · double-click a row to edit · full details (owner, parcel, zoning, hours, coords) live in the edit popup
+      {filteredSites.length} of {localSites.length} sites · click column headers to sort · double-click a row to edit · full details (owner, parcel, zoning_code, hours, coords) live in the edit popup
     </p>
 
     {hasUnsaved && (

@@ -14,12 +14,12 @@ export function haversineMi(lat1: number, lon1: number, lat2: number, lon2: numb
   return 2 * R * Math.asin(Math.sqrt(a));
 }
 
-export function polygonAreaSqm(points: Array<{ lat: number; lon: number }>): number | null {
+export function polygonAreaSqm(points: Array<{ lat: number; lng: number }>): number | null {
   if (!points || points.length < 3) return null;
 
   const lat0 = points.reduce((sum, p) => sum + p.lat, 0) / points.length;
   const k = Math.cos((lat0 * Math.PI) / 180);
-  const xs = points.map((p) => p.lon * 111320.0 * k);
+  const xs = points.map((p) => p.lng * 111320.0 * k);
   const ys = points.map((p) => p.lat * 110540.0);
 
   let area = 0;
@@ -36,18 +36,18 @@ interface OverpassElement {
   type: 'node' | 'way' | 'relation';
   id: number;
   lat?: number;
-  lon?: number;
-  center?: { lat: number; lon: number };
+  lng?: number;
+  center?: { lat: number; lng: number };
   tags?: Record<string, string>;
-  geometry?: Array<{ lat: number; lon: number }>;
+  geometry?: Array<{ lat: number; lng: number }>;
 }
 
 export async function fetchOverpassData(config: FinderConfig): Promise<{
   parking: OverpassElement[];
   residential: OverpassElement[];
 }> {
-  const { bbox } = config;
-  const s = bbox.south, w = bbox.west, n = bbox.north, e = bbox.east;
+  const { bounding_box } = config;
+  const s = bounding_box.south, w = bounding_box.west, n = bounding_box.north, e = bounding_box.east;
 
   // Combined query: parking + residential in one call, minimizing API requests
   const query = `[out:json][timeout:300];
@@ -103,7 +103,7 @@ interface ResidentialWay {
   maxLat: number;
   minLon: number;
   maxLon: number;
-  points: Array<{ lat: number; lon: number }>;
+  points: Array<{ lat: number; lng: number }>;
 }
 
 export function buildResidentialWays(residential: OverpassElement[]): ResidentialWay[] {
@@ -114,7 +114,7 @@ export function buildResidentialWays(residential: OverpassElement[]): Residentia
     let minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
     for (const p of points) {
       minLat = Math.min(minLat, p.lat); maxLat = Math.max(maxLat, p.lat);
-      minLon = Math.min(minLon, p.lon); maxLon = Math.max(maxLon, p.lon);
+      minLon = Math.min(minLon, p.lng); maxLon = Math.max(maxLon, p.lng);
     }
     ways.push({ minLat, maxLat, minLon, maxLon, points });
   }
@@ -125,12 +125,12 @@ function projectMeters(
   centerLat: number,
   centerLon: number,
   lat: number,
-  lon: number,
+  lng: number,
 ): { x: number; y: number } {
   const metersPerDegreeLat = 110540;
   const metersPerDegreeLon = 111320 * Math.cos((centerLat * Math.PI) / 180);
   return {
-    x: (lon - centerLon) * metersPerDegreeLon,
+    x: (lng - centerLon) * metersPerDegreeLon,
     y: (lat - centerLat) * metersPerDegreeLat,
   };
 }
@@ -159,14 +159,14 @@ function distToSegmentMeters(
 
 export function isNearResidential(
   lat: number,
-  lon: number,
+  lng: number,
   ways: ResidentialWay[],
   bufferM: number,
 ): boolean {
   const pad = (bufferM * 1.5) / 111_000;
   for (const way of ways) {
-    if (lat < way.minLat - pad || lat > way.maxLat + pad || lon < way.minLon - pad || lon > way.maxLon + pad) continue;
-    const poly = way.points.map((p) => projectMeters(lat, lon, p.lat, p.lon));
+    if (lat < way.minLat - pad || lat > way.maxLat + pad || lng < way.minLon - pad || lng > way.maxLon + pad) continue;
+    const poly = way.points.map((p) => projectMeters(lat, lng, p.lat, p.lng));
     if (pointInPolygon(poly)) return true;
     for (let i = 0; i < poly.length - 1; i++) {
       if (distToSegmentMeters(poly[i], poly[i + 1]) <= bufferM) return true;
@@ -178,26 +178,26 @@ export function isNearResidential(
 // ===== Scoring =====
 
 export interface ScoredSite {
-  osmId: string;
+  osm_id: string;
   lat: number;
-  lon: number;
+  lng: number;
   name: string;
   type: string;
   capacity: number | null;
-  capacitySource: string;
-  areaSqm: number | null;
-  storageScore: number;
-  stagingScore: number;
-  nearestAnchor: string;
-  anchorMi: number;
-  residentialFlag: string;
-  resDistanceM: number | null;
-  ownerDirectCandidate: boolean;
+  capacity_source: string;
+  area_sqm: number | null;
+  storage_score: number;
+  staging_score: number;
+  nearest_anchor_name: string;
+  distance_to_anchor_miles: number;
+  residential_flag: string;
+  distance_to_res_meters: number | null;
+  is_owner_direct_candidate: boolean;
   access: string;
   fee: string;
-  depotMi: number | null;
-  walkList: boolean;
-  openingHours: string | null;
+  distance_to_depot_miles: number | null;
+  is_walk_list_ready: boolean;
+  opening_hours: string | null;
 }
 
 export function scoreSite(
@@ -207,14 +207,14 @@ export function scoreSite(
 ): ScoredSite | null {
   const tags = el.tags ?? {};
   let lat = el.lat ?? el.center?.lat;
-  let lon = el.lon ?? el.center?.lon;
+  let lng = el.lng ?? el.center?.lng;
   // Ways/relations fetched with `out body geom` carry no lat/center — only a
   // geometry ring. Fall back to its centroid (matches the original finder.py).
   if (lat === undefined && el.geometry && el.geometry.length > 0) {
     lat = el.geometry.reduce((sum, p) => sum + p.lat, 0) / el.geometry.length;
-    lon = el.geometry.reduce((sum, p) => sum + p.lon, 0) / el.geometry.length;
+    lng = el.geometry.reduce((sum, p) => sum + p.lng, 0) / el.geometry.length;
   }
-  if (lat === undefined || lon === undefined) return null;
+  if (lat === undefined || lng === undefined) return null;
 
   const ptype = tags.parking ?? '';
   const capRaw = tags.capacity;
@@ -226,8 +226,8 @@ export function scoreSite(
   // Layer 1: demand proximity
   let dAnchor = Infinity;
   let nearest = '';
-  for (const a of config.anchors) {
-    const d = haversineMi(lat, lon, a.lat, a.lon);
+  for (const a of config.anchor_locations) {
+    const d = haversineMi(lat, lng, a.lat, a.lng);
     if (d < dAnchor) {
       dAnchor = d;
       nearest = a.name;
@@ -235,7 +235,7 @@ export function scoreSite(
   }
 
   let prox: number;
-  for (const band of config.proximityBands) {
+  for (const band of config.proximity_bands) {
     if (dAnchor < band.maxMi) {
       prox = band.score;
       break;
@@ -245,29 +245,29 @@ export function scoreSite(
 
   // Depot bonus
   let depotBonus = 0;
-  let depotMi: number | null = null;
-  if (config.referenceDepot) {
-    const dDepot = haversineMi(lat, lon, config.referenceDepot.lat, config.referenceDepot.lon);
+  let distance_to_depot_miles: number | null = null;
+  if (config.depot_location) {
+    const dDepot = haversineMi(lat, lng, config.depot_location.lat, config.depot_location.lng);
     depotBonus = Math.min(15, dDepot * 2.5);
-    depotMi = Math.round(dDepot * 100) / 100;
+    distance_to_depot_miles = Math.round(dDepot * 100) / 100;
   }
 
   // Layer 3/4: geometry
   let geom: number;
-  if (ptype === 'surface') geom = config.geometryScores.surface;
-  else if (ptype === 'multi-storey') geom = config.geometryScores.multiStorey;
-  else if (ptype === 'underground') geom = config.geometryScores.underground;
-  else geom = config.geometryScores.untagged;
+  if (ptype === 'surface') geom = config.geometry_scores.surface;
+  else if (ptype === 'multi-storey') geom = config.geometry_scores.multiStorey;
+  else if (ptype === 'underground') geom = config.geometry_scores.underground;
+  else geom = config.geometry_scores.untagged;
 
   // Layer 7: commercial signals
   let commercial: number;
-  if (access === 'private' || access === 'customers') commercial = config.commercialScores.ownerDirect;
-  else if (tags.fee === 'yes') commercial = config.commercialScores.paid;
-  else commercial = config.commercialScores.unknown;
+  if (access === 'private' || access === 'customers') commercial = config.commercial_scores.ownerDirect;
+  else if (tags.fee === 'yes') commercial = config.commercial_scores.paid;
+  else commercial = config.commercial_scores.unknown;
 
   // Capacity fit
   const storageCap =
-    cap_ !== null && cap_ >= config.capacityThresholds.storage.min
+    cap_ !== null && cap_ >= config.capacity_thresholds.storage.min
       ? 100
       : cap_ !== null && cap_ >= 25
         ? 60
@@ -275,13 +275,13 @@ export function scoreSite(
           ? 75
           : 20;
 
-  const stagingMin = config.capacityThresholds.staging.min;
-  const stagingMax = config.capacityThresholds.staging.max;
+  const stagingMin = config.capacity_thresholds.staging.min;
+  const stagingMax = config.capacity_thresholds.staging.max;
   const stagingCap =
     cap_ !== null && cap_ >= stagingMin && cap_ <= stagingMax ? 100 : cap_ === null ? 80 : 60;
 
   // Apply weights
-  const w = config.storageWeights;
+  const w = config.storage_weights;
   const storage = Math.round(
     w.proximity * prox +
       w.geometry * geom +
@@ -290,30 +290,30 @@ export function scoreSite(
       (w.depot ?? 0) * ((depotBonus / 15) * 100),
   );
 
-  const ws = config.stagingWeights;
+  const ws = config.staging_weights;
   const staging = Math.round(
     ws.proximity * prox + ws.geometry * geom + ws.capacity * stagingCap + ws.commercial * commercial,
   );
 
   // Residential penalty
-  const resDistanceM = isNearResidential(lat, lon, residentialWays, config.residentialBuffer)
+  const distance_to_res_meters = isNearResidential(lat, lng, residentialWays, config.residential_buffer_meters)
     ? 0
     : 500;
   let resFlag = '';
-  if (resDistanceM === 0) {
+  if (distance_to_res_meters === 0) {
     resFlag = 'ADJACENT (<100m)';
   }
 
   let finalStorage = storage;
   let finalStaging = staging;
   if (resFlag.startsWith('ADJACENT')) {
-    finalStorage = Math.max(0, storage - config.residentialPenalty);
-    finalStaging = Math.max(0, staging - config.residentialPenalty);
+    finalStorage = Math.max(0, storage - config.residential_penalty_points);
+    finalStaging = Math.max(0, staging - config.residential_penalty_points);
   }
 
   // Capacity estimation from geometry
   const area = polygonAreaSqm(el.geometry ?? []);
-  let capacitySource = cap_ !== null ? 'osm tag' : '';
+  let capacity_source = cap_ !== null ? 'osm tag' : '';
   let estimatedCap: number | null = null;
   if (cap_ === null && area && area > 200) {
     const levels = tags.parking_levels || tags.building_levels || '1';
@@ -324,30 +324,30 @@ export function scoreSite(
       lv = 1;
     }
     estimatedCap = Math.round((area / 30) * lv);
-    capacitySource = `estimated from ${Math.round(area).toLocaleString()} sqm`;
+    capacity_source = `estimated from ${Math.round(area).toLocaleString()} sqm`;
   }
 
   return {
-    osmId: `${el.type}/${el.id}`,
+    osm_id: `${el.type}/${el.id}`,
     lat: Math.round(lat * 1e6) / 1e6,
-    lon: Math.round(lon * 1e6) / 1e6,
+    lng: Math.round(lng * 1e6) / 1e6,
     name,
     type: ptype || 'unknown',
     capacity: cap_ ?? estimatedCap,
-    capacitySource,
-    areaSqm: area ? Math.round(area) : null,
-    storageScore: finalStorage,
-    stagingScore: finalStaging,
-    nearestAnchor: nearest,
-    anchorMi: Math.round(dAnchor * 100) / 100,
-    residentialFlag: resFlag,
-    resDistanceM: resDistanceM > 500 ? null : resDistanceM,
-    ownerDirectCandidate: access === 'private' || access === 'customers',
+    capacity_source,
+    area_sqm: area ? Math.round(area) : null,
+    storage_score: finalStorage,
+    staging_score: finalStaging,
+    nearest_anchor_name: nearest,
+    distance_to_anchor_miles: Math.round(dAnchor * 100) / 100,
+    residential_flag: resFlag,
+    distance_to_res_meters: distance_to_res_meters > 500 ? null : distance_to_res_meters,
+    is_owner_direct_candidate: access === 'private' || access === 'customers',
     access: access || 'unknown',
     fee: tags.fee ?? '',
-    depotMi,
-    walkList: Math.max(finalStorage, finalStaging) >= config.walkListThreshold,
-    openingHours: tags.opening_hours ?? null,
+    distance_to_depot_miles,
+    is_walk_list_ready: Math.max(finalStorage, finalStaging) >= config.walk_list_min_score,
+    opening_hours: tags.opening_hours ?? null,
   };
 }
 
@@ -360,7 +360,7 @@ export async function runFinder(_metro: MetroCode, config: FinderConfig): Promis
     .filter((s): s is ScoredSite => s !== null);
 
   sites.sort(
-    (a, b) => Math.max(b.storageScore, b.stagingScore) - Math.max(a.storageScore, a.stagingScore),
+    (a, b) => Math.max(b.storage_score, b.staging_score) - Math.max(a.storage_score, a.staging_score),
   );
 
   return sites;

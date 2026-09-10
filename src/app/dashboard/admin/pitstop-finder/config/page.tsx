@@ -16,7 +16,7 @@ function notify(type: 'success' | 'error', message: string) {
   }
 }
 
-type EditCell = { metro: string; field: string } | null;
+type EditCell = { metro_id: string; field: string } | null;
 
 interface EditPopupProps {
   value: any;
@@ -68,20 +68,20 @@ export default function ConfigPage() {
   const [newMetroName, setNewMetroName] = useState('');
   const [isPending, startTransition] = useTransition();
 
-  const availableMetroCodes = METRO_CODES.filter((code) => !metros.some((m) => m.metro === code));
+  const availableMetroCodes = METRO_CODES.filter((code) => !metros.some((m) => m.metro_id === code));
 
-  const handleCellEdit = (metro: string, field: string, newValue: any) => {
+  const handleCellEdit = (metro_id: string, field: string, newValue: any) => {
     setMetros((prev) =>
       prev.map((m) =>
-        m.metro === metro ? { ...m, [field]: newValue, updatedAt: new Date() } : m
+        m.metro_id === metro_id ? { ...m, [field]: newValue, updated_at: new Date() } : m
       )
     );
 
     startTransition(async () => {
       try {
-        const config = metros.find((m) => m.metro === metro);
+        const config = metros.find((m) => m.metro_id === metro_id);
         if (!config) return;
-        await saveFinderConfig(metro as MetroCode, { ...config, [field]: newValue });
+        await saveFinderConfig(metro_id as MetroCode, { ...config, [field]: newValue });
         notify('success', `Saved`);
       } catch (err) {
         notify('error', err instanceof Error ? err.message : 'Failed to save');
@@ -90,13 +90,13 @@ export default function ConfigPage() {
     setEditCell(null);
   };
 
-  const handleDelete = (metro: string, name: string) => {
+  const handleDelete = (metro_id: string, name: string) => {
     if (!confirm(`Delete ${name} and all its site findings?`)) return;
 
     startTransition(async () => {
       try {
-        await deleteMetro(metro as MetroCode, true);
-        setMetros((prev) => prev.filter((m) => m.metro !== metro));
+        await deleteMetro(metro_id as MetroCode, true);
+        setMetros((prev) => prev.filter((m) => m.metro_id !== metro_id));
         notify('success', `${name} removed.`);
       } catch (err) {
         notify('error', err instanceof Error ? err.message : 'Failed to delete');
@@ -110,7 +110,7 @@ export default function ConfigPage() {
       return;
     }
 
-    if (metros.some((m) => m.metro === newMetroCode)) {
+    if (metros.some((m) => m.metro_id === newMetroCode)) {
       notify('error', 'Metro already exists');
       return;
     }
@@ -119,33 +119,33 @@ export default function ConfigPage() {
     const template = DEFAULT_FINDER_CONFIGS.miami;
     const newConfig = {
       ...template,
-      metro: newMetroCode as MetroCode,
+      metro_id: newMetroCode as MetroCode,
       name: newMetroName,
     };
 
     startTransition(async () => {
       try {
         await saveFinderConfig(newMetroCode as MetroCode, newConfig);
-        setMetros((prev) => [...prev, { ...newConfig, createdAt: new Date(), updatedAt: new Date() }]);
+        setMetros((prev) => [...prev, { ...newConfig, created_at: new Date(), updated_at: new Date() }]);
         notify('success', `${newMetroName} added.`);
         setShowAddForm(false);
         setNewMetroCode('');
         setNewMetroName('');
       } catch (err) {
-        notify('error', err instanceof Error ? err.message : 'Failed to add metro');
+        notify('error', err instanceof Error ? err.message : 'Failed to add metro_id');
       }
     });
   };
 
-  const EditableCell = ({ metro, field, value, type = 'text' }: { metro: string; field: string; value: any; type?: 'text' | 'number' }) => (
+  const EditableCell = ({ metro_id, field, value, type = 'text' }: { metro_id: string; field: string; value: any; type?: 'text' | 'number' }) => (
     <td
       className="px-4 py-3 text-sm cursor-pointer hover:bg-[#0e1c36]/5 transition-colors"
-      onDoubleClick={() => setEditCell({ metro, field })}
+      onDoubleClick={() => setEditCell({ metro_id, field })}
     >
-      {editCell?.metro === metro && editCell?.field === field ? (
+      {editCell?.metro_id === metro_id && editCell?.field === field ? (
         <EditPopup
           value={value}
-          onSave={(v) => handleCellEdit(metro, field, v)}
+          onSave={(v) => handleCellEdit(metro_id, field, v)}
           onCancel={() => setEditCell(null)}
           field={field}
           type={type}
@@ -188,17 +188,17 @@ export default function ConfigPage() {
           </thead>
           <tbody className="divide-y divide-[#0e1c36]/8">
             {metros.map((m) => (
-              <tr key={m.metro} className="hover:bg-[#0e1c36]/[.02]">
-                <EditableCell metro={m.metro} field="name" value={m.name} />
-                <td className="px-4 py-3 text-sm text-[#0e1c36]/60 font-mono">{m.metro}</td>
+              <tr key={m.metro_id} className="hover:bg-[#0e1c36]/[.02]">
+                <EditableCell metro_id={m.metro_id} field="name" value={m.name} />
+                <td className="px-4 py-3 text-sm text-[#0e1c36]/60 font-mono">{m.metro_id}</td>
                 <td className="px-4 py-3 text-sm text-[#0e1c36]/60">{m.anchors.length}</td>
-                <EditableCell metro={m.metro} field="walkListThreshold" value={m.walkListThreshold} type="number" />
-                <EditableCell metro={m.metro} field="residentialPenalty" value={m.residentialPenalty} type="number" />
+                <EditableCell metro_id={m.metro_id} field="walkListThreshold" value={m.walkListThreshold} type="number" />
+                <EditableCell metro_id={m.metro_id} field="residentialPenalty" value={m.residentialPenalty} type="number" />
                 <td className="px-4 py-3 text-right">
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleDelete(m.metro, m.name)}
+                    onClick={() => handleDelete(m.metro_id, m.name)}
                     disabled={isPending}
                   >
                     <Trash2 className="h-3.5 w-3.5 text-[#c1121f]" />
@@ -228,7 +228,7 @@ export default function ConfigPage() {
                   onChange={(e) => setNewMetroCode(e.target.value)}
                   className="w-full mt-1 px-3 py-2 border border-[#0e1c36]/20 rounded text-sm"
                 >
-                  <option value="">Select a metro...</option>
+                  <option value="">Select a metro_id...</option>
                   {availableMetroCodes.map((code) => (
                     <option key={code} value={code}>
                       {code}

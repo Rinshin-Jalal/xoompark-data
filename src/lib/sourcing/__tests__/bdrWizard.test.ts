@@ -30,15 +30,15 @@ function makeLocation(overrides: Partial<SourcedParkingLocation> = {}): SourcedP
   return {
     id: `loc-${seq}`,
     name: `Lot ${seq}`,
-    source: 'spothero',
-    sourceUrl: 'https://example.com',
+    source_name: 'spothero',
+    source_url: 'https://example.com',
     evidence: [],
-    fieldProvenance: {},
-    capturedBy: 'scraped',
+    field_sources: {},
+    captured_by: 'scraped',
     status: 'draft',
-    rawInput: null,
-    createdAt: '2026-08-23T00:00:00.000Z',
-    updatedAt: '2026-08-23T00:00:00.000Z',
+    raw_input: null,
+    created_at: '2026-08-23T00:00:00.000Z',
+    updated_at: '2026-08-23T00:00:00.000Z',
     ...overrides,
   };
 }
@@ -49,9 +49,9 @@ test('WIZARD_FIELD_KEYS: matches bdrView.ts kill-order exactly', () => {
   assert.deepEqual(WIZARD_FIELD_KEYS, [
     'capacity',
     'open247',
-    'fenced',
-    'lit',
-    'ingressEgress',
+    'is_fenced',
+    'is_lit',
+    'ingress_egress',
     'clearance',
     'ratesHours',
   ]);
@@ -67,42 +67,42 @@ test('wizardFieldState: empty field is neither captured nor confirmable', () => 
 });
 
 test('wizardFieldState: scraped-but-unverified value is confirmable, not captured', () => {
-  const loc = makeLocation({ stallsTotal: 200 });
+  const loc = makeLocation({ stall_count: 200 });
   const s = wizardFieldState(loc, 'capacity');
   assert.equal(s.captured, false);
   assert.equal(s.scrapedValue, '200');
 });
 
 test('wizardFieldState: verified value is captured, no confirm prompt', () => {
-  const loc = makeLocation({ stallsTotal: 200, fieldProvenance: { stallsTotal: 'verified' } });
+  const loc = makeLocation({ stall_count: 200, field_sources: { stall_count: 'verified' } });
   const s = wizardFieldState(loc, 'capacity');
   assert.equal(s.captured, true);
   assert.equal(s.scrapedValue, null);
 });
 
 test('wizardFieldState: tri-state fields render Yes/No/Can\'t tell for confirm', () => {
-  assert.equal(wizardFieldState(makeLocation({ access247: true }), 'open247').scrapedValue, 'Yes');
-  assert.equal(wizardFieldState(makeLocation({ fenced: false }), 'fenced').scrapedValue, 'No');
-  assert.equal(wizardFieldState(makeLocation({ lit: null }), 'lit').scrapedValue, "Can't tell");
+  assert.equal(wizardFieldState(makeLocation({ is_24_7: true }), 'open247').scrapedValue, 'Yes');
+  assert.equal(wizardFieldState(makeLocation({ is_fenced: false }), 'is_fenced').scrapedValue, 'No');
+  assert.equal(wizardFieldState(makeLocation({ is_lit: null }), 'is_lit').scrapedValue, "Can't tell");
 });
 
 test('wizardFieldState: verified tri-state (including null/"can\'t tell") is captured', () => {
-  const loc = makeLocation({ lit: null, fieldProvenance: { lit: 'verified' } });
-  const s = wizardFieldState(loc, 'lit');
+  const loc = makeLocation({ is_lit: null, field_sources: { is_lit: 'verified' } });
+  const s = wizardFieldState(loc, 'is_lit');
   assert.equal(s.captured, true);
   assert.equal(s.scrapedValue, null);
 });
 
-test('wizardFieldState: ratesHours needs BOTH priceText and hoursText verified to count captured', () => {
-  const bothScraped = makeLocation({ priceText: '$10/day', hoursText: '24/7' });
+test('wizardFieldState: ratesHours needs BOTH price_text and hours_text verified to count captured', () => {
+  const bothScraped = makeLocation({ price_text: '$10/day', hours_text: '24/7' });
   const rh1 = wizardFieldState(bothScraped, 'ratesHours');
   assert.equal(rh1.captured, false);
   assert.equal(rh1.scrapedValue, '$10/day · 24/7');
 
   const priceVerifiedOnly = makeLocation({
-    priceText: '$10/day',
-    hoursText: '24/7',
-    fieldProvenance: { priceText: 'verified' },
+    price_text: '$10/day',
+    hours_text: '24/7',
+    field_sources: { price_text: 'verified' },
   });
   const rh2 = wizardFieldState(priceVerifiedOnly, 'ratesHours');
   assert.equal(rh2.captured, false);
@@ -110,26 +110,26 @@ test('wizardFieldState: ratesHours needs BOTH priceText and hoursText verified t
   assert.equal(rh2.scrapedValue, '24/7');
 
   const bothVerified = makeLocation({
-    priceText: '$10/day',
-    hoursText: '24/7',
-    fieldProvenance: { priceText: 'verified', hoursText: 'verified' },
+    price_text: '$10/day',
+    hours_text: '24/7',
+    field_sources: { price_text: 'verified', hours_text: 'verified' },
   });
   const rh3 = wizardFieldState(bothVerified, 'ratesHours');
   assert.equal(rh3.captured, true);
   assert.equal(rh3.scrapedValue, null);
 });
 
-test('wizardFieldState: ingressEgress/clearance text fields follow the same captured/confirm split', () => {
-  const scraped = makeLocation({ ingressEgress: 'one-way in, separate exit', clearanceText: "6'8\"" });
-  assert.equal(wizardFieldState(scraped, 'ingressEgress').scrapedValue, 'one-way in, separate exit');
+test('wizardFieldState: ingress_egress/clearance text fields follow the same captured/confirm split', () => {
+  const scraped = makeLocation({ ingress_egress: 'one-way in, separate exit', clearance_text: "6'8\"" });
+  assert.equal(wizardFieldState(scraped, 'ingress_egress').scrapedValue, 'one-way in, separate exit');
   assert.equal(wizardFieldState(scraped, 'clearance').scrapedValue, "6'8\"");
 
   const verified = makeLocation({
-    ingressEgress: 'one-way in, separate exit',
-    clearanceText: "6'8\"",
-    fieldProvenance: { ingressEgress: 'verified', clearanceText: 'verified' },
+    ingress_egress: 'one-way in, separate exit',
+    clearance_text: "6'8\"",
+    field_sources: { ingress_egress: 'verified', clearance_text: 'verified' },
   });
-  assert.equal(wizardFieldState(verified, 'ingressEgress').captured, true);
+  assert.equal(wizardFieldState(verified, 'ingress_egress').captured, true);
   assert.equal(wizardFieldState(verified, 'clearance').captured, true);
 });
 

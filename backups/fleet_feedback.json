@@ -1,0 +1,16 @@
+[
+  {
+    "id": "AtbBiBepMukCbpOf2aXL__laz:coconut-grove-fl-sbs-tower",
+    "siteId": "laz:coconut-grove-fl-sbs-tower",
+    "fleet": "rinshin - test",
+    "decision": "selected",
+    "reasons": [
+      "fenced",
+      "75 stalls",
+      "LPR gate"
+    ],
+    "notes": null,
+    "createdAt": "2026-09-03T19:59:23.412Z",
+    "updatedAt": "2026-09-03T19:59:23.412Z"
+  }
+]

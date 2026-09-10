@@ -40,7 +40,7 @@ async function getMetroConfig(metro: MetroCode): Promise<FinderConfig> {
     // Firestore unavailable; fall back to hardcoded defaults
   }
 
-  return { ...DEFAULT_FINDER_CONFIGS[metro], createdAt: undefined as any, updatedAt: undefined as any };
+  return { ...DEFAULT_FINDER_CONFIGS[metro], created_at: undefined as any, updated_at: undefined as any };
 }
 
 function isMetro(v: string | undefined): v is MetroCode {

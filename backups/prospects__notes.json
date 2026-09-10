@@ -1,0 +1,902 @@
+[
+  {
+    "parentId": "6CczUvBns2nJpzTVwvT4",
+    "id": "K3Mkgtk8m6PEjC0BznXU",
+    "data": {
+      "id": "K3Mkgtk8m6PEjC0BznXU",
+      "body": "initial reply 9/2/26\n\nHi Kit,\nI received your email from Julio. Can you elaborate on what you’re looking for. A few questions below.\nWhat area of San Francisco?\nWill this be as an aggregator parking or monthly parking?\nStart date?\nFull valet experience or just vehicle storage?\nWill these vehicles be moving daily? Approx times?\n These questions will help us locate the right property and pricing option.\n\nLon Hettrick",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788440853,
+        "nanoseconds": 80000000
+      }
+    }
+  },
+  {
+    "parentId": "3H86MJSITt4H4fAMj2eI",
+    "id": "78N7wuvtV50QF30YOyyx",
+    "data": {
+      "id": "78N7wuvtV50QF30YOyyx",
+      "body": "Met 7/30\t\nAirport parking â€” pilot discussed",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786979483,
+        "nanoseconds": 94000000
+      }
+    }
+  },
+  {
+    "parentId": "TiU8LPXo9sHxAS0XsgQA",
+    "id": "5uWfZjSEGQsvZWInWMW7",
+    "data": {
+      "id": "5uWfZjSEGQsvZWInWMW7",
+      "body": "Met 8/4\nLA valet operator",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786980637,
+        "nanoseconds": 832000000
+      }
+    }
+  },
+  {
+    "parentId": "EptHcPnMyWtSHpwPHzjR",
+    "id": "qvqgfcjQfYLBCms1aSgT",
+    "data": {
+      "id": "qvqgfcjQfYLBCms1aSgT",
+      "body": "Miami Worldcenter operator â€” ties to Jamestown/Zoox PUDO thread\nSite visit 8/18",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786978104,
+        "nanoseconds": 206000000
+      }
+    }
+  },
+  {
+    "parentId": "HYfFyLsqzzFSurZ80oIL",
+    "id": "AwtesMGri4pHGezTo3WG",
+    "data": {
+      "id": "AwtesMGri4pHGezTo3WG",
+      "body": "Meeting Brandon Tues Aug 18",
+      "authorEmail": "greg@xoompark.co",
+      "authorName": "Greg Bessoni",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786470257,
+        "nanoseconds": 151000000
+      }
+    }
+  },
+  {
+    "parentId": "NYTs7HwoJ56QVoDDAOwd",
+    "id": "3UbdmQnIHKbKyLrjPCJF",
+    "data": {
+      "id": "3UbdmQnIHKbKyLrjPCJF",
+      "body": "Met 7/17 + 7/24\t\nAlso in IU Charging convo",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786980202,
+        "nanoseconds": 755000000
+      }
+    }
+  },
+  {
+    "parentId": "KR8VVG6WOn3KkAdCTHNq",
+    "id": "ImQMdHfHkOwiGpkDNus3",
+    "data": {
+      "id": "ImQMdHfHkOwiGpkDNus3",
+      "body": "http://www.linkedin.com/in/adam-martinez-6858204",
+      "authorEmail": "tom.sivak@xoompark.co",
+      "authorName": "tom.sivak@xoompark.co",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788271453,
+        "nanoseconds": 192000000
+      }
+    }
+  },
+  {
+    "parentId": "Nxx5ojkb82wWnrjbBcZW",
+    "id": "o9HR676NXZcJqcMOOkYE",
+    "data": {
+      "id": "o9HR676NXZcJqcMOOkYE",
+      "body": "They had a call with Greg 9/8/26",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788959733,
+        "nanoseconds": 179000000
+      }
+    }
+  },
+  {
+    "parentId": "nt6vknckcH9o1jST88FS",
+    "id": "G218LC7iEeRTeh3ZpK9C",
+    "data": {
+      "id": "G218LC7iEeRTeh3ZpK9C",
+      "body": "Met 7/28\t\nGarage owner-operator",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786980489,
+        "nanoseconds": 812000000
+      }
+    }
+  },
+  {
+    "parentId": "CSBkU1NJKA5j9sciuAee",
+    "id": "IUbnHgHPx3vQPk43M24h",
+    "data": {
+      "id": "IUbnHgHPx3vQPk43M24h",
+      "body": "Met 7/27 + 7/30\t\nPitch deck delivered (SF)",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786978810,
+        "nanoseconds": 289000000
+      }
+    }
+  },
+  {
+    "parentId": "Id0iPqfTBY0LP46yRHNV",
+    "id": "S3WCL2yxdFfu4y5ROmSw",
+    "data": {
+      "id": "S3WCL2yxdFfu4y5ROmSw",
+      "body": "Met 7/29\t\nAustin sites (703 E 9th, Sabine, UT lot)",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786979979,
+        "nanoseconds": 605000000
+      }
+    }
+  },
+  {
+    "parentId": "cf9QGWwGXcHbKkoIBTKU",
+    "id": "3SY1ntvXWtmYC7YfnfzL",
+    "data": {
+      "id": "3SY1ntvXWtmYC7YfnfzL",
+      "body": "We definitely have parking spaces available at the 3 Miami Central Garage, and we are ready to accommodate your parking needs immediately.\nThe monthly rate is $125.00 per space. These are non-reserved spaces and are available on a first-come, first-served basis.\nThe garage address is:\n161 NW 6th Street\nMiami, FL 33136",
+      "authorEmail": "tom.sivak@xoompark.co",
+      "authorName": "tom.sivak@xoompark.co",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788963978,
+        "nanoseconds": 200000000
+      }
+    }
+  },
+  {
+    "parentId": "RT0ReIc1X4SPonp3L5zh",
+    "id": "Jyz9AOHNeunwQTy3fSlj",
+    "data": {
+      "id": "Jyz9AOHNeunwQTy3fSlj",
+      "body": "Intro 7/30\t\nNational operator",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786978605,
+        "nanoseconds": 836000000
+      }
+    }
+  },
+  {
+    "parentId": "FJhdLOaPYqTVNtHXvOr1",
+    "id": "lgXGt5KsbsGzu3IuNtkf",
+    "data": {
+      "id": "lgXGt5KsbsGzu3IuNtkf",
+      "body": "Email exchange with Greg and Brett, Brett, to summarize our call and next steps. Also looping in my team.  \n\nPowerShelter builds battery locker and swap systems. Developed in the Netherlands, deployed across the EU and UK, now entering the US and looking for site partners.\n\nThe concept: put swap lockers at XoomPark pit stops. E-bikes, scooters and delivery robots pull in, swap a depleted battery for a charged one in under a minute, and go back out. No charging dwell, no trip back to a hub or depot. The vehicle stays inside the demand zone, which is the same thing we sell car fleets, applied to small vehicles.\n\nWhy our sites fit: we already have what a locker needs. Space, power, security, and staff on site. The footprint is small and it consumes no stalls, so it sits alongside car staging rather than competing with it.\n\nWhat it brings us: a new customer segment on infrastructure we're already paying for. Delivery platforms and micromobility fleets (DoorDash, Serve, Coco, Zoomo, Whizz) all have the same problem and none of them need a parking space to solve it. It also puts a product on sites that can't support car charging, which widens what counts as a usable site for us.\n\nOpen items: which metros they're prioritizing, footprint and power requirements per unit, who pays for the hardware, and how revenue splits between them and the site. We're active in Phoenix, San Diego, SF, LA, Austin, Dallas and Miami, and our API can be queried for capacity by location.\n\nNext step: three-way call with Carlin at DoorDash, and our teams\n\nGreg Bessoni\nCEO, XoomPark\n\nFrom: Brett Bouthillier <brett@powershelter.com>\nSent: Wednesday, August 12, 2026 11:36 AM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: Jake De Wulf <jake@powershelter.com>; Alexander Czeh <alexander@powershelter.com>\nSubject: PowerShelter x Xoompark\n \nHey Greg,\n\nThanks for the great chat today. \n\nAs I mentioned Id like to set up some time next week to discuss with my co-founder Jake and are resident shared mobility expert to come into a call (with your potential team members / door dash contacts) to understand how we could all work together in the US market here.\n\nMaybe next Wednesday morning US time and afternoon Dutch time?\n\n\n--\nBrett Bouthillier\nCEO & Co-Founder\n\nImage\nE-Bike Battery Charging Lockers\n+31 6 21306938\nbrett@powershelter.com | LinkedIn\nwww.powershelter.com",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786639580,
+        "nanoseconds": 969000000
+      }
+    }
+  },
+  {
+    "parentId": "ZU4jlShKRl767jtHuMvz",
+    "id": "3ecONcwM0RmA34dKSLiz",
+    "data": {
+      "id": "3ecONcwM0RmA34dKSLiz",
+      "body": "Met 7/27\nCA operator",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786980359,
+        "nanoseconds": 698000000
+      }
+    }
+  },
+  {
+    "parentId": "keSY9RVCMUvJBxBrJbg2",
+    "id": "WXRQ9M8rjNUjkRrKszlx",
+    "data": {
+      "id": "WXRQ9M8rjNUjkRrKszlx",
+      "body": "We have two contacts for this parking \nNick Roth - Business Development and Operations Manager\nand\nCalvin Tan - Regional Manager\n\nBoth replied interested in Kit's email",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788276762,
+        "nanoseconds": 284000000
+      }
+    }
+  },
+  {
+    "parentId": "TMC0pzxlewGRJXhkZmxh",
+    "id": "rNQk0TRJzTAYvHq6rZny",
+    "data": {
+      "id": "rNQk0TRJzTAYvHq6rZny",
+      "body": "hihihihih",
+      "authorEmail": "blah@xoompark.co",
+      "authorName": "blah co",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786461720,
+        "nanoseconds": 103000000
+      }
+    }
+  },
+  {
+    "parentId": "Yf4snMQiGri1xOr6gA84",
+    "id": "8KHrD9fxvLskRPOGIuMg",
+    "data": {
+      "id": "8KHrD9fxvLskRPOGIuMg",
+      "body": "Andrew's email 7/22/2026 - L2 Charging in Garages, Gated 8' clearance (San Diego, Chicago)",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786491176,
+        "nanoseconds": 727000000
+      }
+    }
+  },
+  {
+    "parentId": "Yf4snMQiGri1xOr6gA84",
+    "id": "yy76sbIhycIzXU4CU2qS",
+    "data": {
+      "id": "yy76sbIhycIzXU4CU2qS",
+      "body": "Mike @ Ace Parking confirmation of the 10 spaces - Yes, we have 10 level 2 chargers at the property that we can designate as reserved.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786491262,
+        "nanoseconds": 721000000
+      }
+    }
+  },
+  {
+    "parentId": "iTXsVRBScKNrSTdNtdhP",
+    "id": "EM5PfJKuCkqWIMMyTzEi",
+    "data": {
+      "id": "EM5PfJKuCkqWIMMyTzEi",
+      "body": "ACE Parking - For opportunities 1 & 2, the garage below would work.\n\n925 Waterfront Place\nSan Diego, CA 92101\nRate: $350/stall/month\nCapacity: Up to 50 Level 2 chargers",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786486527,
+        "nanoseconds": 665000000
+      }
+    }
+  },
+  {
+    "parentId": "iTXsVRBScKNrSTdNtdhP",
+    "id": "KKuFHsi6dBSrx1baNpXO",
+    "data": {
+      "id": "KKuFHsi6dBSrx1baNpXO",
+      "body": "Sent request to ACE Parking in San Diego",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786407547,
+        "nanoseconds": 848000000
+      }
+    }
+  },
+  {
+    "parentId": "iTXsVRBScKNrSTdNtdhP",
+    "id": "lCH7nG5Pt0o86y9E7Etn",
+    "data": {
+      "id": "lCH7nG5Pt0o86y9E7Etn",
+      "body": "Jeff spoke to Curo on 8/13/2026 about this 925 Waterfront, waiting for response",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786724946,
+        "nanoseconds": 747000000
+      }
+    }
+  },
+  {
+    "parentId": "tNxNkXGPLZ6ndK6ydXKG",
+    "id": "cGwR1dZtbc1Usmj99BLM",
+    "data": {
+      "id": "cGwR1dZtbc1Usmj99BLM",
+      "body": "9/8/26\n\nThank you for contacting parking! \n \nPlease provide the full address, city, and state of the facility that you are referring to.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788960181,
+        "nanoseconds": 241000000
+      }
+    }
+  },
+  {
+    "parentId": "tNxNkXGPLZ6ndK6ydXKG",
+    "id": "cwyps4DdcyN0aQuIAlOi",
+    "data": {
+      "id": "cwyps4DdcyN0aQuIAlOi",
+      "body": "9/9/26\nKit sent a reply to them. \nStill waiting to hear back from them",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788960210,
+        "nanoseconds": 460000000
+      }
+    }
+  },
+  {
+    "parentId": "haeTG3y7feRErqv3Rg24",
+    "id": "FJI1f7k4HqWGitCMRK8m",
+    "data": {
+      "id": "FJI1f7k4HqWGitCMRK8m",
+      "body": "ACE Parking - 100 stalls\n1814 S. 32nd Street\nSan Diego, CA 92136\n$17,500 Lot Rental\n\nACE Parking - I'll work on Opportunity 3. With a 12-24 month guaranteed term, may move an existing fleet to accommodate this gas-powered fleet.\nThe rate would be $235 per stall at our lot at 3rd and Ash.\nWhat does the move-in timeline look like on your end?",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786486460,
+        "nanoseconds": 720000000
+      }
+    }
+  },
+  {
+    "parentId": "haeTG3y7feRErqv3Rg24",
+    "id": "JkIjeUmDBcfA9Bj19peQ",
+    "data": {
+      "id": "JkIjeUmDBcfA9Bj19peQ",
+      "body": "Jeff spoke to Curo on 8/13/2026 about 1814 S. 32 St. and 3rd and Ash, waiting for response",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786725013,
+        "nanoseconds": 231000000
+      }
+    }
+  },
+  {
+    "parentId": "haeTG3y7feRErqv3Rg24",
+    "id": "yBKtVX6tbE7boqOV0AkA",
+    "data": {
+      "id": "yBKtVX6tbE7boqOV0AkA",
+      "body": "Sent request to ACE Parking in San Diego",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786407806,
+        "nanoseconds": 589000000
+      }
+    }
+  },
+  {
+    "parentId": "MgyYFJQysSNdaECVzJNa",
+    "id": "HRoJZYYMGHNzcq41d8mq",
+    "data": {
+      "id": "HRoJZYYMGHNzcq41d8mq",
+      "body": "Jeff's email to Mike on 8/10/2026 -   Fleet 2Opportunity 3 - Primarily gas:\n75-100 vehicles\n24/7 access, primarily out driving during daytime and evening hours and parked overnight\nInitial term: 12-24 months\nSurface lots preferred\nAbility to perform light maintenance on site (oil changes, tire rotations, waterless cleaning, etc.) is a plus\nBathrooms + small office is a bonus, or ability to bring on site",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786487837,
+        "nanoseconds": 698000000
+      }
+    }
+  },
+  {
+    "parentId": "MgyYFJQysSNdaECVzJNa",
+    "id": "NQbZUraVPT1Qf0wWyBwN",
+    "data": {
+      "id": "NQbZUraVPT1Qf0wWyBwN",
+      "body": "Jeff spoke to Curo on 8/13/2026 about this location, waiting for response",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786724860,
+        "nanoseconds": 92000000
+      }
+    }
+  },
+  {
+    "parentId": "MgyYFJQysSNdaECVzJNa",
+    "id": "tlneE7dlu2IxPxVVxOEu",
+    "data": {
+      "id": "tlneE7dlu2IxPxVVxOEu",
+      "body": "Mikes response on 8/11/2026 - I'll work on Opportunity 3. With a 12-24 month guaranteed term, may move an existing fleet to accommodate this gas-powered fleet.\nThe rate would be $235 per stall at our lot at 3rd and Ash.\nWhat does the move-in timeline look like on your end?",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786487946,
+        "nanoseconds": 819000000
+      }
+    }
+  },
+  {
+    "parentId": "VqvD7gQqKT6rju6f9f1o",
+    "id": "9zF87LfKLY2S14Qgtedi",
+    "data": {
+      "id": "9zF87LfKLY2S14Qgtedi",
+      "body": "Hello Kit,\n\nPlease see below locations that can accommodate this request. Let me know if I can provide additional information.\n255 12th St SF\n$365/vehicle for 20 spaces\nIndoor garage\n801 Bryant St SF\n$350/vehicle for 20 spaces\nOutdoor lot\n\nBest Regards,\n\nMark Osorio",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788959916,
+        "nanoseconds": 888000000
+      }
+    }
+  },
+  {
+    "parentId": "VqvD7gQqKT6rju6f9f1o",
+    "id": "OaPVDac5FlyjaG9FhjAz",
+    "data": {
+      "id": "OaPVDac5FlyjaG9FhjAz",
+      "body": "9/9/26\nstill waiting for their reply to Greg's last email to them",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788960041,
+        "nanoseconds": 738000000
+      }
+    }
+  },
+  {
+    "parentId": "VqvD7gQqKT6rju6f9f1o",
+    "id": "YkXUDs3NIXnpqsPkQ4u4",
+    "data": {
+      "id": "YkXUDs3NIXnpqsPkQ4u4",
+      "body": "9/8/26\n\nI don't think the public garage will be a great fit, but the 801 Bryant might work Mark.  Happy to discuss further if you have some time.\nGreg",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1788959989,
+        "nanoseconds": 486000000
+      }
+    }
+  },
+  {
+    "parentId": "oAPUeQfGTbotuM8bg1sY",
+    "id": "sjUWdJ0xXXqq3AuNXzwC",
+    "data": {
+      "id": "sjUWdJ0xXXqq3AuNXzwC",
+      "body": "Email notes between Greg and Bern, Just catching up now, Greg. We talk at 0900 Eastern Thurs\n\nRegards,\n\nBern Grush\nExecutive Director, Urban Robotics Foundation\nCEO, Pudocity Inc.\n5-min explainer: https://curbreserver.com/download.html?doc=case-study\n\n\nOn Wed, 12 Aug 2026 at 11:57, Greg Bessoni <greg@xoompark.co> wrote:\nLarry and team\n\nNew Austin opening, straight from a Waymo conversation. Two threads:\n1. Event PUDO lots — same model as the 49ers operation. Waymo wants dedicated lots positioned just outside the traffic-control perimeter during large events. Their spec:\nAs close to the venue as possible without being inside the closure zone\nPickup timed and paired with the rider — car and rider arrive together, no dwell\nWalk of 3 blocks or less, stretchable for a big event\nFast egress — out of event traffic and moving toward the destination quickly\n\nThey asked us: which lots can run PUDO, capacity at each, and what infrastructure is on site. The two screens that decide everything: proximity to the venue and a clean path out.\n\nWe're in good shape. Our lot at 2911 Medical Arts St is 0.44 mi from DKR and 0.56 mi from Moody Center — one site covering football Saturdays and 150 arena nights, outside the campus closure core, with I-35 egress two blocks away. 703 E 9th and 315 Sabine cover the Convention Center and downtown. I'm getting stall counts and power specs from PMC this week, then the full answer goes back to Waymo.\n\nLarry — this is the same designated-lot playbook as Phoenix, so let's align the two; one document should serve both cities.  Boots on the ground?  \n\nStart conversations again with the BID and City (both of which we've spoken with but now have more traction I believe)\n\n2. @Bern Grush — live lead for CurbReserver. The same Waymo contact cares a lot about geofence management for emergency and construction situations — they want it managed, not improvised. Squarely your wheelhouse; happy to make the intro this week.\n\nGreg",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786639860,
+        "nanoseconds": 817000000
+      }
+    }
+  },
+  {
+    "parentId": "ux47CCNg81exCMRhOZ0d",
+    "id": "G74qWU44dZU0RBoKWVon",
+    "data": {
+      "id": "G74qWU44dZU0RBoKWVon",
+      "body": "Met 7/14\t\nParking/mobility real estate",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786980816,
+        "nanoseconds": 537000000
+      }
+    }
+  },
+  {
+    "parentId": "zQyvTnMJ4XsCqqLVnVeI",
+    "id": "2lEwiGmWpQANkt1fUwTf",
+    "data": {
+      "id": "2lEwiGmWpQANkt1fUwTf",
+      "body": "Jeff spoke to Curo on 8/13/2026 about this location, waiting for response",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786724843,
+        "nanoseconds": 694000000
+      }
+    }
+  },
+  {
+    "parentId": "zQyvTnMJ4XsCqqLVnVeI",
+    "id": "Qdq6FOV8HQwiczkFuCSD",
+    "data": {
+      "id": "Qdq6FOV8HQwiczkFuCSD",
+      "body": "Jeff's email to Mike @ ACE - 75-100 vehicles\n24/7 access, primarily out driving during daytime and evening hours and parked overnight\nInitial term: 12-24 months\nSurface lots preferred\nAbility to perform light maintenance on site (oil changes, tire rotations, waterless cleaning, etc.) is a plus\nBathrooms + small office is a bonus, or ability to bring on site",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488210,
+        "nanoseconds": 614000000
+      }
+    }
+  },
+  {
+    "parentId": "zQyvTnMJ4XsCqqLVnVeI",
+    "id": "mzWiCd8NUYpOO5UaFu2U",
+    "data": {
+      "id": "mzWiCd8NUYpOO5UaFu2U",
+      "body": "Here is another option for the gas-powered fleet.\n\nMike's reply on 8/11/2026 - \n100 stalls\n1814 S. 32nd Street\nSan Diego, CA 92136\n$17,500 Lot Rental",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488259,
+        "nanoseconds": 739000000
+      }
+    }
+  },
+  {
+    "parentId": "VW2KQMNVivTx5CZeY0RU",
+    "id": "7Vujsl2NnA66zTBJ3gGv",
+    "data": {
+      "id": "7Vujsl2NnA66zTBJ3gGv",
+      "body": "Added Email Exchange - Friday, August 21st works for my calendar.\nMy office and APD work closely with UT/Moody on all plans. It might be easier to get a smaller group together quickly and then see what questions/issues you have for UT property. There is a good chance we may be able to answer.\n \nAPD team, could yall meet next Friday virtually to discuss?\n \nThank you,\n-annette\n \n \nAnnette Martinez\nDivision Manager\nAustin Transportation & Public Works, Office of Special Events\n512-974-3062\nannette.martinez@austintexas.gov\n \n \n \n \nFrom: Greg Bessoni <greg@parkingaccess.com>\nSent: Thursday, August 13, 2026 9:59 AM\nTo: Martinez, Annette <Annette.Martinez@austintexas.gov>\nCc: Lawrence Marcus <lmarcus@forward-progress.com>; jeff.miller@xoompark.co; tom.sivak@xoompark.co; Leff, Lewis <Lewis.Leff@austintexas.gov>; Bern Grush <bern@pudocity.com>; APD Special Events <APDSpecialEvents@austintexas.gov>\nSubject: Re: OA & Austin Transportation & Public Works\n \nExternal Email - Exercise Caution\n\n\nThank you Lewis.   Annette,  thank you as well for the quick response, and glad to have APD in the room.  Would August 21 work for your team? Happy to move around whatever is easiest that week.\n\nSome context to what we do...the main thing we do is coordinate pickup and drop-off and staging, specifically for AV fleets, by placing them in a private lot or a dedicated curb space instead of leaving it to happen wherever a rider happens to be standing. On a game day that's the difference between passengers loading at a controlled, designated location and vehicles stopping in travel lanes next to a crowd. Waymo has told us what they need for it to work: as close to the venue as possible without being inside the closure, pickup times on par with Uber and Lyft, a short walk, and a clean path out and most importantly, a dedicated Waymo only zone/lot.  We believe we can provide that.\n\nStaging is the supporting piece, vehicles wait nearby and release into the pickup point on a controlled cadence instead of circling causing more congestion.\n\nLewis you are correct that the lots themselves are between us and the property owners. What we want is for how they operate on game day to line up with the City's and UT's traffic control plans rather than run alongside them.\n\nLewis mentioned your team coordinates with UT on game day, would it make sense to have them in the same meeting? Roland and Matt at Opportunity Austin were helping us connect there as well, but I dont believe they work there any longer.\n\nTHank you all\n \nGreg Bessoni\n(860) 964-9001\nLinkedin",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786640522,
+        "nanoseconds": 253000000
+      }
+    }
+  },
+  {
+    "parentId": "VW2KQMNVivTx5CZeY0RU",
+    "id": "GGWLzaaW2rs8Ax993D4m",
+    "data": {
+      "id": "GGWLzaaW2rs8Ax993D4m",
+      "body": "Email exchange with Greg and various departments within the City of Austin. -Thanks Lewis. Great to meet you Greg. Would love to sit down and talk through this with you/your team. I would also like to invite APD, as they deal with all the day to day during events on UT campus. Please let us know your availability in the upcoming weeks for a meeting.\n \nThank you,\n-annette\n \nA picture containing text, clipart\n\nAI-generated content may be incorrect.\nAnnette Martinez\nDivision Manager\nAustin Transportation & Public Works, Office of Special Events\n512-974-3062\nannette.martinez@austintexas.gov\n \n \n \nFrom: Leff, Lewis <Lewis.Leff@austintexas.gov>\nSent: Thursday, August 13, 2026 8:49 AM\nTo: Greg Bessoni <greg@parkingaccess.com>; Bern Grush <bern@pudocity.com>; Martinez, Annette <Annette.Martinez@austintexas.gov>\nCc: Roland Peña <rpena@opportunityaustin.com>; Castignoli, Rachel <Rachel.Castignoli@austintexas.gov>; Matt Creel <mcreel@opportunityaustin.com>; Lawrence Marcus <lmarcus@forward-progress.com>; jeff.miller@xoompark.co; tom.sivak@xoompark.co\nSubject: RE: OA & Austin Transportation & Public Works\n \nHi Greg –\n \nGood to hear from you, and truly appreciate the proactive efforts here.\n \nMy understanding is that the City would not determine nor regulate what happens on private parking lots, as that would need to be worked out with the property owners/management. However, I recognize the admirable goal to ensure this aligns with the City’s/UT’s traffic control plans and so I’m adding in Annette Martinez who manages our Special Events office and is connected to the broader coordination with UT on game day traffic. Her team would be a great starting point for y’all to have this conversation.\n \nLewis\n \nLewis Leff, Assistant Director\nAustin Transportation and Public Works\n \nFrom: Greg Bessoni <greg@parkingaccess.com>\nSent: Wednesday, August 12, 2026 4:22 PM\nTo: Leff, Lewis <Lewis.Leff@austintexas.gov>; Bern Grush <bern@pudocity.com>\nCc: Roland Peña <rpena@opportunityaustin.com>; Castignoli, Rachel <Rachel.Castignoli@austintexas.gov>; Matt Creel <mcreel@opportunityaustin.com>; Lawrence Marcus <lmarcus@forward-progress.com>; jeff.miller@xoompark.co; tom.sivak@xoompark.co\nSubject: Re: OA & Austin Transportation & Public Works\n \nExternal Email - Exercise Caution\n \n\nLewis, Roland\n \nWanted to follow back up since it's been a few months.\n \nWhere it stands today: we met with Waymo, and they want dedicated lots for large events — positioned just outside the traffic closure perimeter, riders picked up as fast as an Uber or Lyft, a walk of about three blocks, and a clean path out of event traffic. We're building the same thing in Phoenix and Miami, and it's how a major NFL venue handles AV pickup today: designated lots, vehicles staged and released on a controlled cadence, coordinated with the traffic control plan instead of fighting it.\n \nAustin has the pieces already. We have a lot at 2911 Medical Arts, 0.44 miles from DKR and 0.56 from Moody Center, outside the campus closure core with I-35 egress two blocks away. Larry Marcus and Mike Sawyer at Forward Progress are our transportation planning partners on the city-process side, and we have people on the ground here.\n \nWhat I want out of the call is who needs to be in the room — UT parking and transportation, city traffic, APD, Moody Center operations. If the UT introduction is still open, now is the moment: football starts in a few weeks and this plan has to be built before the first game, not after one goes badly.\n\nLet me know what a good day and time in the coming weeks to discuss further.\n \nGreg Bessoni\n(860) 964-9001\nLinkedin\n \n \nOn Tue, May 5, 2026 at 8:48 PM Greg Bessoni <greg@parkingaccess.com> wrote:\nLewis Friday the 15th 10AM CST works for us. \n \nGreg Bessoni\n(860) 964-9001\nLinkedin\n \n \nOn Tue, May 5, 2026 at 11:03 AM Leff, Lewis <Lewis.Leff@austintexas.gov> wrote:\nAppreciate the additional information, Greg, and thanks for the intro, Roland.\n \nHere are a few times (CST) for a virtual call that work for me and Rachel may join too:\nFriday the 15th 10AM-noon\nWednesday the 20th, 9AM-11AM\nFriday the 22nd, 2-4PM\n \nLewis Leff, Assistant Director\nAustin Transportation and Public Works\n \nFrom: Greg Bessoni <greg@parkingaccess.com>\nSent: Monday, May 4, 2026 4:52 PM\nTo: Roland Peña <rpena@opportunityaustin.com>\nCc: Castignoli, Rachel <Rachel.Castignoli@austintexas.gov>; Leff, Lewis <Lewis.Leff@austintexas.gov>; mcreel <mcreel@opportunityaustin.com>\nSubject: Re: OA & Austin Transportation & Public Works\n \nYou don't often get email from greg@parkingaccess.com. Learn why this is important\nExternal Email - Exercise Caution\n \n\n\nRachel and Lewis,\n\nThanks Roland for the kind intro.\n\nShort version of what we do: as robotaxis scale, the in-shift dwell problem (where AVs wait between trips) lands on the curb and on residential streets. xoompark builds the off-street, private-property staging layer that absorbs that pressure before it becomes a city-management problem. paired withBern grush's curbreserver, the system handles staging, PUDO, and charging coordination in a way that's machine-readable to fleets and standards-aligned (ISO TS 25614).\n\nHappy to walk through what we're seeing in miami today and what we think austin will need ahead of waymo's expansion and tesla robotaxi launch.\n\nPlease provide some open slots for the next couple weeks to discuss in more detail\n\nGreg Bessoni\nFounder and CEO, Xoompark\n(860) 964-9001\nLinkedin\n \n \nOn Thu, Apr 2, 2026 at 1:50 PM Roland Peña <rpena@opportunityaustin.com> wrote:\nHi Rachel and Leff,\n \nI just wrapped up a virtual call with Greg Bessoni, CEO of XoomPark, and Bern Grush of Curb Reserver—two companies that are joining forces to address some of the most common and critical challenges emerging nationwide with robo-taxis.\n \nThey are tackling issues you’re already familiar with, including staging, safety risks, traffic congestion, lost municipal parking revenue, accessibility, and EV charging availability.\n \nTogether, they offer a robo-taxi support solution focused on staging, standardized pickup and drop-off, and real-time discovery of available parking and the most cost-effective charging options based on proximity.\n \nI was genuinely excited by the conversation and immediately thought the two of you should connect with them, especially since they’ll be coming to Austin soon.\n \nI don’t yet have Bern’s email address, but Greg is more than happy to loop him into the conversation.\n \nThanks again for the partnership, I really appreciate it.\n \nKind regards,\n \nRoland Peña\nSenior Vice President,\nGlobal Investment & Innovation\n200 W 6th St, Ste 1750 | Austin, TX 78701\nA logo with colorful letters\n\nAI-generated content may be incorrect.opportunityaustin.com\n \n \n \n-----Original Appointment-----\nFrom: Janae Hoekstra <JHoekstra@opportunityaustin.com>\nSent: Wednesday, March 11, 2026 2:01 PM\nTo: Janae Hoekstra; Janae Hoekstra; Roland Peña; Matt Creel; rachel.castignoli@austintexas.gov; Lewis.Leff@austintexas.gov\nCc: Susan Davenport\nSubject: OA & Austin Transportation & Public Works\nWhen: Friday, March 27, 2026 10:30 AM-11:30 AM (UTC-06:00) Central Time (US & Canada).\nWhere: Opportunity Austin (200 W 6th St, Austin, TX 78701)\n \n \n \nCAUTION: This is an EXTERNAL email. Please use caution when clicking links or opening attachments. If you believe this to be a malicious or phishing email, please report it using the \"Report Message\" button in Outlook.\nFor any additional questions or concerns, contact CSIRT at \"cybersecurity@austintexas.gov\".\n \nCAUTION: This is an EXTERNAL email. Please use caution when clicking links or opening attachments. If you believe this to be a malicious or phishing email, please report it using the \"Report Message\" button in Outlook.\nFor any additional questions or concerns, contact CSIRT at \"cybersecurity@austintexas.gov\".",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786640078,
+        "nanoseconds": 619000000
+      }
+    }
+  },
+  {
+    "parentId": "akOwLCJCYRA0tuhCb1cQ",
+    "id": "4K6A0ejWph4KJkGrILDT",
+    "data": {
+      "id": "4K6A0ejWph4KJkGrILDT",
+      "body": "Further conversation with Nick @ Brick - Hi Greg,\n\nCould you please clarify a few details regarding the pilot locations?\n\n  - What is the exact number of locations?\n  - If there are multiple locations: How many stalls are at each? What is the distance between them?\n \nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Wed, Aug 5, 2026 at 4:30 PM Greg Bessoni <greg@xoompark.co> wrote:\nNick / TJ\nThe fleet wants two service levels, so I need two rates from you, per car on a batched visit:\nLight touch-up — trash out, interior wipe-down, glass, photo. 10–15 min per car. What's your per-car number for this?\nFull interior — the above plus vacuum. You quoted $15/car for interior before — confirm that still holds on scheduled visits?\nAnd your visit/trip charge for a scheduled single-site stop, so I can build the math cleanly.\nPhoto per car still closes the job and triggers payment. Target start is as soon as the fleet signs likely within 2 weeks.\nGreg\n\nFrom: Nick Dalessandro <nickd@brickdynamics.com>\nSent: Wednesday, August 5, 2026 2:40 PM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: TJ Hennessy <tj@brickdynamics.com>; Zack Saadioui <zack@xoompark.co>; Jeff Miller <jeff.miller@xoompark.co>; Tom Sivak <tom.sivak@xoompark.co>\nSubject: Re: Non circumvent language\n \nHi Greg,\n\nThat's awesome news! We're working on your request now and will get back to you shortly.\n\nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Wed, Aug 5, 2026 at 2:58 AM Greg Bessoni <greg@xoompark.co> wrote:\nNick TJ\n\nI have a 30-day pilot for us, downtown SF: three single-stall locations, one nightly route, interior clean on up to 3 vehicles (vacuum + wipe-down). Our system dispatches the route — 2-car minimum and a photo per vehicle closes the job and triggers payment. Time window depends on each site's access rules; likely late evening or early morning, confirm with @Jeff Miller before start.\n\nTwo questions:\nWhat's your nightly rate for a single-stop, single-vehicle interior clean — and the rate for a 3-stop, 3-vehicle route, so we know the number as this scales?\nAPI for dispatch and job tracking, please send docs and a tech contact? Our eng lead and  @Zack Saadioui will drive the integration so completions and photos flow into the customer's service record.\n\nOnce it's live, I'd love to announce Brick together as the first integrated labor provider on our platform in a press release.\n\nTarget start: Asap.\n\nGreg\n\n\nFrom: Greg Bessoni <greg@xoompark.co>\nSent: Tuesday, August 4, 2026 11:42 AM\nTo: TJ Hennessy <tj@brickdynamics.com>\nCc: Nick Dalessandro <nickd@brickdynamics.com>; Zack Saadioui <zack@xoompark.co>; Jeff Miller <jeff.miller@xoompark.co>; Tom Sivak <tom.sivak@xoompark.co>\nSubject: Re: Non circumvent language\n \nSpending the next 30 days pitching and hopefully closing, so if no integration required at this time to get ahead of the game, then we'll reach out when we have a customer.  \n\nThanks TJ and Nick!\n\nGreg\nFrom: TJ Hennessy <tj@brickdynamics.com>\nSent: Tuesday, August 4, 2026 11:32 AM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: Nick Dalessandro <nickd@brickdynamics.com>; Zack Saadioui <zack@xoompark.co>; Jeff Miller <jeff.miller@xoompark.co>; Tom Sivak <tom.sivak@xoompark.co>\nSubject: Re: Non circumvent language\n \nHey Greg,\n\nWe can commence integration discussions and pull in tech resources once you have a demand-side partner, which would move quickly from there. Do you have a sense of timing on that front, or know who is a current front runner to be the first customer?\n\nTJ Hennessy\nCo-Founder, Brick Dynamics\n(310) 962-7388\n\n\nOn Tue, Aug 04, 2026 at 9:11 AM, Greg Bessoni <greg@xoompark.co> wrote:\nNick, TJ, thank you for your efforts on getting us the pricing.\n\nIntegration. We want Brick in the platform so reservations and work orders flow automatically instead of over email. Can your CTO or tech lead get on a call with Zack this week?\n\nOne thought.  You already work with EV and AV fleets. Every site we open is labor revenue for you, so when one of your customers needs a new location or is expanding, pointing them our way puts work on your books, not just ours.\n\nSourcing locations and power is where we're laser focused and making real progress (expeicaly at parking lots and garages in the center city / demand zones). What we're missing is a first fleet in a market. Miami and Dallas are ready on our side, if any of your current customers need capacity there, let's move on it now.\n\n@Zack  please connect with Nick and TJ and get a tech call set up. Let's get the integration done ASAP.\n\nAlso want to line up a co-branded release for when we have a site running, AV fleets booking ground services through a single API is a genuinely new thing and worth telling for both our companies.\n\nThank you all.\n\nGreg\nFrom: Nick Dalessandro <nickd@brickdynamics.com>\nSent: Monday, August 3, 2026 4:06 PM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: Jeff Miller <jeff.miller@xoompark.co>; Zack Saadioui <zack@xoompark.co>; Tom Sivak <tom.sivak@xoompark.co>; TJ Hennessy <tj@brickdynamics.com>\nSubject: Re: Non circumvent language\n \nHi Greg,\n\nHope you had a great weekend. I wanted to follow up on your request to walk through the information we sent over.\n\nPlease let us know your availability for this week so we can get some time scheduled on the calendar.\n\nAlternatively, you can schedule a meeting via the following link: Calendar Link\n\nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Tue, Jul 28, 2026 at 3:29 PM Nick Dalessandro <nickd@brickdynamics.com> wrote:\nHi Greg,\n\nSounds like a plan. TJ and I are traveling toward the end of this week, but we are available early next week.\n\nHere are some times that work for us:\n  - Monday (8/3): 10:00 AM - 1:00 PM PST\n  - Tuesday (8/4): 9:00 AM - 5:00 PM PST\n\nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Fri, Jul 24, 2026 at 11:06 AM Greg Bessoni <greg@xoompark.co> wrote:\nNick, TJ,  thanks for putting this together.\n@Jeff Miller is evaluating it over the next 3 business days. Let's get a call on the calendar for end of next week to walk through it and line up next steps  we'll hopefully be able to bring the Dallas site profile so you can turn a firm quote off the back of it. Does Thursday or Friday work on your end?\nWe should have our technical people talk about how we send or you receive the work orders from our partners. Cc'd @Zack Saadioui for this next call, if you can share any API docs or put your CTO in touch with Zack, and let them chat 1:1. \n\nTalk soon.\nGreg\n\nFrom: Nick Dalessandro <nickd@brickdynamics.com>\nSent: Thursday, July 23, 2026 8:06 PM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: TJ Hennessy <tj@brickdynamics.com>; Jeff Miller <jeff.miller@xoompark.co>; Tom Sivak <tom.sivak@xoompark.co>\nSubject: Re: Non circumvent language\n \nHi Greg and Team,\n\nAs promised, attached is the rate card. It includes three billing structures, each with ranges and the key drivers so you can position any site appropriately.\n\nThe second tab features a site estimator. By entering the vehicle count, stall count, charger type, coverage hours, and fleet type, it will generate an estimated monthly range across all three models. Please note this is intended as a working tool rather than a final quote.\n\nOne important detail to highlight: charger type and quantity are very important variables in the per-vehicle structure. L2 overnight sites and L3 fast-charge sites operate on significantly different session cadences and more touchpoints, which impacts the monthly rate. Having this information for the Dallas site will tighten the estimated range considerably.\n\nOf the three options, the per-task and per-vehicle structures will translate most directly into how you price services for your fleets. The hourly structure is included primarily as a benchmark.\n\nNext Steps for Dallas:\nPlease share the initial site profile including: vehicle count, stall count, expected sessions per vehicle per day, coverage hours, and whether the fleet consists of AVs or driver EVs. Once received, we will provide a firm quote within 24 hours.\n\nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Wed, Jul 22, 2026 at 4:23 AM Greg Bessoni <greg@xoompark.co> wrote:\nTJ,\nFair enough, the firm-wide logic makes sense, and your standard protection works for us: contracted engagements and our signed sites stay ours, we own the relationship and the invoice. Let's have counsel reflect exactly that in the MSA, plus standard confidentiality on site lists, schedules, and rates nothing broader.\n\nPricing\nHourly attendant rates:  day / overnight / weekend, and minimums\nPer-visit roving rates for multi-site routes: cleaning, plug-in/out, quick inspections\nOn-call dispatch: rate and response time\n\nPlease share today and we can take next steps\n\nGreg\n\nFrom: TJ Hennessy <tj@brickdynamics.com>\nSent: Tuesday, July 21, 2026 10:47 PM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: Tom Sivak <tom.sivak@xoompark.co>; Nick Dalessandro <nickd@brickdynamics.com>\nSubject: Re: Non circumvent language\n \nGreg,\n\nAppreciate you laying this out, and I understand your position. The straight answer: we don't grant exclusivity, radius restrictions, or referral locks to anyone, at any size. We hold this line with the largest operators in the space, even the public companies we work with who contract for 3-years at high volume, so it's a firm-wide position rather than a judgment on XoomPark.\n\nThe reasoning is simple. This market is in its first innings and nobody knows who wins each metro or how the market will shake out. Our value to every partner, including you, is that we're the neutral operations layer already on the ground everywhere with the expertise, teams, systems, and SOPs to execute above even the strictest SLA requirements. A 15-mile ring with an 18-month tail asks us to preselect winners, and if a partner ever lost a site or a customer, our business in that market would die with it. We can't carry that risk for anyone.\n\nWhat we will commit to, and this is standard protection we extend to every customer: the engagements you contract us for stay yours and the sites you are signing exclusives with are already yours by nature. We don't go around you on those and per our conversation today, you own the relationship and the invoice which already protects the concern. On the operator side, as I mentioned on the call, we've been in direct conversations with Waymo, Uber, Zoox, and most of the field for over a year. We already operate fleets of all form factors and provide cleaning, charging, and servicing in many markets as we discussed in NYC. If I had signed an agreement like this with any of our existing customers, you and I wouldn't be able to work together right now. Importantly, I don't view any of this as competitive, we're complementary layers of the same stack. And as this relationship grows, when customers we bring to the table need space or charging, you'd be our first call.\n\nIf that doesn't work for you, then let us know. If it does, happy to continue and send over pricing for your upcoming conversations. We're confident we will be a big value add that jump starts your go to market with reliable field ops. Let me know, feel free to call me in the AM if needed to discuss any of this 1:1.\n\nBest,\n\nTJ Hennessy\nCo-Founder, Brick Dynamics\n(310) 962-7388\n\n\nOn Tue, Jul 21, 2026 at 7:35 PM, Greg Bessoni <greg@xoompark.co> wrote:\nTJ\n\nHere's some bullet points for non circumvent\n\nServices you perform for XoomPark (plugging, cleaning, etc.)  you don't offer independently within 15 miles of our city-center sites\nDepot carve-out: work at any AV OEM or fleet-operator full-service depot is yours, even inside the ring  but at the depot only, not distributed sites or properties beyond it\nNo direct deals with properties where you've done XoomPark work\nInbound AV ground-services requests in our zones → referred to us\nRuns 18 months per market from last work performed\nMutual we don't touch your depot clients or poach your people\n\n\nGreg",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786490662,
+        "nanoseconds": 172000000
+      }
+    }
+  },
+  {
+    "parentId": "akOwLCJCYRA0tuhCb1cQ",
+    "id": "66GrYezoXgIdsJpY5SlU",
+    "data": {
+      "id": "66GrYezoXgIdsJpY5SlU",
+      "body": "Had a call with Brick discussed SF Pricing, Miami, Los Angeles. Brick will get back to us with the finalized for the locations.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786725383,
+        "nanoseconds": 576000000
+      }
+    }
+  },
+  {
+    "parentId": "akOwLCJCYRA0tuhCb1cQ",
+    "id": "GPUZUlKcD8zl5oNiXleA",
+    "data": {
+      "id": "GPUZUlKcD8zl5oNiXleA",
+      "body": "Various conversations with Brick:\n\nHey Greg,\n\nWe can commence integration discussions and pull in tech resources once you have a demand-side partner, which would move quickly from there. Do you have a sense of timing on that front, or know who is a current front runner to be the first customer?\n\nTJ Hennessy\nCo-Founder, Brick Dynamics\n(310) 962-7388\n\n\nOn Tue, Aug 04, 2026 at 9:11 AM, Greg Bessoni <greg@xoompark.co> wrote:\nNick, TJ, thank you for your efforts on getting us the pricing.\n\nIntegration. We want Brick in the platform so reservations and work orders flow automatically instead of over email. Can your CTO or tech lead get on a call with Zack this week?\n\nOne thought.  You already work with EV and AV fleets. Every site we open is labor revenue for you, so when one of your customers needs a new location or is expanding, pointing them our way puts work on your books, not just ours.\n\nSourcing locations and power is where we're laser focused and making real progress (expeicaly at parking lots and garages in the center city / demand zones). What we're missing is a first fleet in a market. Miami and Dallas are ready on our side, if any of your current customers need capacity there, let's move on it now.\n\n@Zack  please connect with Nick and TJ and get a tech call set up. Let's get the integration done ASAP.\n\nAlso want to line up a co-branded release for when we have a site running, AV fleets booking ground services through a single API is a genuinely new thing and worth telling for both our companies.\n\nThank you all.\n\nGreg\nFrom: Nick Dalessandro <nickd@brickdynamics.com>\nSent: Monday, August 3, 2026 4:06 PM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: Jeff Miller <jeff.miller@xoompark.co>; Zack Saadioui <zack@xoompark.co>; Tom Sivak <tom.sivak@xoompark.co>; TJ Hennessy <tj@brickdynamics.com>\nSubject: Re: Non circumvent language\n \nHi Greg,\n\nHope you had a great weekend. I wanted to follow up on your request to walk through the information we sent over.\n\nPlease let us know your availability for this week so we can get some time scheduled on the calendar.\n\nAlternatively, you can schedule a meeting via the following link: Calendar Link\n\nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Tue, Jul 28, 2026 at 3:29 PM Nick Dalessandro <nickd@brickdynamics.com> wrote:\nHi Greg,\n\nSounds like a plan. TJ and I are traveling toward the end of this week, but we are available early next week.\n\nHere are some times that work for us:\n  - Monday (8/3): 10:00 AM - 1:00 PM PST\n  - Tuesday (8/4): 9:00 AM - 5:00 PM PST\n\nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Fri, Jul 24, 2026 at 11:06 AM Greg Bessoni <greg@xoompark.co> wrote:\nNick, TJ,  thanks for putting this together.\n@Jeff Miller is evaluating it over the next 3 business days. Let's get a call on the calendar for end of next week to walk through it and line up next steps  we'll hopefully be able to bring the Dallas site profile so you can turn a firm quote off the back of it. Does Thursday or Friday work on your end?\nWe should have our technical people talk about how we send or you receive the work orders from our partners. Cc'd @Zack Saadioui for this next call, if you can share any API docs or put your CTO in touch with Zack, and let them chat 1:1. \n\nTalk soon.\nGreg\n\nFrom: Nick Dalessandro <nickd@brickdynamics.com>\nSent: Thursday, July 23, 2026 8:06 PM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: TJ Hennessy <tj@brickdynamics.com>; Jeff Miller <jeff.miller@xoompark.co>; Tom Sivak <tom.sivak@xoompark.co>\nSubject: Re: Non circumvent language\n \nHi Greg and Team,\n\nAs promised, attached is the rate card. It includes three billing structures, each with ranges and the key drivers so you can position any site appropriately.\n\nThe second tab features a site estimator. By entering the vehicle count, stall count, charger type, coverage hours, and fleet type, it will generate an estimated monthly range across all three models. Please note this is intended as a working tool rather than a final quote.\n\nOne important detail to highlight: charger type and quantity are very important variables in the per-vehicle structure. L2 overnight sites and L3 fast-charge sites operate on significantly different session cadences and more touchpoints, which impacts the monthly rate. Having this information for the Dallas site will tighten the estimated range considerably.\n\nOf the three options, the per-task and per-vehicle structures will translate most directly into how you price services for your fleets. The hourly structure is included primarily as a benchmark.\n\nNext Steps for Dallas:\nPlease share the initial site profile including: vehicle count, stall count, expected sessions per vehicle per day, coverage hours, and whether the fleet consists of AVs or driver EVs. Once received, we will provide a firm quote within 24 hours.\n\nBest,\nNick Dalessandro\nDirector of Partnerships, Brick Dynamics\n(310) 850-5859\n\n\nOn Wed, Jul 22, 2026 at 4:23 AM Greg Bessoni <greg@xoompark.co> wrote:\nTJ,\nFair enough, the firm-wide logic makes sense, and your standard protection works for us: contracted engagements and our signed sites stay ours, we own the relationship and the invoice. Let's have counsel reflect exactly that in the MSA, plus standard confidentiality on site lists, schedules, and rates nothing broader.\n\nPricing\nHourly attendant rates:  day / overnight / weekend, and minimums\nPer-visit roving rates for multi-site routes: cleaning, plug-in/out, quick inspections\nOn-call dispatch: rate and response time\n\nPlease share today and we can take next steps\n\nGreg\n\nFrom: TJ Hennessy <tj@brickdynamics.com>\nSent: Tuesday, July 21, 2026 10:47 PM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: Tom Sivak <tom.sivak@xoompark.co>; Nick Dalessandro <nickd@brickdynamics.com>\nSubject: Re: Non circumvent language\n \nGreg,\n\nAppreciate you laying this out, and I understand your position. The straight answer: we don't grant exclusivity, radius restrictions, or referral locks to anyone, at any size. We hold this line with the largest operators in the space, even the public companies we work with who contract for 3-years at high volume, so it's a firm-wide position rather than a judgment on XoomPark.\n\nThe reasoning is simple. This market is in its first innings and nobody knows who wins each metro or how the market will shake out. Our value to every partner, including you, is that we're the neutral operations layer already on the ground everywhere with the expertise, teams, systems, and SOPs to execute above even the strictest SLA requirements. A 15-mile ring with an 18-month tail asks us to preselect winners, and if a partner ever lost a site or a customer, our business in that market would die with it. We can't carry that risk for anyone.\n\nWhat we will commit to, and this is standard protection we extend to every customer: the engagements you contract us for stay yours and the sites you are signing exclusives with are already yours by nature. We don't go around you on those and per our conversation today, you own the relationship and the invoice which already protects the concern. On the operator side, as I mentioned on the call, we've been in direct conversations with Waymo, Uber, Zoox, and most of the field for over a year. We already operate fleets of all form factors and provide cleaning, charging, and servicing in many markets as we discussed in NYC. If I had signed an agreement like this with any of our existing customers, you and I wouldn't be able to work together right now. Importantly, I don't view any of this as competitive, we're complementary layers of the same stack. And as this relationship grows, when customers we bring to the table need space or charging, you'd be our first call.\n\nIf that doesn't work for you, then let us know. If it does, happy to continue and send over pricing for your upcoming conversations. We're confident we will be a big value add that jump starts your go to market with reliable field ops. Let me know, feel free to call me in the AM if needed to discuss any of this 1:1.\n\nBest,\n\nTJ Hennessy\nCo-Founder, Brick Dynamics\n(310) 962-7388\n\n\nOn Tue, Jul 21, 2026 at 7:35 PM, Greg Bessoni <greg@xoompark.co> wrote:\nTJ\n\nHere's some bullet points for non circumvent\n\nServices you perform for XoomPark (plugging, cleaning, etc.)  you don't offer independently within 15 miles of our city-center sites\nDepot carve-out: work at any AV OEM or fleet-operator full-service depot is yours, even inside the ring  but at the depot only, not distributed sites or properties beyond it\nNo direct deals with properties where you've done XoomPark work\nInbound AV ground-services requests in our zones → referred to us\nRuns 18 months per market from last work performed\nMutual we don't touch your depot clients or poach your people\n\n\nGreg",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786490565,
+        "nanoseconds": 374000000
+      }
+    }
+  },
+  {
+    "parentId": "LFmWR3Gtc32muMRuU33N",
+    "id": "6QFJjstU4fVTnNt8hGgm",
+    "data": {
+      "id": "6QFJjstU4fVTnNt8hGgm",
+      "body": "Jeff spoke to Curo on 8/13/2026 about this location, waiting for response",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786724823,
+        "nanoseconds": 801000000
+      }
+    }
+  },
+  {
+    "parentId": "LFmWR3Gtc32muMRuU33N",
+    "id": "PuEfGYPaEvXdswQSBDSR",
+    "data": {
+      "id": "PuEfGYPaEvXdswQSBDSR",
+      "body": "Email from Mike G. @ Ace on 7/27/2026 - Yes, we have 10 level 2 chargers at the property that we can designate as reserved.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786487424,
+        "nanoseconds": 84000000
+      }
+    }
+  },
+  {
+    "parentId": "LFmWR3Gtc32muMRuU33N",
+    "id": "RZ8EzUSbNPSPCqgiLV3F",
+    "data": {
+      "id": "RZ8EzUSbNPSPCqgiLV3F",
+      "body": "Jeff's email to MIke @ ACE on 8/10/2026 - Fleet 1/Opportunity 2 - All EV:\n \nUp to 40 EVs, can be clustered in groups of 10\n24/7 access, most vehicles out during the day, Level 2 charging needed overnight \nInitial term: 6-12 months\nProfessional drivers only — not random gig workers\n8ft clearance at the stalls, ideally >6’7” at entrance\nAbility to perform basic reconditioning (ie: waterless cleaning) as well as sensor maintenance done from time-to-time\nBathrooms + small office is a bonus, or ability to bring on site",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786487540,
+        "nanoseconds": 909000000
+      }
+    }
+  },
+  {
+    "parentId": "LFmWR3Gtc32muMRuU33N",
+    "id": "UyPFJPQeUYlEFyBNecQG",
+    "data": {
+      "id": "UyPFJPQeUYlEFyBNecQG",
+      "body": "Working a deal for 10 EV spaces.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786487288,
+        "nanoseconds": 119000000
+      }
+    }
+  },
+  {
+    "parentId": "LFmWR3Gtc32muMRuU33N",
+    "id": "jtDzqtA1oPQYervnwX9H",
+    "data": {
+      "id": "jtDzqtA1oPQYervnwX9H",
+      "body": "Mike's response on 8/11/2026 - For opportunities 1 & 2, the garage below would work.\n\n925 Waterfront Place\nSan Diego, CA 92101\nRate: $350/stall/month\nCapacity: Up to 50 Level 2 chargers",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786487619,
+        "nanoseconds": 267000000
+      }
+    }
+  },
+  {
+    "parentId": "LFmWR3Gtc32muMRuU33N",
+    "id": "vAHxBsy12K0TKP1OsNHM",
+    "data": {
+      "id": "vAHxBsy12K0TKP1OsNHM",
+      "body": "The 1st request for 10 EV spaces was for Inspiration mobility.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786490763,
+        "nanoseconds": 639000000
+      }
+    }
+  },
+  {
+    "parentId": "SB4E25b2s9DsTIfx0RDU",
+    "id": "CGM5J5ORYpK07vJXjuLr",
+    "data": {
+      "id": "CGM5J5ORYpK07vJXjuLr",
+      "body": "Email for Dominic to Greg - From: Dominic Papa <dpapa@dtphx.org>\nSent: Thursday, July 9, 2026 11:46 AM\nTo: Greg Bessoni <greg@xoompark.co>\nCc: Devney Majerle <dmajerle@dtphx.org>\nSubject: PCA Membership Application\n \nHi Greg!\nGreat news, the website application process is back up and running. Thank you for your patience with that. You can get all signed up right here: https://phoenixcommunityalliance.com/membership-application Let me know if you run into any more challenges! \nI know we already have something lined up with your team, and I look forward to diving into the work! I thought you would like that picture I sent yesterday. It captures the challenges we face here in Downtown when delivery vehicles stop on our main thoroughfare!\nTalk soon!\nBest,\nDom\n\n\n\n\n\npca-logo-4c-stack.png\nDominic Papa\nSenior Director\nOffice: (602) 495-1500  /  Direct: (480) 267-7408\n1 E. Washington St., Ste. 230, Phoenix, AZ 85004\nAn Affiliate of Downtown Phoenix Inc. \nCreating a Stronger Downtown for a better Phoenix for over 40 years.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786724681,
+        "nanoseconds": 434000000
+      }
+    }
+  },
+  {
+    "parentId": "SB4E25b2s9DsTIfx0RDU",
+    "id": "b4FN5rSRsdWUJAzMsfuO",
+    "data": {
+      "id": "b4FN5rSRsdWUJAzMsfuO",
+      "body": "Greg's email to Dominic - Dom, hope all has been well.  Wanted to line up the next call with the team, and I have an update that should make it more useful.\n\nWe just ran this play in Austin and it moved things along fast. City transportation routed us to their Office of Special Events, who brought in Austin PD and coordinate directly with UT and the Moody Center. We're all sitting down on August 21 to build the game-day pickup and staging plan for autonomous vehicles.\n\nI'd like to run the same sequence in Phoenix. Three intros would do it:\n\nCity of Phoenix Office of Special Events, that's the door that worked in Austin. They own event-day coordination and hold the venue relationships, and they usually bring parking, curbside management and PD along themselves.\nAce Parking, on the city-owned lots downtown.\nWaymo / Moove whoever handles game-day coordination on the AV fleet side.  Most likely, Waymo.\n\nLooping in Larry Marcus and our local associates at either Kittelson or Mead & Hunt.\n\nThe overall agenda is as follows, with a focus on the above as it's the most immediate need and fastest to implement\n1. Confirm 4 areas to work together\n2. Review curbside management training outline\n3. Discuss process to implement an AV pilot project\n4. Plan steps to study multimodal transportation street design / connectivity\n5. Review the opportunity for a downtown circulator\n6. Roundtable update on AV demand on city streets and event activities      \n\nWhat does your calendar look like over the next couple weeks?\n\nThanks\n\nGreg Bessoni\nCEO, XoomPark",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786724741,
+        "nanoseconds": 741000000
+      }
+    }
+  },
+  {
+    "parentId": "gAMQekD84E7ev1ZAXCq2",
+    "id": "R0qEGrxaneVGyre7xhWn",
+    "data": {
+      "id": "R0qEGrxaneVGyre7xhWn",
+      "body": "Aaron's reply on 8/11/2026 - Hi Jeff,\nGreat to hear from you. Yes, we already operate in Miami so that would be the ideal city to start in. There are real costs associated with this pilot - equipment purchase, hiring, etc - but the costs would be reduced by using a city we already operate in. We could reduce the setup fee to $6000 if we could start in Miami. Does this work?\n\nTalk soon,\n\nAaron",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786489429,
+        "nanoseconds": 461000000
+      }
+    }
+  },
+  {
+    "parentId": "gAMQekD84E7ev1ZAXCq2",
+    "id": "SoV4sObktV2QiLDq75kU",
+    "data": {
+      "id": "SoV4sObktV2QiLDq75kU",
+      "body": "Spiffy Pricing Model:\n\nFrom: Aaron Freeman <afreeman@getspiffy.com>\nDate: Wednesday, August 5, 2026 at 12:16 PM\nTo: Jeff Miller <jeff.miller@xoompark.co>\nCc: Karl Murphy <karl@getspiffy.com>; Jim Wilson <jwilson@getspiffy.com>; Corey Vodicka <cvodicka@getspiffy.com>\nSubject: XoomPark - Spiffy partnership 8/5/26\n\nHi Jeff,\n\nGreat talking today and clarifying a few things. We'd love to be a part of the pilot program and the larger rollout as it launches.\n\nFor the pricing, we've made a few assumptions including:\nLaunch city - we would strongly prefer Miami for the launch. We have a presence in Miami currently with an existing staff and manager. Launching in Miami would make for the smoothest pilot, by far.\nFor each city launch, there are setup costs for each city. Buying equipment, recruiting and hiring staff, on-site training, insurance costs. etc. These are one-time costs.\nFor monthly pricing, we're offering a fixed price based on number of shifts per day. You'll see pricing for 1 shift per day and 3 shifts per day, assuming 5 days per week. I can tweak if you need 7 days per week.\n1 shift per day (5 days/week) / one city pricing:\nSetup cost: $12,000\nMonthly Cost: $13,468\n3 shifts per day (5 days/week) / one city pricing:\nSetup cost: $20,000\nMonthly cost: $36,204\nI'm happy to tweak these based on changing assumptions. Also happy to answer any questions, call me any time,\n\nAaron\n \nAaron Freeman\nCOO, Spiffy\n \nE: afreeman@getspiffy.com\nM: 919-619-4042\n \nSpiffy: much more than clean.\nGetSpiffy.com",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786489253,
+        "nanoseconds": 674000000
+      }
+    }
+  },
+  {
+    "parentId": "gAMQekD84E7ev1ZAXCq2",
+    "id": "b2m56EG4UkAx2SxwPW4Y",
+    "data": {
+      "id": "b2m56EG4UkAx2SxwPW4Y",
+      "body": "Jeff's email to Aaron on 8/10/2026 - Hi Aaron, Thanks for the info. Is there a city your already set up in where there would be no set up fee? Thanks",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786489337,
+        "nanoseconds": 945000000
+      }
+    }
+  },
+  {
+    "parentId": "xZFMoK250W43z7I0oP1X",
+    "id": "5j2VtiigQMyuX01ii5GZ",
+    "data": {
+      "id": "5j2VtiigQMyuX01ii5GZ",
+      "body": "Jeff's email to Joe on 8/11/2026 -Hi Joe, Checking in to see if you have heard back from the client. Thanks",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488975,
+        "nanoseconds": 690000000
+      }
+    }
+  },
+  {
+    "parentId": "xZFMoK250W43z7I0oP1X",
+    "id": "CqO0oXGQI50IJ51iDc0a",
+    "data": {
+      "id": "CqO0oXGQI50IJ51iDc0a",
+      "body": "Joe's email on 8/9/2026 - Sent the info to the client.  I'll let you know as soon as I hear back.",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488921,
+        "nanoseconds": 837000000
+      }
+    }
+  },
+  {
+    "parentId": "xZFMoK250W43z7I0oP1X",
+    "id": "DUdAgf4WCZJFju9DpVBh",
+    "data": {
+      "id": "DUdAgf4WCZJFju9DpVBh",
+      "body": "starting 10/1/2026",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488826,
+        "nanoseconds": 377000000
+      }
+    }
+  },
+  {
+    "parentId": "xZFMoK250W43z7I0oP1X",
+    "id": "Qhcx0IBq8bS3kKc9rWdu",
+    "data": {
+      "id": "Qhcx0IBq8bS3kKc9rWdu",
+      "body": "Starting 10/1/2026",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488888,
+        "nanoseconds": 401000000
+      }
+    }
+  },
+  {
+    "parentId": "xZFMoK250W43z7I0oP1X",
+    "id": "WnBFlMafdxHUHZrSxckO",
+    "data": {
+      "id": "WnBFlMafdxHUHZrSxckO",
+      "body": "Jeff's summarized email to Joe on 8/7/2026 - I hope all is well. We’d like the full lot for a 1-year agreement with a 120-day termination. Do you think that will work for the owner? Thanks",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488810,
+        "nanoseconds": 357000000
+      }
+    }
+  },
+  {
+    "parentId": "xZFMoK250W43z7I0oP1X",
+    "id": "iAJYGbrH2RDnyVlbLUsC",
+    "data": {
+      "id": "iAJYGbrH2RDnyVlbLUsC",
+      "body": "Joe's reply 8/7/2026 - Hi Jeff - 100 spaces at 350 2nd Street for a one-year term with a 120 day term?  Start date?",
+      "authorEmail": "jeff.miller@xoompark.co",
+      "authorName": "Jeff Miller",
+      "createdAt": {
+        "__type": "timestamp",
+        "seconds": 1786488870,
+        "nanoseconds": 18000000
+      }
+    }
+  }
+]

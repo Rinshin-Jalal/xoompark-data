@@ -16,7 +16,7 @@
 // filing service) — stored, but never treated as the decision-maker.
 import type { SourcedParkingLocation } from './types.ts';
 
-export type EntityContext = NonNullable<SourcedParkingLocation['entityContext']>;
+export type EntityContext = NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['corporate_entity']>;
 
 export const SUNBIZ_SEARCH_URL = 'https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResults';
 

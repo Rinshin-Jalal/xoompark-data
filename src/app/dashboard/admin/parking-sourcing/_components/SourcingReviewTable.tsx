@@ -35,11 +35,11 @@ import { ParkingSourcingMap } from './ParkingSourcingMap';
 const PROVENANCE_FIELDS: { key: string; label: string }[] = [
   { key: 'name', label: 'Name' },
   { key: 'address', label: 'Address' },
-  { key: 'priceText', label: 'Price' },
-  { key: 'hoursText', label: 'Hours' },
-  { key: 'capacityText', label: 'Capacity' },
-  { key: 'surfaceType', label: 'Surface' },
-  { key: 'gateType', label: 'Gate' },
+  { key: 'price_text', label: 'Price' },
+  { key: 'hours_text', label: 'Hours' },
+  { key: 'capacity_text', label: 'Capacity' },
+  { key: 'surface_type', label: 'Surface' },
+  { key: 'gate_type', label: 'Gate' },
 ];
 
 type Toast = { type: 'success' | 'error'; message: string };
@@ -60,8 +60,8 @@ function ProvenanceSummary({ location }: { location: SourcedParkingLocation }) {
       {PROVENANCE_FIELDS.map((f) => (
         <span
           key={f.key}
-          title={`${f.label}: ${location.fieldProvenance[f.key] ?? 'unknown'}`}
-          className={cn('inline-block h-2 w-2 rounded-full', provenanceDotClasses(location.fieldProvenance[f.key]))}
+          title={`${f.label}: ${location.field_sources[f.key] ?? 'unknown'}`}
+          className={cn('inline-block h-2 w-2 rounded-full', provenanceDotClasses(location.field_sources[f.key]))}
         />
       ))}
     </div>
@@ -242,7 +242,7 @@ function formatWhen(iso?: string | null): string {
 // distance to the nearest DC-fast station (from evContext — see
 // scripts/enrich_prod_ev_pitstop.ts).
 function EvBadge({ location }: { location: SourcedParkingLocation }) {
-  const ev = location.evContext;
+  const ev = location.enrichment?.ev;
   if (!ev) return <span className="text-[#0e1c36]/30">—</span>;
   if (ev.onSiteDcFastPorts) {
     return (
@@ -266,7 +266,7 @@ function EvBadge({ location }: { location: SourcedParkingLocation }) {
 // full precision lives in the doc. Straight-line (haversine), not driving
 // distance — hover spells out the contract.
 function DemandBadge({ location }: { location: SourcedParkingLocation }) {
-  const demand = location.geoContext?.demand;
+  const demand = location.enrichment?.geo?.demand;
   if (!demand) return <span className="text-[#0e1c36]/30">—</span>;
   const zone = MIAMI_DEMAND_ZONES.find((z) => z.id === demand.nearestZoneId);
   const label = zone ? zone.name : demand.nearestZoneId;
@@ -329,7 +329,7 @@ const SourceLink = ({ url }: { url: string }) => (
   <a href={url} target="_blank" rel="noreferrer" className="text-[#1E477C] hover:underline">{hostOf(url)}</a>
 );
 
-function ParcelContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['parcelContext']> }) {
+function ParcelContextBlock({ ctx }: { ctx: NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['parcel']> }) {
   return (
     <ContextDisclosure label="Parcel" summary={ctx.ownerOfRecord}>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2.5">
@@ -347,7 +347,7 @@ function ParcelContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['
   );
 }
 
-function EntityContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['entityContext']> }) {
+function EntityContextBlock({ ctx }: { ctx: NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['corporate_entity']> }) {
   const persons = ctx.authorizedPersons ?? [];
   const shown = persons.slice(0, 3);
   const more = persons.length > 3 ? persons.length - 3 : 0;
@@ -377,7 +377,7 @@ function EntityContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['
   );
 }
 
-function LbtContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['lbtContext']> }) {
+function LbtContextBlock({ ctx }: { ctx: NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['business_license']> }) {
   return (
     <ContextDisclosure label="LBT" summary={ctx.businessName}>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2.5">
@@ -395,7 +395,7 @@ function LbtContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['lbt
   );
 }
 
-function GateEvidenceBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['gateEvidence']> }) {
+function GateEvidenceBlock({ ctx }: { ctx: NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['gate']> }) {
   const summary = ctx.derivedGateType
     ? `${ctx.derivedGateType}, ${ctx.claims.length} claim${ctx.claims.length === 1 ? '' : 's'}`
     : `${ctx.claims.length} claim${ctx.claims.length === 1 ? '' : 's'}`;
@@ -411,7 +411,7 @@ function GateEvidenceBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['g
   );
 }
 
-function AmenityContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation['amenityContext']> }) {
+function AmenityContextBlock({ ctx }: { ctx: NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['amenities']> }) {
   const wash = ctx.nearestCarWashM;
   const svc = ctx.nearestCarServiceM;
   return (
@@ -438,17 +438,17 @@ function AmenityContextBlock({ ctx }: { ctx: NonNullable<SourcedParkingLocation[
 // of "—" is noise pretending to be data) — a record with nothing captured
 // reads as a short record, not a wall of nulls.
 function DetailsGrid({ location }: { location: SourcedParkingLocation }) {
-  const geo = location.geoContext;
+  const geo = location.enrichment?.geo;
   const rows: { label: string; value: string }[] = [
-    { label: 'Clearance', value: detailValue(location.clearanceText) },
-    { label: 'Access', value: detailValue(location.ingressEgress) },
+    { label: 'Clearance', value: detailValue(location.clearance_text) },
+    { label: 'Access', value: detailValue(location.ingress_egress) },
     { label: 'Locality', value: detailValue(location.locality) },
-    { label: 'Capacity', value: detailValue(location.capacityText) },
-    { label: 'Surface', value: detailValue(location.surfaceType) },
-    { label: 'Gate', value: detailValue(location.gateType) },
-    { label: 'Stalls total', value: detailValue(location.stallsTotal) },
-    { label: 'Captured by', value: detailValue(location.capturedBy) },
-    { label: 'Added by', value: detailValue(location.addedBy) },
+    { label: 'Capacity', value: detailValue(location.capacity_text) },
+    { label: 'Surface', value: detailValue(location.surface_type) },
+    { label: 'Gate', value: detailValue(location.gate_type) },
+    { label: 'Stalls total', value: detailValue(location.stall_count) },
+    { label: 'Captured by', value: detailValue(location.captured_by) },
+    { label: 'Added by', value: detailValue(location.added_by) },
   ].filter((r) => r.value !== '—');
 
   const geoRows = geo
@@ -492,28 +492,28 @@ function DetailsGrid({ location }: { location: SourcedParkingLocation }) {
         </div>
       )}
 
-      {location.evContext && (
+      {location.enrichment?.ev && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 mb-3 pt-2 border-t border-[#0e1c36]/10">
-          <div><span className="text-[#0e1c36]/40">DC fast on-site</span><br />{detailValue(location.evContext.onSiteDcFastPorts)}</div>
-          <div><span className="text-[#0e1c36]/40">Nearest DC fast</span><br />{location.evContext.nearestDcFastMi != null ? `${location.evContext.nearestDcFastMi} mi` : '—'}</div>
-          <div><span className="text-[#0e1c36]/40">Nearest network</span><br />{detailValue(location.evContext.nearestNetwork)}</div>
-          <div><span className="text-[#0e1c36]/40">EV checked</span><br />{detailValue(location.evContext.checkedAt)}</div>
+          <div><span className="text-[#0e1c36]/40">DC fast on-site</span><br />{detailValue(location.enrichment?.ev.onSiteDcFastPorts)}</div>
+          <div><span className="text-[#0e1c36]/40">Nearest DC fast</span><br />{location.enrichment?.ev.nearestDcFastMi != null ? `${location.enrichment?.ev.nearestDcFastMi} mi` : '—'}</div>
+          <div><span className="text-[#0e1c36]/40">Nearest network</span><br />{detailValue(location.enrichment?.ev.nearestNetwork)}</div>
+          <div><span className="text-[#0e1c36]/40">EV checked</span><br />{detailValue(location.enrichment?.ev.checkedAt)}</div>
         </div>
       )}
 
-      {location.pitstopContext && (
+      {location.enrichment?.pitstop && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 mb-3 pt-2 border-t border-[#0e1c36]/10">
-          <div><span className="text-[#0e1c36]/40">Storage score</span><br />{detailValue(location.pitstopContext.storageScore)}</div>
-          <div><span className="text-[#0e1c36]/40">Staging score</span><br />{detailValue(location.pitstopContext.stagingScore)}</div>
-          <div><span className="text-[#0e1c36]/40">OSM capacity</span><br />{detailValue(location.pitstopContext.capacity)}</div>
-          <div><span className="text-[#0e1c36]/40">Area (sqm)</span><br />{detailValue(location.pitstopContext.areaSqm)}</div>
-          <div><span className="text-[#0e1c36]/40">Owner-direct candidate</span><br />{detailValue(location.pitstopContext.ownerDirectCandidate)}</div>
-          <div><span className="text-[#0e1c36]/40">Owner</span><br />{detailValue(location.pitstopContext.owner)}</div>
-          {location.pitstopContext.osmId && (
+          <div><span className="text-[#0e1c36]/40">Storage score</span><br />{detailValue(location.enrichment?.pitstop.storageScore)}</div>
+          <div><span className="text-[#0e1c36]/40">Staging score</span><br />{detailValue(location.enrichment?.pitstop.stagingScore)}</div>
+          <div><span className="text-[#0e1c36]/40">OSM capacity</span><br />{detailValue(location.enrichment?.pitstop.capacity)}</div>
+          <div><span className="text-[#0e1c36]/40">Area (sqm)</span><br />{detailValue(location.enrichment?.pitstop.areaSqm)}</div>
+          <div><span className="text-[#0e1c36]/40">Owner-direct candidate</span><br />{detailValue(location.enrichment?.pitstop.ownerDirectCandidate)}</div>
+          <div><span className="text-[#0e1c36]/40">Owner</span><br />{detailValue(location.enrichment?.pitstop.owner)}</div>
+          {location.enrichment?.pitstop.osmId && (
             <div className="col-span-2">
               <span className="text-[#0e1c36]/40">OSM</span><br />
-              <a href={`https://www.openstreetmap.org/${location.pitstopContext.osmId}`} target="_blank" rel="noreferrer" className="text-[#1a3a7a] hover:underline">
-                {location.pitstopContext.osmId}
+              <a href={`https://www.openstreetmap.org/${location.enrichment?.pitstop.osmId}`} target="_blank" rel="noreferrer" className="text-[#1a3a7a] hover:underline">
+                {location.enrichment?.pitstop.osmId}
               </a>
             </div>
           )}
@@ -552,8 +552,8 @@ function EvidenceList({ location }: { location: SourcedParkingLocation }) {
             >
               {hostOf(e.url)} ↗
             </a>
-            <div className="text-[11px] text-[#8B96A6] mt-0.5" title={e.seenAt}>
-              {formatWhen(e.seenAt)}
+            <div className="text-[11px] text-[#8B96A6] mt-0.5" title={e.seen_at}>
+              {formatWhen(e.seen_at)}
             </div>
           </div>
           <span className="text-[10px] font-mono uppercase tracking-wide text-[#8B96A6] shrink-0 pt-1">
@@ -614,7 +614,7 @@ function ViewDetailsPopup({
                 {location.address || 'No address on file'}
               </p>
               <p className="text-[14px] text-[#53627A] font-medium mt-1">
-                {location.priceText || '—'} · {location.hoursText || '—'}
+                {location.price_text || '—'} · {location.hours_text || '—'}
               </p>
               {/* Ground-truth check straight from the record — official Maps
                   URL API, opens in a new tab. Only when coords exist. */}
@@ -643,10 +643,10 @@ function ViewDetailsPopup({
           </div>
           <div className="mt-3.5 flex items-center gap-4 flex-wrap text-[10px] font-mono uppercase tracking-wide text-[#8B96A6]">
             <span>
-              source <span className="text-[#53627A] normal-case font-medium">{location.source}</span>
+              source <span className="text-[#53627A] normal-case font-medium">{location.source_name}</span>
             </span>
             <span>
-              captured <span className="text-[#53627A] font-medium">{formatWhen(location.createdAt)}</span>
+              captured <span className="text-[#53627A] font-medium">{formatWhen(location.created_at)}</span>
             </span>
             <span className="ml-auto border border-[#0e1c36]/15 rounded px-1.5 py-0.5">read only</span>
           </div>
@@ -681,15 +681,15 @@ function ViewDetailsPopup({
             </div>
           </section>
 
-          {(location.parcelContext || location.entityContext || location.lbtContext || location.gateEvidence || location.amenityContext) && (
+          {(location.enrichment?.parcel || location.enrichment?.corporate_entity || location.enrichment?.business_license || location.enrichment?.gate || location.enrichment?.amenities) && (
             <section className="px-6 py-4 border-b border-[#0e1c36]/8">
               <PopupSectionLabel>Enrichment</PopupSectionLabel>
               <div className="mt-2 space-y-1">
-                {location.parcelContext && <ParcelContextBlock ctx={location.parcelContext} />}
-                {location.entityContext && <EntityContextBlock ctx={location.entityContext} />}
-                {location.lbtContext && <LbtContextBlock ctx={location.lbtContext} />}
-                {location.gateEvidence && <GateEvidenceBlock ctx={location.gateEvidence} />}
-                {location.amenityContext && <AmenityContextBlock ctx={location.amenityContext} />}
+                {location.enrichment?.parcel && <ParcelContextBlock ctx={location.enrichment?.parcel} />}
+                {location.enrichment?.corporate_entity && <EntityContextBlock ctx={location.enrichment?.corporate_entity} />}
+                {location.enrichment?.business_license && <LbtContextBlock ctx={location.enrichment?.business_license} />}
+                {location.enrichment?.gate && <GateEvidenceBlock ctx={location.enrichment?.gate} />}
+                {location.enrichment?.amenities && <AmenityContextBlock ctx={location.enrichment?.amenities} />}
               </div>
             </section>
           )}
@@ -705,11 +705,11 @@ function ViewDetailsPopup({
         {/* One timestamp row, in the footer where it belongs */}
         <div className="px-6 py-3 border-t border-[#0e1c36]/10 bg-white flex items-center justify-between gap-3">
           <p className="text-[10px] font-mono uppercase tracking-wide text-[#9AA3AF]">
-            <span title={location.createdAt}>Created {formatWhen(location.createdAt)}</span>
+            <span title={location.created_at}>Created {formatWhen(location.created_at)}</span>
             {' · '}
-            <span title={location.updatedAt}>Updated {formatWhen(location.updatedAt)}</span>
-            {location.enrichedAt && <span title={location.enrichedAt}> · Enriched {formatWhen(location.enrichedAt)}</span>}
-            {location.mergedInto && ` · Merged into ${location.mergedInto}`}
+            <span title={location.updated_at}>Updated {formatWhen(location.updated_at)}</span>
+            {location.enriched_at && <span title={location.enriched_at}> · Enriched {formatWhen(location.enriched_at)}</span>}
+            {location.merged_into_lot_id && ` · Merged into ${location.merged_into_lot_id}`}
           </p>
           <div className="flex gap-2">
             <button
@@ -741,13 +741,13 @@ function ViewDetailsPopup({
 // row can scroll/highlight the matching input (the checklist is the form's
 // table of contents).
 export const CHECKLIST_FIELD_TO_INPUT_ID: Record<string, string> = {
-  capacity: 'edit-stallsTotal',
-  open247: 'edit-access247',
-  fenced: 'edit-fenced',
-  lit: 'edit-lit',
-  ingressEgress: 'edit-ingressEgress',
-  clearance: 'edit-clearanceText',
-  ratesHours: 'edit-priceText',
+  capacity: 'edit-stall_count',
+  open247: 'edit-is_24_7',
+  is_fenced: 'edit-is_fenced',
+  is_lit: 'edit-is_lit',
+  ingress_egress: 'edit-ingress_egress',
+  clearance: 'edit-clearance_text',
+  ratesHours: 'edit-price_text',
 };
 
 // Three-state segmented control for tri-state boolean fields. Untouched =
@@ -834,23 +834,23 @@ export function EditPopup({
 }) {
   const [name, setName] = useState(location.name ?? '');
   const [address, setAddress] = useState(location.address ?? '');
-  const [priceText, setPriceText] = useState(location.priceText ?? '');
-  const [hoursText, setHoursText] = useState(location.hoursText ?? '');
+  const [price_text, setPriceText] = useState(location.price_text ?? '');
+  const [hours_text, setHoursText] = useState(location.hours_text ?? '');
   const [notes, setNotes] = useState(location.notes ?? '');
-  const [clearanceText, setClearanceText] = useState(location.clearanceText ?? '');
-  const [access247, setAccess247] = useState<boolean | null | undefined>(location.access247);
-  const [fenced, setFenced] = useState<boolean | null | undefined>(location.fenced);
-  const [lit, setLit] = useState<boolean | null | undefined>(location.lit);
-  const [ingressEgress, setIngressEgress] = useState(location.ingressEgress ?? '');
-  // ponytail: stallsTotal held as raw input text so an empty field means
+  const [clearance_text, setClearanceText] = useState(location.clearance_text ?? '');
+  const [is_24_7, setAccess247] = useState<boolean | null | undefined>(location.is_24_7);
+  const [is_fenced, setFenced] = useState<boolean | null | undefined>(location.is_fenced);
+  const [is_lit, setLit] = useState<boolean | null | undefined>(location.is_lit);
+  const [ingress_egress, setIngressEgress] = useState(location.ingress_egress ?? '');
+  // ponytail: stall_count held as raw input text so an empty field means
   // "untouched"; parsed (invalid -> untouched) at save time.
-  const [stallsTotalRaw, setStallsTotalRaw] = useState(
-    location.stallsTotal === undefined || location.stallsTotal === null ? '' : String(location.stallsTotal),
+  const [stall_countRaw, setStallsTotalRaw] = useState(
+    location.stall_count === undefined || location.stall_count === null ? '' : String(location.stall_count),
   );
-  const [surfaceType, setSurfaceType] = useState<'surface' | 'structured' | null | undefined>(
-    location.surfaceType ?? undefined,
+  const [surface_type, setSurfaceType] = useState<'surface' | 'structured' | null | undefined>(
+    location.surface_type ?? undefined,
   );
-  // Raw text like stallsTotalRaw above — empty means "untouched", parsed at
+  // Raw text like stall_countRaw above — empty means "untouched", parsed at
   // save time. mapsLink is scratch space only, never saved itself; parsing
   // it just fills the two coordinate fields for review before Save.
   const [latRaw, setLatRaw] = useState(location.lat === undefined ? '' : String(location.lat));
@@ -887,18 +887,18 @@ export function EditPopup({
   const isDirty =
     name !== (location.name ?? '') ||
     address !== (location.address ?? '') ||
-    priceText !== (location.priceText ?? '') ||
-    hoursText !== (location.hoursText ?? '') ||
+    price_text !== (location.price_text ?? '') ||
+    hours_text !== (location.hours_text ?? '') ||
     notes !== (location.notes ?? '') ||
-    clearanceText !== (location.clearanceText ?? '') ||
-    ingressEgress !== (location.ingressEgress ?? '') ||
+    clearance_text !== (location.clearance_text ?? '') ||
+    ingress_egress !== (location.ingress_egress ?? '') ||
     latRaw !== (location.lat === undefined ? '' : String(location.lat)) ||
     lngRaw !== (location.lng === undefined ? '' : String(location.lng)) ||
-    stallsTotalRaw !== (location.stallsTotal === undefined || location.stallsTotal === null ? '' : String(location.stallsTotal)) ||
-    access247 !== location.access247 ||
-    fenced !== location.fenced ||
-    lit !== location.lit ||
-    surfaceType !== (location.surfaceType ?? undefined);
+    stall_countRaw !== (location.stall_count === undefined || location.stall_count === null ? '' : String(location.stall_count)) ||
+    is_24_7 !== location.is_24_7 ||
+    is_fenced !== location.is_fenced ||
+    is_lit !== location.is_lit ||
+    surface_type !== (location.surface_type ?? undefined);
 
   // Escape / X / overlay-click all route through here — a dirty form
   // confirms before dropping edits on the floor.
@@ -908,27 +908,27 @@ export function EditPopup({
   }
 
   function buildEdits(): SourcedLocationEdits {
-    const stalls = stallsTotalRaw.trim() === '' ? undefined : Number(stallsTotalRaw);
+    const stalls = stall_countRaw.trim() === '' ? undefined : Number(stall_countRaw);
     const lat = latRaw.trim() === '' ? undefined : Number(latRaw);
     const lng = lngRaw.trim() === '' ? undefined : Number(lngRaw);
     return {
       name: name.trim() || undefined,
       address: address.trim() || undefined,
-      priceText: priceText.trim() || undefined,
-      hoursText: hoursText.trim() || undefined,
+      price_text: price_text.trim() || undefined,
+      hours_text: hours_text.trim() || undefined,
       notes: notes.trim() || undefined,
       // ponytail: text fields can't be cleared from here (same as
       // name/address above) — only overwritten with a new value.
-      clearanceText: clearanceText.trim() || undefined,
-      ingressEgress: ingressEgress.trim() || undefined,
+      clearance_text: clearance_text.trim() || undefined,
+      ingress_egress: ingress_egress.trim() || undefined,
       // Only send a field when it actually changed vs the record —
       // otherwise saving would re-stamp scraped values as verified.
-      ...(access247 !== location.access247 ? { access247 } : {}),
-      ...(fenced !== location.fenced ? { fenced } : {}),
-      ...(lit !== location.lit ? { lit } : {}),
-      ...(surfaceType !== (location.surfaceType ?? undefined) ? { surfaceType } : {}),
-      ...(stalls !== undefined && stalls !== location.stallsTotal && !Number.isNaN(stalls)
-        ? { stallsTotal: stalls }
+      ...(is_24_7 !== location.is_24_7 ? { is_24_7 } : {}),
+      ...(is_fenced !== location.is_fenced ? { is_fenced } : {}),
+      ...(is_lit !== location.is_lit ? { is_lit } : {}),
+      ...(surface_type !== (location.surface_type ?? undefined) ? { surface_type } : {}),
+      ...(stalls !== undefined && stalls !== location.stall_count && !Number.isNaN(stalls)
+        ? { stall_count: stalls }
         : {}),
       ...(lat !== undefined && lat !== location.lat && !Number.isNaN(lat) ? { lat } : {}),
       ...(lng !== undefined && lng !== location.lng && !Number.isNaN(lng) ? { lng } : {}),
@@ -957,7 +957,7 @@ export function EditPopup({
               <DialogTitle className="text-base">Edit sourced location</DialogTitle>
               <StatusBadge status={location.status} />
               <span className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border bg-[#0e1c36]/5 border-[#0e1c36]/15 text-[#0e1c36]/60">
-                {location.source}
+                {location.source_name}
               </span>
             </div>
             <DialogDescription className="text-xs">
@@ -1046,20 +1046,20 @@ export function EditPopup({
               <PopupSectionLabel>Commercial</PopupSectionLabel>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="edit-priceText" className={labelCls}>Price</label>
-                  <input id="edit-priceText" value={priceText} onChange={(e) => setPriceText(e.target.value)} className={inputCls} />
+                  <label htmlFor="edit-price_text" className={labelCls}>Price</label>
+                  <input id="edit-price_text" value={price_text} onChange={(e) => setPriceText(e.target.value)} className={inputCls} />
                 </div>
                 <div>
-                  <label htmlFor="edit-hoursText" className={labelCls}>Hours</label>
-                  <input id="edit-hoursText" value={hoursText} onChange={(e) => setHoursText(e.target.value)} className={inputCls} />
+                  <label htmlFor="edit-hours_text" className={labelCls}>Hours</label>
+                  <input id="edit-hours_text" value={hours_text} onChange={(e) => setHoursText(e.target.value)} className={inputCls} />
                 </div>
                 <div>
-                  <label htmlFor="edit-stallsTotal" className={labelCls}>Stall count</label>
+                  <label htmlFor="edit-stall_count" className={labelCls}>Stall count</label>
                   <input
-                    id="edit-stallsTotal"
+                    id="edit-stall_count"
                     type="number"
                     min={0}
-                    value={stallsTotalRaw}
+                    value={stall_countRaw}
                     onChange={(e) => setStallsTotalRaw(e.target.value)}
                     className={inputCls}
                   />
@@ -1068,10 +1068,10 @@ export function EditPopup({
                   </p>
                 </div>
                 <div>
-                  <label htmlFor="edit-clearanceText" className={labelCls}>Clearance</label>
+                  <label htmlFor="edit-clearance_text" className={labelCls}>Clearance</label>
                   <input
-                    id="edit-clearanceText"
-                    value={clearanceText}
+                    id="edit-clearance_text"
+                    value={clearance_text}
                     onChange={(e) => setClearanceText(e.target.value)}
                     placeholder={'e.g. 6\'8"'}
                     className={inputCls}
@@ -1079,10 +1079,10 @@ export function EditPopup({
                 </div>
               </div>
               <div>
-                <label htmlFor="edit-ingressEgress" className={labelCls}>Ingress / egress</label>
+                <label htmlFor="edit-ingress_egress" className={labelCls}>Ingress / egress</label>
                 <input
-                  id="edit-ingressEgress"
-                  value={ingressEgress}
+                  id="edit-ingress_egress"
+                  value={ingress_egress}
                   onChange={(e) => setIngressEgress(e.target.value)}
                   placeholder="e.g. one-way in, separate exit on SE 2nd St"
                   className={inputCls}
@@ -1106,7 +1106,7 @@ export function EditPopup({
                       onClick={() => setSurfaceType(o.v)}
                       className={cn(
                         'px-3 py-1.5 text-xs rounded border transition-colors',
-                        surfaceType === o.v && o.v !== undefined
+                        surface_type === o.v && o.v !== undefined
                           ? 'bg-[#afcbff] text-[#0e1c36] border-[#0e1c36]/40 font-semibold'
                           : 'border-[#0e1c36]/20 text-[#0e1c36]/70 hover:border-[#0e1c36]/50',
                       )}
@@ -1117,9 +1117,9 @@ export function EditPopup({
                 </div>
               </div>
               <div className="grid sm:grid-cols-3 gap-3">
-                <TriStateControl id="edit-access247" label="24/7 access" value={access247} onChange={setAccess247} />
-                <TriStateControl id="edit-fenced" label="Fenced" value={fenced} onChange={setFenced} />
-                <TriStateControl id="edit-lit" label="Lit" value={lit} onChange={setLit} />
+                <TriStateControl id="edit-is_24_7" label="24/7 access" value={is_24_7} onChange={setAccess247} />
+                <TriStateControl id="edit-is_fenced" label="Fenced" value={is_fenced} onChange={setFenced} />
+                <TriStateControl id="edit-is_lit" label="Lit" value={is_lit} onChange={setLit} />
               </div>
             </div>
 
@@ -1252,7 +1252,7 @@ export function SourcingReviewTable({
       header: 'Name',
       cell: ({ row }) => (
         <a
-          href={row.original.sourceUrl}
+          href={row.original.source_url}
           target="_blank"
           rel="noreferrer"
           onClick={(e) => e.stopPropagation()}
@@ -1264,7 +1264,7 @@ export function SourcingReviewTable({
         </a>
       ),
     }),
-    columnHelper.accessor('source', {
+    columnHelper.accessor('source_name', {
       header: 'Source',
       cell: ({ getValue }) => (
         <span className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border bg-[#0e1c36]/5 border-[#0e1c36]/15 text-[#0e1c36]/60">
@@ -1278,9 +1278,9 @@ export function SourcingReviewTable({
       cell: ({ row }) => (
         <span
           className="text-xs text-[#0e1c36]/60 max-w-[10rem] truncate block"
-          title={`${row.original.priceText || '—'} / ${row.original.hoursText || '—'}`}
+          title={`${row.original.price_text || '—'} / ${row.original.hours_text || '—'}`}
         >
-          {row.original.priceText || '—'} / {row.original.hoursText || '—'}
+          {row.original.price_text || '—'} / {row.original.hours_text || '—'}
         </span>
       ),
     }),
@@ -1342,9 +1342,9 @@ export function SourcingReviewTable({
         return (
           <span
             className="text-[10px] font-mono uppercase tracking-wide px-2 py-0.5 rounded-full border whitespace-nowrap bg-[#afcbff]/20 border-[#1a3a7a]/20 text-[#1a3a7a]"
-            title={`State: ${OUTREACH_STATE_LABELS[o.outreachState]} · BDR: ${o.bdrOwner || '—'}`}
+            title={`State: ${OUTREACH_STATE_LABELS[o.status]} · BDR: ${o.assigned_to || '—'}`}
           >
-            {OUTREACH_STATE_LABELS[o.outreachState]}
+            {OUTREACH_STATE_LABELS[o.status]}
           </span>
         );
       },
@@ -1380,7 +1380,7 @@ export function SourcingReviewTable({
   // How many filter dimensions are off-default right now — shown as a count
   // on the Filters trigger so applied state stays visible while collapsed.
   const activeFilterCount = (
-    ['search', 'locality', 'status', 'source', 'flood', 'residential', 'addedBy', 'odd', 'hasCoords'] as const
+    ['search', 'locality', 'status', 'source', 'flood', 'residential', 'added_by', 'odd', 'hasCoords'] as const
   ).filter(
     (k) =>
       k === 'search'

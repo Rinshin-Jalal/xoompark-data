@@ -90,7 +90,7 @@ const ACCESS_MAP: Record<string, ChargingAccessCode> = {
 
 const ALWAYS_OPEN_MARKERS = ['24 hours daily', '24/7', '24 hours', 'daily 24'];
 
-function is247(accessDaysTime: string | undefined): boolean {
+function is_24_7(accessDaysTime: string | undefined): boolean {
   if (!accessDaysTime) return false;
   const text = accessDaysTime.toLowerCase();
   return ALWAYS_OPEN_MARKERS.some((m) => text.includes(m));
@@ -134,30 +134,30 @@ function normalizeStation(raw: AfdcRawStation): ChargingSite | null {
   const statusRaw = (raw.status_code ?? '').toUpperCase();
 
   return {
-    afdcId: raw.id,
+    source_id: raw.id,
     name: raw.station_name || 'Unnamed station',
-    network: raw.ev_network || null,
-    streetAddress: raw.street_address || null,
+    network_name: raw.ev_network || null,
+    street_address: raw.street_address || null,
     city: raw.city || null,
     state: raw.state || null,
     zip: raw.zip || null,
     lat: raw.latitude,
     lng: raw.longitude,
-    dcFastPorts: raw.ev_dc_fast_num ?? 0,
-    level2Ports: raw.ev_level2_evse_num ?? 0,
+    dc_fast_port_count: raw.ev_dc_fast_num ?? 0,
+    level_2_ports: raw.ev_level2_evse_num ?? 0,
     connectors,
     // Absent is null, never 0 — 0 would read as a dead station.
-    powerKw: power,
-    maxPowerKw: power.length ? power[0] : null,
+    power_kw: power,
+    max_power_kw: power.length ? power[0] : null,
     access: ACCESS_MAP[accessRaw] ?? 'unknown',
-    accessHours: raw.access_days_time ?? null,
-    is247: is247(raw.access_days_time),
+    access_hours: raw.access_days_time ?? null,
+    is_24_7: is_24_7(raw.access_days_time),
     status: STATUS_MAP[statusRaw] ?? 'unknown',
     pricing: raw.ev_pricing || null,
-    facilityType: raw.facility_type || null,
-    ownerType: raw.owner_type_code || null,
+    facility_type: raw.facility_type || null,
+    owner_type: raw.owner_type_code || null,
     updatedAt: raw.updated_at || null,
-    distanceMiles: typeof raw.distance === 'number' ? raw.distance : null,
+    distance_miles: typeof raw.distance === 'number' ? raw.distance : null,
   };
 }
 
@@ -176,7 +176,7 @@ function normalizeStation(raw: AfdcRawStation): ChargingSite | null {
  * them looks like a fast-charging site worth calling.
  */
 export function isDcFastSite(site: ChargingSite): boolean {
-  return site.dcFastPorts > 0;
+  return site.dc_fast_port_count > 0;
 }
 
 export async function searchChargingSites({
@@ -229,5 +229,5 @@ export async function searchChargingSites({
   return stations
     .map(normalizeStation)
     .filter((s): s is ChargingSite => s !== null)
-    .filter((s) => (includeLevel2 ? s.dcFastPorts > 0 || s.level2Ports > 0 : isDcFastSite(s)));
+    .filter((s) => (includeLevel2 ? s.dc_fast_port_count > 0 || s.level_2_ports > 0 : isDcFastSite(s)));
 }

@@ -24,15 +24,15 @@ function makeLocation(overrides: Partial<SourcedParkingLocation> = {}): SourcedP
     // Downtown Miami — inside the Waymo ODD, so the hard ODD filter keeps it.
     lat: 25.7617,
     lng: -80.1917,
-    source: 'test',
-    sourceUrl: 'https://example.com',
+    source_name: 'test',
+    source_url: 'https://example.com',
     evidence: [],
-    fieldProvenance: {},
-    capturedBy: 'admin',
+    field_sources: {},
+    captured_by: 'admin',
     status: 'saved',
-    rawInput: null,
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
+    raw_input: null,
+    created_at: '2026-01-01T00:00:00Z',
+    updated_at: '2026-01-01T00:00:00Z',
     ...overrides,
   } as SourcedParkingLocation;
 }
@@ -51,61 +51,61 @@ test('sites outside the Waymo ODD are always dropped', () => {
 // --- wide-net rule ------------------------------------------------------------
 
 test('no query returns all sites including unknown-data ones', () => {
-  const sites = [makeLocation(), makeLocation({ fenced: undefined, stallsTotal: undefined })];
+  const sites = [makeLocation(), makeLocation({ is_fenced: undefined, stall_count: undefined })];
   assert.equal(filterFleetSites(sites, {}).length, 2);
 });
 
-test('fenced=true excludes unknowns but bare query keeps them', () => {
-  const unknown = makeLocation({ fenced: undefined });
-  const fenced = makeLocation({ fenced: true });
-  assert.equal(filterFleetSites([unknown, fenced], { fenced: true }).length, 1);
-  assert.equal(filterFleetSites([unknown, fenced], {}).length, 2);
+test('is_fenced=true excludes unknowns but bare query keeps them', () => {
+  const unknown = makeLocation({ is_fenced: undefined });
+  const is_fenced = makeLocation({ is_fenced: true });
+  assert.equal(filterFleetSites([unknown, is_fenced], { is_fenced: true }).length, 1);
+  assert.equal(filterFleetSites([unknown, is_fenced], {}).length, 2);
 });
 
-test('fenced=false requires a confirmed fail, not unknown', () => {
-  const unknown = makeLocation({ fenced: undefined });
-  const unfenced = makeLocation({ fenced: false });
-  const out = filterFleetSites([unknown, unfenced], { fenced: false });
+test('is_fenced=false requires a confirmed fail, not unknown', () => {
+  const unknown = makeLocation({ is_fenced: undefined });
+  const unfenced = makeLocation({ is_fenced: false });
+  const out = filterFleetSites([unknown, unfenced], { is_fenced: false });
   assert.equal(out.length, 1);
-  assert.equal(out[0].fenced, false);
+  assert.equal(out[0].is_fenced, false);
 });
 
 test('null (checked, could not tell) behaves like unknown for filters', () => {
-  const nullLit = makeLocation({ lit: null });
+  const nullLit = makeLocation({ is_lit: null });
   assert.equal(filterFleetSites([nullLit], {}).length, 1); // wide net keeps it
-  assert.equal(filterFleetSites([nullLit], { lit: true }).length, 0); // explicit ask drops it
-  assert.equal(filterFleetSites([nullLit], { lit: false }).length, 0);
+  assert.equal(filterFleetSites([nullLit], { is_lit: true }).length, 0); // explicit ask drops it
+  assert.equal(filterFleetSites([nullLit], { is_lit: false }).length, 0);
 });
 
 test('minStalls drops unknown stall counts and below-minimum sites', () => {
-  const unknown = makeLocation({ stallsTotal: undefined });
-  const nullStalls = makeLocation({ stallsTotal: null });
-  const small = makeLocation({ stallsTotal: 30 });
-  const big = makeLocation({ stallsTotal: 80 });
+  const unknown = makeLocation({ stall_count: undefined });
+  const nullStalls = makeLocation({ stall_count: null });
+  const small = makeLocation({ stall_count: 30 });
+  const big = makeLocation({ stall_count: 80 });
   const out = filterFleetSites([unknown, nullStalls, small, big], { minStalls: 50 });
   assert.equal(out.length, 1);
   assert.equal(out[0].id, big.id);
 });
 
 test('minStalls=50 boundary: exactly 50 passes', () => {
-  assert.equal(filterFleetSites([makeLocation({ stallsTotal: 50 })], { minStalls: 50 }).length, 1);
+  assert.equal(filterFleetSites([makeLocation({ stall_count: 50 })], { minStalls: 50 }).length, 1);
 });
 
-test('surfaceType and gateType match exactly, unknown excluded', () => {
-  const surface = makeLocation({ surfaceType: 'surface' });
-  const structured = makeLocation({ surfaceType: 'structured' });
-  const unknown = makeLocation({ surfaceType: null });
-  assert.equal(filterFleetSites([surface, structured, unknown], { surfaceType: 'surface' }).length, 1);
-  const lpr = makeLocation({ gateType: 'lpr' });
-  const manual = makeLocation({ gateType: 'manual' });
-  assert.equal(filterFleetSites([lpr, manual], { gateType: 'lpr' })[0].id, lpr.id);
+test('surface_type and gate_type match exactly, unknown excluded', () => {
+  const surface = makeLocation({ surface_type: 'surface' });
+  const structured = makeLocation({ surface_type: 'structured' });
+  const unknown = makeLocation({ surface_type: null });
+  assert.equal(filterFleetSites([surface, structured, unknown], { surface_type: 'surface' }).length, 1);
+  const lpr = makeLocation({ gate_type: 'lpr' });
+  const manual = makeLocation({ gate_type: 'manual' });
+  assert.equal(filterFleetSites([lpr, manual], { gate_type: 'lpr' })[0].id, lpr.id);
 });
 
 test('all constraints compose (AND semantics)', () => {
-  const match = makeLocation({ fenced: true, lit: true, access247: true, stallsTotal: 100, surfaceType: 'surface', gateType: 'lpr' });
-  const nearMiss = makeLocation({ fenced: true, lit: true, access247: true, stallsTotal: 100, surfaceType: 'surface', gateType: 'manual' });
+  const match = makeLocation({ is_fenced: true, is_lit: true, is_24_7: true, stall_count: 100, surface_type: 'surface', gate_type: 'lpr' });
+  const nearMiss = makeLocation({ is_fenced: true, is_lit: true, is_24_7: true, stall_count: 100, surface_type: 'surface', gate_type: 'manual' });
   const out = filterFleetSites([match, nearMiss], {
-    fenced: true, lit: true, access247: true, minStalls: 50, surfaceType: 'surface', gateType: 'lpr',
+    is_fenced: true, is_lit: true, is_24_7: true, minStalls: 50, surface_type: 'surface', gate_type: 'lpr',
   });
   assert.equal(out.length, 1);
   assert.equal(out[0].id, match.id);
@@ -158,9 +158,9 @@ test('limit slices results', () => {
 // --- summary projection -------------------------------------------------------
 
 test('summary carries all 9 hard-filter tri-states and never invents a fail', () => {
-  const loc = makeLocation({ fenced: true, stallsTotal: 120 });
+  const loc = makeLocation({ is_fenced: true, stall_count: 120 });
   const s = toFleetSiteSummary(loc);
-  assert.equal(s.hardFilters.fenced, 'pass');
+  assert.equal(s.hardFilters.is_fenced, 'pass');
   assert.equal(s.hardFilters.fiftyPlusStalls, 'pass');
   assert.equal(s.hardFilters.cellCoverage, 'unknown');
   assert.equal(s.hardFilters.dedicatedStalls, 'unknown');
@@ -177,11 +177,11 @@ test('summary reports confirmed hard fails (flood zone, residential adjacency)',
 });
 
 test('summary normalizes undefined soft fields to null, keeps falsy values', () => {
-  const s = toFleetSiteSummary(makeLocation({ stallsTotal: 0, surfaceType: undefined, gateType: undefined }));
-  assert.equal(s.stallsTotal, 0); // 0 is a real value, not unknown
-  assert.equal(s.surfaceType, null);
-  assert.equal(s.gateType, null);
-  assert.equal(s.access247, null);
+  const s = toFleetSiteSummary(makeLocation({ stall_count: 0, surface_type: undefined, gate_type: undefined }));
+  assert.equal(s.stall_count, 0); // 0 is a real value, not unknown
+  assert.equal(s.surface_type, null);
+  assert.equal(s.gate_type, null);
+  assert.equal(s.is_24_7, null);
 });
 
 test('summary distanceM only present with a center', () => {
@@ -195,30 +195,30 @@ test('summary distanceM only present with a center', () => {
 test('REGRESSION: bare query string constrains nothing except managed (null vs undefined)', () => {
   // The original bug: q.get() returns null for absent params, and null
   // slipped into FleetSiteQuery where undefined means "no constraint" —
-  // a bare GET dropped every site with a known gateType.
+  // a bare GET dropped every site with a known gate_type.
   const parsed = parseFleetQuery(new URLSearchParams(''));
   assert.equal(parsed.ok, true);
   if (!parsed.ok) return;
   const { query, status } = parsed.value;
-  assert.equal(query.gateType, undefined);
-  assert.equal(query.surfaceType, undefined);
+  assert.equal(query.gate_type, undefined);
+  assert.equal(query.surface_type, undefined);
   assert.equal(query.minStalls, undefined);
   assert.equal(query.radiusM, undefined);
   assert.equal(query.center, undefined);
-  assert.equal(query.fenced, undefined);
-  assert.equal(query.access247, undefined);
-  assert.equal(query.lit, undefined);
+  assert.equal(query.is_fenced, undefined);
+  assert.equal(query.is_24_7, undefined);
+  assert.equal(query.is_lit, undefined);
   assert.equal(query.limit, 200); // default
   assert.equal(query.managed, true); // the ONE default-on filter (commercial requirement)
   assert.equal(status, undefined);
-  // And through the filter: a site with a known gateType survives a bare query.
-  const lpr = makeLocation({ gateType: 'lpr', source: 'laz', name: 'Managed' });
+  // And through the filter: a site with a known gate_type survives a bare query.
+  const lpr = makeLocation({ gate_type: 'lpr', source_name: 'laz', name: 'Managed' });
   assert.equal(filterFleetSites([lpr], query).length, 1);
 });
 
 test('parse: happy path with every param', () => {
   const sp = new URLSearchParams(
-    'lat=25.76&lng=-80.19&radiusM=1000&minStalls=50&surfaceType=surface&gateType=lpr&access247=true&fenced=false&lit=true&status=saved&limit=10',
+    'lat=25.76&lng=-80.19&radiusM=1000&minStalls=50&surface_type=surface&gate_type=lpr&is_24_7=true&is_fenced=false&is_lit=true&status=saved&limit=10',
   );
   const parsed = parseFleetQuery(sp);
   assert.equal(parsed.ok, true);
@@ -227,17 +227,17 @@ test('parse: happy path with every param', () => {
   assert.deepEqual(query.center, { lat: 25.76, lng: -80.19 });
   assert.equal(query.radiusM, 1000);
   assert.equal(query.minStalls, 50);
-  assert.equal(query.surfaceType, 'surface');
-  assert.equal(query.gateType, 'lpr');
-  assert.equal(query.access247, true);
-  assert.equal(query.fenced, false);
-  assert.equal(query.lit, true);
+  assert.equal(query.surface_type, 'surface');
+  assert.equal(query.gate_type, 'lpr');
+  assert.equal(query.is_24_7, true);
+  assert.equal(query.is_fenced, false);
+  assert.equal(query.is_lit, true);
   assert.equal(query.limit, 10);
   assert.equal(status, 'saved');
 });
 
 test('parse: empty-string params are rejected, not silently ignored', () => {
-  for (const bad of ['lat=', 'lng=', 'radiusM=', 'minStalls=', 'limit=', 'surfaceType=', 'gateType=', 'status=', 'fenced=']) {
+  for (const bad of ['lat=', 'lng=', 'radiusM=', 'minStalls=', 'limit=', 'surface_type=', 'gate_type=', 'status=', 'is_fenced=']) {
     const parsed = parseFleetQuery(new URLSearchParams(bad));
     assert.equal(parsed.ok, false, `expected error for ${bad}`);
   }
@@ -249,9 +249,9 @@ test('parse: rejects bad values for every param', () => {
     'lat=25.76', 'lng=-80.19', // lone lat / lone lng
     'radiusM=0', 'radiusM=-5', 'radiusM=50001', 'radiusM=abc',
     'minStalls=-1', 'minStalls=abc',
-    'surfaceType=gravel', 'gateType=army', 'status=archived',
+    'surface_type=gravel', 'gate_type=army', 'status=archived',
     'limit=0', 'limit=1001', 'limit=abc',
-    'fenced=maybe', 'access247=yes', 'lit=1',
+    'is_fenced=maybe', 'is_24_7=yes', 'is_lit=1',
   ];
   for (const c of cases) {
     const parsed = parseFleetQuery(new URLSearchParams(c));
@@ -307,7 +307,7 @@ test('FUZZ: 5000 random garbage query strings never throw', () => {
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
-  const keys = ['lat', 'lng', 'radiusM', 'minStalls', 'surfaceType', 'gateType', 'access247', 'fenced', 'lit', 'status', 'limit', 'odd', 'garbage', '', '🎉'];
+  const keys = ['lat', 'lng', 'radiusM', 'minStalls', 'surface_type', 'gate_type', 'is_24_7', 'is_fenced', 'is_lit', 'status', 'limit', 'odd', 'garbage', '', '🎉'];
   const values = ['', ' ', 'abc', '0', '-1', '1e999', 'Infinity', 'NaN', '0x10', '1e2', '25.76', '-80.19', 'true', 'false', 'TRUE', 'surface', 'lpr', 'saved', '50000', '50001', '1000', '1001', '%20', 'a=b', '🎉', null, undefined, {}, []];
   for (let i = 0; i < 5000; i++) {
     const parts: string[] = [];
@@ -329,7 +329,7 @@ test('FUZZ: 5000 random garbage query strings never throw', () => {
 });
 
 test('FUZZ: valid-ish inputs that parse ok never produce NaN in the query', () => {
-  const samples = ['lat=25.76&lng=-80.19', 'minStalls=0', 'radiusM=50000', 'limit=1000', 'status=saved', 'fenced=true&lit=false'];
+  const samples = ['lat=25.76&lng=-80.19', 'minStalls=0', 'radiusM=50000', 'limit=1000', 'status=saved', 'is_fenced=true&is_lit=false'];
   for (const qs of samples) {
     const r = parseFleetQuery(new URLSearchParams(qs));
     assert.equal(r.ok, true, qs);
@@ -345,30 +345,30 @@ test('FUZZ: valid-ish inputs that parse ok never produce NaN in the query', () =
 
 test('detail never exposes internal workflow fields', () => {
   const loc = makeLocation({
-    rawInput: { secret: 'scrape blob' },
-    claimedBy: 'internal-bdr',
-    addedBy: 'internal-admin',
-    fieldProvenance: { fenced: 'verified' },
-    notes: 'conflict:priceText:$5|$6',
-    evidence: [{ source: 'spothero', url: 'https://example.com', seenAt: '2026-01-01T00:00:00Z' }],
+    raw_input: { secret: 'scrape blob' },
+    claimed_by: 'internal-bdr',
+    added_by: 'internal-admin',
+    field_sources: { is_fenced: 'verified' },
+    notes: 'conflict:price_text:$5|$6',
+    evidence: [{ source_name: 'spothero', url: 'https://example.com', seen_at: '2026-01-01T00:00:00Z' }],
   });
   const d = toFleetSiteDetail(loc);
-  for (const banned of ['rawInput', 'claimedBy', 'addedBy', 'fieldProvenance', 'evidence']) {
+  for (const banned of ['raw_input', 'claimed_by', 'added_by', 'field_sources', 'evidence']) {
     assert.ok(!(banned in d), `${banned} leaked into fleet detail`);
   }
 });
 
 test('detail keeps the fields fleets need (geoContext, hours, ingress)', () => {
   const loc = makeLocation({
-    hoursText: '24/7',
-    ingressEgress: 'separate one-way',
+    hours_text: '24/7',
+    ingress_egress: 'separate one-way',
     geoContext: { floodHazardArea: false, residentialAdjacent: false, checkedAt: '2026-01-01T00:00:00Z' },
   });
   const d = toFleetSiteDetail(loc);
-  assert.equal(d.hoursText, '24/7');
-  assert.equal(d.ingressEgress, 'separate one-way');
+  assert.equal(d.hours_text, '24/7');
+  assert.equal(d.ingress_egress, 'separate one-way');
   assert.ok(d.geoContext && typeof d.geoContext === 'object');
-  assert.equal((d.hardFilters as Record<string, string>).fenced, 'unknown'); // summary projection present
+  assert.equal((d.hardFilters as Record<string, string>).is_fenced, 'unknown'); // summary projection present
 });
 
 test('detail: a hypothetical new internal field cannot leak by default', () => {
@@ -412,22 +412,22 @@ test('FUZZ: filterFleetSites invariants hold under random locations x queries', 
     const locs: SourcedParkingLocation[] = Array.from({ length: 10 }, () => makeLocation({
       lat: pick([25.7617, 25.7717, 40.7128, undefined]),
       lng: pick([-80.1917, -80.2017, -74.006, undefined]),
-      fenced: pick([true, false, null, undefined]),
-      lit: pick([true, false, null, undefined]),
-      access247: pick([true, false, null, undefined]),
-      stallsTotal: pick([0, 30, 50, 120, null, undefined]),
-      surfaceType: pick(['surface', 'structured', null, undefined]),
-      gateType: pick(['lpr', 'manual', 'gateless', null, undefined]),
+      is_fenced: pick([true, false, null, undefined]),
+      is_lit: pick([true, false, null, undefined]),
+      is_24_7: pick([true, false, null, undefined]),
+      stall_count: pick([0, 30, 50, 120, null, undefined]),
+      surface_type: pick(['surface', 'structured', null, undefined]),
+      gate_type: pick(['lpr', 'manual', 'gateless', null, undefined]),
     }));
     const query = {
       center: rand() < 0.5 ? { lat: 25.7617, lng: -80.1917 } : undefined,
       radiusM: pick([500, 5000, 50000]),
       minStalls: pick([0, 50, 100]),
-      surfaceType: pick<'surface' | 'structured' | undefined>(['surface', 'structured', undefined]),
-      gateType: pick<'lpr' | 'manual' | undefined>(['lpr', 'manual', undefined]),
-      fenced: pick([true, false, undefined]),
-      lit: pick([true, false, undefined]),
-      access247: pick([true, false, undefined]),
+      surface_type: pick<'surface' | 'structured' | undefined>(['surface', 'structured', undefined]),
+      gate_type: pick<'lpr' | 'manual' | undefined>(['lpr', 'manual', undefined]),
+      is_fenced: pick([true, false, undefined]),
+      is_lit: pick([true, false, undefined]),
+      is_24_7: pick([true, false, undefined]),
       limit: pick([1, 5, 100]),
     };
     const out = filterFleetSites(locs, query);
@@ -440,12 +440,12 @@ test('FUZZ: filterFleetSites invariants hold under random locations x queries', 
     assert.ok(out.length <= (query.limit ?? Infinity), 'limit exceeded');
     // Invariant 4: every explicit constraint holds on every result.
     for (const o of out) {
-      if (query.fenced !== undefined) assert.equal(o.fenced, query.fenced);
-      if (query.lit !== undefined) assert.equal(o.lit, query.lit);
-      if (query.access247 !== undefined) assert.equal(o.access247, query.access247);
-      if (query.minStalls !== undefined) assert.ok(typeof o.stallsTotal === 'number' && o.stallsTotal >= query.minStalls);
-      if (query.surfaceType !== undefined) assert.equal(o.surfaceType, query.surfaceType);
-      if (query.gateType !== undefined) assert.equal(o.gateType, query.gateType);
+      if (query.is_fenced !== undefined) assert.equal(o.is_fenced, query.is_fenced);
+      if (query.is_lit !== undefined) assert.equal(o.is_lit, query.is_lit);
+      if (query.is_24_7 !== undefined) assert.equal(o.is_24_7, query.is_24_7);
+      if (query.minStalls !== undefined) assert.ok(typeof o.stall_count === 'number' && o.stall_count >= query.minStalls);
+      if (query.surface_type !== undefined) assert.equal(o.surface_type, query.surface_type);
+      if (query.gate_type !== undefined) assert.equal(o.gate_type, query.gate_type);
     }
   }
 });
@@ -453,31 +453,31 @@ test('FUZZ: filterFleetSites invariants hold under random locations x queries', 
 // --- operator management ------------------------------------------------------
 
 test('deriveOperator: source-based (laz/ipark scrapers are managed by definition)', () => {
-  assert.equal(deriveOperator({ source: 'laz', name: 'First Citizens Bank' }), 'LAZ');
-  assert.equal(deriveOperator({ source: 'ipark', name: 'Any Garage' }), 'InterPark');
+  assert.equal(deriveOperator({ source_name: 'laz', name: 'First Citizens Bank' }), 'LAZ');
+  assert.equal(deriveOperator({ source_name: 'ipark', name: 'Any Garage' }), 'InterPark');
 });
 
 test('deriveOperator: name-based brand matching from any source', () => {
-  assert.equal(deriveOperator({ source: 'spothero', name: 'LAZ Parking First Citizens Bank' }), 'LAZ');
-  assert.equal(deriveOperator({ source: 'spothero', name: 'InterPark 100 Brickell' }), 'InterPark');
-  assert.equal(deriveOperator({ source: 'manual', name: 'Ace Parking Downtown' }), 'Ace Parking');
-  assert.equal(deriveOperator({ source: 'manual', name: 'Platinum Parking Midtown' }), 'Platinum');
-  assert.equal(deriveOperator({ source: 'manual', name: 'Paradise Parking South Beach' }), 'Paradise');
-  assert.equal(deriveOperator({ source: 'manual', name: 'Reimagined PMC Lot 4' }), 'Reimagined PMC');
+  assert.equal(deriveOperator({ source_name: 'spothero', name: 'LAZ Parking First Citizens Bank' }), 'LAZ');
+  assert.equal(deriveOperator({ source_name: 'spothero', name: 'InterPark 100 Brickell' }), 'InterPark');
+  assert.equal(deriveOperator({ source_name: 'manual', name: 'Ace Parking Downtown' }), 'Ace Parking');
+  assert.equal(deriveOperator({ source_name: 'manual', name: 'Platinum Parking Midtown' }), 'Platinum');
+  assert.equal(deriveOperator({ source_name: 'manual', name: 'Paradise Parking South Beach' }), 'Paradise');
+  assert.equal(deriveOperator({ source_name: 'manual', name: 'Reimagined PMC Lot 4' }), 'Reimagined PMC');
 });
 
 test('deriveOperator: no false positives on lookalike names', () => {
-  assert.equal(deriveOperator({ source: 'spothero', name: 'Ace Hardware Plaza' }), null);
-  assert.equal(deriveOperator({ source: 'spothero', name: 'Knight Center Garage' }), null);
-  assert.equal(deriveOperator({ source: 'parkopedia', name: 'Brickell Bay Garage' }), null);
-  assert.equal(deriveOperator({ source: 'manual', name: 'Platinum Realty Garage' }), null); // no "park"
-  assert.equal(deriveOperator({ source: 'manual', name: 'Paradise Casino Valet' }), null);
+  assert.equal(deriveOperator({ source_name: 'spothero', name: 'Ace Hardware Plaza' }), null);
+  assert.equal(deriveOperator({ source_name: 'spothero', name: 'Knight Center Garage' }), null);
+  assert.equal(deriveOperator({ source_name: 'parkopedia', name: 'Brickell Bay Garage' }), null);
+  assert.equal(deriveOperator({ source_name: 'manual', name: 'Platinum Realty Garage' }), null); // no "park"
+  assert.equal(deriveOperator({ source_name: 'manual', name: 'Paradise Casino Valet' }), null);
 });
 
 test('managed filter: true keeps operator sites, false keeps unmanaged, undefined keeps all', () => {
-  const laz = makeLocation({ source: 'laz', name: 'First Citizens Bank' });
-  const spotheroLaz = makeLocation({ source: 'spothero', name: 'LAZ Parking Midtown' });
-  const unmanaged = makeLocation({ source: 'parkopedia', name: 'Knight Center Garage' });
+  const laz = makeLocation({ source_name: 'laz', name: 'First Citizens Bank' });
+  const spotheroLaz = makeLocation({ source_name: 'spothero', name: 'LAZ Parking Midtown' });
+  const unmanaged = makeLocation({ source_name: 'parkopedia', name: 'Knight Center Garage' });
   const all = [laz, spotheroLaz, unmanaged];
   assert.equal(filterFleetSites(all, { managed: true }).length, 2);
   assert.equal(filterFleetSites(all, { managed: false }).length, 1);
@@ -498,9 +498,9 @@ test('parse: managed defaults to true, any/true/false parse, junk rejected', () 
 });
 
 test('summary carries managedBy', () => {
-  const s = toFleetSiteSummary(makeLocation({ source: 'laz', name: 'Anything' }));
+  const s = toFleetSiteSummary(makeLocation({ source_name: 'laz', name: 'Anything' }));
   assert.equal(s.managedBy, 'LAZ');
-  const s2 = toFleetSiteSummary(makeLocation({ source: 'parkopedia', name: 'Knight Center Garage' }));
+  const s2 = toFleetSiteSummary(makeLocation({ source_name: 'parkopedia', name: 'Knight Center Garage' }));
   assert.equal(s2.managedBy, null);
 });
 

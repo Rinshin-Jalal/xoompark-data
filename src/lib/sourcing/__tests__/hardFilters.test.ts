@@ -23,15 +23,15 @@ function makeLocation(overrides: Partial<SourcedParkingLocation> = {}): SourcedP
   return {
     id: `loc-${seq}`,
     name: `Lot ${seq}`,
-    source: 'spothero',
-    sourceUrl: 'https://example.com',
+    source_name: 'spothero',
+    source_url: 'https://example.com',
     evidence: [],
-    fieldProvenance: {},
-    capturedBy: 'scraped',
+    field_sources: {},
+    captured_by: 'scraped',
     status: 'draft',
-    rawInput: null,
-    createdAt: '2026-08-23T00:00:00.000Z',
-    updatedAt: '2026-08-23T00:00:00.000Z',
+    raw_input: null,
+    created_at: '2026-08-23T00:00:00.000Z',
+    updated_at: '2026-08-23T00:00:00.000Z',
     ...overrides,
   };
 }
@@ -92,41 +92,41 @@ test('evaluateHardFilter: schema-less keys (e.g. dedicatedStalls) always unknown
   assert.equal(evaluateHardFilter(loc, 'open247').result, 'unknown');
 });
 
-// --- #34: schema-backed keys (open247/fenced/lit/fiftyPlusStalls/ingress) ---
+// --- #34: schema-backed keys (open247/is_fenced/is_lit/fiftyPlusStalls/ingress) ---
 
 test('evaluateHardFilter open247: tri-state map true/false/null/undefined -> pass/fail/unknown/unknown', () => {
-  assert.equal(evaluateHardFilter(makeLocation({ access247: true }), 'open247').result, 'pass');
-  assert.equal(evaluateHardFilter(makeLocation({ access247: false }), 'open247').result, 'fail');
-  assert.equal(evaluateHardFilter(makeLocation({ access247: null }), 'open247').result, 'unknown');
+  assert.equal(evaluateHardFilter(makeLocation({ is_24_7: true }), 'open247').result, 'pass');
+  assert.equal(evaluateHardFilter(makeLocation({ is_24_7: false }), 'open247').result, 'fail');
+  assert.equal(evaluateHardFilter(makeLocation({ is_24_7: null }), 'open247').result, 'unknown');
   assert.equal(evaluateHardFilter(makeLocation(), 'open247').result, 'unknown');
 });
 
-test('evaluateHardFilter fenced/lit: same tri-state map', () => {
-  assert.equal(evaluateHardFilter(makeLocation({ fenced: true }), 'fenced').result, 'pass');
-  assert.equal(evaluateHardFilter(makeLocation({ fenced: false }), 'fenced').result, 'fail');
-  assert.equal(evaluateHardFilter(makeLocation({ fenced: null }), 'fenced').result, 'unknown');
-  assert.equal(evaluateHardFilter(makeLocation({ lit: true }), 'lit').result, 'pass');
-  assert.equal(evaluateHardFilter(makeLocation({ lit: false }), 'lit').result, 'fail');
-  assert.equal(evaluateHardFilter(makeLocation(), 'lit').result, 'unknown');
+test('evaluateHardFilter is_fenced/is_lit: same tri-state map', () => {
+  assert.equal(evaluateHardFilter(makeLocation({ is_fenced: true }), 'is_fenced').result, 'pass');
+  assert.equal(evaluateHardFilter(makeLocation({ is_fenced: false }), 'is_fenced').result, 'fail');
+  assert.equal(evaluateHardFilter(makeLocation({ is_fenced: null }), 'is_fenced').result, 'unknown');
+  assert.equal(evaluateHardFilter(makeLocation({ is_lit: true }), 'is_lit').result, 'pass');
+  assert.equal(evaluateHardFilter(makeLocation({ is_lit: false }), 'is_lit').result, 'fail');
+  assert.equal(evaluateHardFilter(makeLocation(), 'is_lit').result, 'unknown');
 });
 
-test('evaluateHardFilter fiftyPlusStalls: stallsTotal >= 50 -> pass, < 50 -> fail, no number -> unknown', () => {
-  assert.equal(evaluateHardFilter(makeLocation({ stallsTotal: 62 }), 'fiftyPlusStalls').result, 'pass');
-  assert.equal(evaluateHardFilter(makeLocation({ stallsTotal: 12 }), 'fiftyPlusStalls').result, 'fail');
-  assert.equal(evaluateHardFilter(makeLocation({ stallsTotal: null }), 'fiftyPlusStalls').result, 'unknown');
+test('evaluateHardFilter fiftyPlusStalls: stall_count >= 50 -> pass, < 50 -> fail, no number -> unknown', () => {
+  assert.equal(evaluateHardFilter(makeLocation({ stall_count: 62 }), 'fiftyPlusStalls').result, 'pass');
+  assert.equal(evaluateHardFilter(makeLocation({ stall_count: 12 }), 'fiftyPlusStalls').result, 'fail');
+  assert.equal(evaluateHardFilter(makeLocation({ stall_count: null }), 'fiftyPlusStalls').result, 'unknown');
   assert.equal(evaluateHardFilter(makeLocation(), 'fiftyPlusStalls').result, 'unknown');
 });
 
-test('evaluateHardFilter ingressEgressControlled: recorded text -> pass (with detail), empty/null -> unknown', () => {
-  const pass = evaluateHardFilter(makeLocation({ ingressEgress: 'one-way in' }), 'ingressEgressControlled');
+test('evaluateHardFilter ingress_egressControlled: recorded text -> pass (with detail), empty/null -> unknown', () => {
+  const pass = evaluateHardFilter(makeLocation({ ingress_egress: 'one-way in' }), 'ingress_egressControlled');
   assert.equal(pass.result, 'pass');
   assert.equal(pass.detail, 'one-way in');
-  assert.equal(evaluateHardFilter(makeLocation({ ingressEgress: '' }), 'ingressEgressControlled').result, 'unknown');
-  assert.equal(evaluateHardFilter(makeLocation(), 'ingressEgressControlled').result, 'unknown');
+  assert.equal(evaluateHardFilter(makeLocation({ ingress_egress: '' }), 'ingress_egressControlled').result, 'unknown');
+  assert.equal(evaluateHardFilter(makeLocation(), 'ingress_egressControlled').result, 'unknown');
 });
 
 test('evaluateHardFilter: Phase II keys (dedicatedStalls, cellCoverage) still always unknown', () => {
-  const loc = makeLocation({ fenced: true, access247: true });
+  const loc = makeLocation({ is_fenced: true, is_24_7: true });
   assert.equal(evaluateHardFilter(loc, 'dedicatedStalls').result, 'unknown');
   assert.equal(evaluateHardFilter(loc, 'cellCoverage').result, 'unknown');
 });
@@ -154,17 +154,17 @@ test('hasHardFail: false when geoContext is entirely missing (everything unknown
 
 // --- sortForReview -----------------------------------------------------------
 
-test('sortForReview: failed records sink to the bottom, createdAt-desc preserved within each group', () => {
-  const passA = makeLocation({ id: 'passA', createdAt: '2026-08-20T00:00:00.000Z' });
-  const passB = makeLocation({ id: 'passB', createdAt: '2026-08-22T00:00:00.000Z' });
+test('sortForReview: failed records sink to the bottom, created_at-desc preserved within each group', () => {
+  const passA = makeLocation({ id: 'passA', created_at: '2026-08-20T00:00:00.000Z' });
+  const passB = makeLocation({ id: 'passB', created_at: '2026-08-22T00:00:00.000Z' });
   const failA = makeLocation({
     id: 'failA',
-    createdAt: '2026-08-23T00:00:00.000Z',
+    created_at: '2026-08-23T00:00:00.000Z',
     geoContext: { floodHazardArea: true, checkedAt: 'x' },
   });
   const failB = makeLocation({
     id: 'failB',
-    createdAt: '2026-08-21T00:00:00.000Z',
+    created_at: '2026-08-21T00:00:00.000Z',
     geoContext: { residentialAdjacent: true, checkedAt: 'x' },
   });
 
@@ -177,16 +177,16 @@ test('sortForReview: failed records sink to the bottom, createdAt-desc preserved
   );
 });
 
-test('sortForReview: unknown-only records (no geoContext) count as not-failed, sort by createdAt like today', () => {
-  const older = makeLocation({ id: 'older', createdAt: '2026-08-01T00:00:00.000Z' });
-  const newer = makeLocation({ id: 'newer', createdAt: '2026-08-10T00:00:00.000Z' });
+test('sortForReview: unknown-only records (no geoContext) count as not-failed, sort by created_at like today', () => {
+  const older = makeLocation({ id: 'older', created_at: '2026-08-01T00:00:00.000Z' });
+  const newer = makeLocation({ id: 'newer', created_at: '2026-08-10T00:00:00.000Z' });
   const sorted = sortForReview([older, newer]);
   assert.deepEqual(sorted.map((l) => l.id), ['newer', 'older']);
 });
 
 test('sortForReview: does not mutate the input array', () => {
-  const a = makeLocation({ id: 'a', createdAt: '2026-08-01T00:00:00.000Z' });
-  const b = makeLocation({ id: 'b', createdAt: '2026-08-10T00:00:00.000Z' });
+  const a = makeLocation({ id: 'a', created_at: '2026-08-01T00:00:00.000Z' });
+  const b = makeLocation({ id: 'b', created_at: '2026-08-10T00:00:00.000Z' });
   const input = [a, b];
   sortForReview(input);
   assert.deepEqual(input.map((l) => l.id), ['a', 'b']);

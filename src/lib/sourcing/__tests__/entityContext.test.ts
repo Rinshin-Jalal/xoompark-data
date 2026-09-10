@@ -152,7 +152,7 @@ test('parseDetailPage: full mapping from the real VIZCAYNE filing', () => {
   assert.ok(ctx.registeredAgent?.includes('C T CORPORATION SYSTEM'));
   assert.ok(ctx.authorizedPersons?.some((p) => p.includes('BROADWAY SARASOTA MANAGER LLC')));
   assert.equal(ctx.lastAnnualReportFiled, '03/06/2026');
-  assert.equal(ctx.sourceUrl, 'https://search.sunbiz.org/detail');
+  assert.equal(ctx.source_url, 'https://search.sunbiz.org/detail');
 });
 
 test('parseDetailPage: garbage markdown -> null (honest miss)', () => {

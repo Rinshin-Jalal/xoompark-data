@@ -294,7 +294,7 @@ export function findCrossSourceMatches(
       matches.push({
         parkopediaId: p.id,
         spotheroId: s.id,
-        addressSimilarity: addressSimilarity(p.normalizedAddress ?? p.address, s.normalizedAddress ?? s.address),
+        addressSimilarity: addressSimilarity(p.normalized_address ?? p.address, s.normalized_address ?? s.address),
         distanceMeters,
       });
     }

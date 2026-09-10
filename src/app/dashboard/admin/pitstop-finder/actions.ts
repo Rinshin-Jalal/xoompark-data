@@ -17,9 +17,9 @@ const getDb = getAdminFirestore;
 // scores 1300+ sites) blow past that in one batch.commit(), so chunk it.
 const BATCH_CHUNK_SIZE = 450;
 
-async function persistSiteFindings(db: FirebaseFirestore.Firestore, metro: MetroCode, sites: any[]) {
+async function persistSiteFindings(db: FirebaseFirestore.Firestore, metro_id: MetroCode, sites: any[]) {
   const refs = sites.map((site) =>
-    db.collection('pitstop_findings').doc(`${metro}_${site.osmId.replace('/', '_')}`)
+    db.collection('pitstop_findings').doc(`${metro_id}_${site.osm_id.replace('/', '_')}`)
   );
 
   // Sequential per-doc reads for 1000+ sites is the slow part users actually
@@ -35,54 +35,54 @@ async function persistSiteFindings(db: FirebaseFirestore.Firestore, metro: Metro
 
       batch.set(refs[j], {
         id: refs[j].id,
-        metro,
-        osmId: site.osmId,
+        metro_id,
+        osm_id: site.osm_id,
         lat: site.lat,
-        lon: site.lon,
-        capacitySource: site.capacitySource,
-        areaSqm: site.areaSqm,
+        lng: site.lng,
+        capacity_source: site.capacity_source,
+        area_sqm: site.area_sqm,
 
         // Scored data (always refresh)
-        storageScore: site.storageScore,
-        stagingScore: site.stagingScore,
-        nearestAnchor: site.nearestAnchor,
-        anchorMi: site.anchorMi,
-        depotMi: site.depotMi ?? undefined,
-        residentialFlag: site.residentialFlag,
-        resDistanceM: site.resDistanceM,
-        ownerDirectCandidate: site.ownerDirectCandidate,
+        storage_score: site.storage_score,
+        staging_score: site.staging_score,
+        nearest_anchor_name: site.nearest_anchor_name,
+        distance_to_anchor_miles: site.distance_to_anchor_miles,
+        distance_to_depot_miles: site.distance_to_depot_miles ?? undefined,
+        residential_flag: site.residential_flag,
+        distance_to_res_meters: site.distance_to_res_meters,
+        is_owner_direct_candidate: site.is_owner_direct_candidate,
         access: site.access,
         fee: site.fee || undefined,
-        walkList: site.walkList,
-        closedAtNight: site.closedAtNight ?? false,
+        is_walk_list_ready: site.is_walk_list_ready,
+        is_closed_at_night: site.is_closed_at_night ?? false,
 
         // Editable dossier fields — an existing manual correction always wins
         // over the freshly-scraped/enriched value from this run.
         name: existing?.name ?? site.name,
-        type: existing?.type ?? site.type,
-        capacity: existing?.capacity ?? site.capacity,
+        type: existing?.facility_type ?? site.facility_type,
+        capacity: existing?.stall_count ?? site.stall_count,
         address: existing?.address ?? site.address ?? undefined,
-        owner: existing?.owner ?? site.owner ?? undefined,
-        ownerMailing: existing?.ownerMailing ?? site.ownerMailing ?? undefined,
-        parcelId: existing?.parcelId ?? site.parcelId ?? undefined,
-        landUse: existing?.landUse ?? site.landUse ?? undefined,
-        zoning: existing?.zoning ?? site.zoning ?? undefined,
-        openingHours: existing?.openingHours ?? site.openingHours ?? undefined,
+        owner: existing?.owner_name ?? site.owner_name ?? undefined,
+        owner_mailing_address: existing?.owner_mailing_address ?? site.owner_mailing_address ?? undefined,
+        parcel_id: existing?.parcel_id ?? site.parcel_id ?? undefined,
+        land_use_code: existing?.land_use_code ?? site.land_use_code ?? undefined,
+        zoning_code: existing?.zoning_code ?? site.zoning_code ?? undefined,
+        opening_hours: existing?.opening_hours ?? site.opening_hours ?? undefined,
 
         // Timestamps
-        lastScoredAt: FieldValue.serverTimestamp(),
-        updatedAt: FieldValue.serverTimestamp(),
+        last_scored_at: FieldValue.serverTimestamp(),
+        updated_at: FieldValue.serverTimestamp(),
 
         // Preserve manual fields from existing doc
         status: (existing?.status ?? 'new') as SiteFindingStatus,
-        capacityActual: existing?.capacityActual,
-        clearanceHeight: existing?.clearanceHeight,
-        powerAvailable: existing?.powerAvailable,
-        notesInternal: existing?.notesInternal,
+        stall_count_actual: existing?.stall_count_actual,
+        clearance_height_inches: existing?.clearance_height_inches,
+        has_power_available: existing?.has_power_available,
+        internal_notes: existing?.internal_notes,
         photos: existing?.photos,
 
         // Create timestamp (only on new docs)
-        createdAt: existing?.createdAt ?? FieldValue.serverTimestamp(),
+        created_at: existing?.created_at ?? FieldValue.serverTimestamp(),
       }, { merge: true });
     }
     await batch.commit();
@@ -92,21 +92,21 @@ async function persistSiteFindings(db: FirebaseFirestore.Firestore, metro: Metro
 // Saves whatever's already on screen — no live re-query. This is the fast
 // path for "persist these results" (the per-row Save button); refreshFinderResults
 // below is the slow path that re-runs the finder against live data first.
-export async function saveFinderResults(metro: MetroCode, sites: any[]) {
+export async function saveFinderResults(metro_id: MetroCode, sites: any[]) {
   await requireAdmin();
   const db = getDb();
 
   try {
-    await persistSiteFindings(db, metro, sites);
+    await persistSiteFindings(db, metro_id, sites);
   } catch (error) {
-    console.error(`[pitstop-finder] save failed for ${metro}:`, error);
-    throw new Error(`Failed to save finder results for ${metro}`);
+    console.error(`[pitstop-finder] save failed for ${metro_id}:`, error);
+    throw new Error(`Failed to save finder results for ${metro_id}`);
   }
 
   revalidatePath('/dashboard/admin/pitstop-finder');
 }
 
-export async function refreshFinderResults(metro: MetroCode) {
+export async function refreshFinderResults(metro_id: MetroCode) {
   await requireAdmin();
   const db = getDb();
 
@@ -114,7 +114,7 @@ export async function refreshFinderResults(metro: MetroCode) {
     // Load config from Firestore or use default
     let config: FinderConfig | undefined;
     try {
-      const doc = await db.collection('pitstop_configs').doc(metro).get();
+      const doc = await db.collection('pitstop_configs').doc(metro_id).get();
       if (doc.exists) {
         config = doc.data() as FinderConfig;
       }
@@ -123,24 +123,24 @@ export async function refreshFinderResults(metro: MetroCode) {
     }
 
     if (!config) {
-      const defaultConfig = DEFAULT_FINDER_CONFIGS[metro];
+      const defaultConfig = DEFAULT_FINDER_CONFIGS[metro_id];
       config = {
         ...defaultConfig,
-        createdAt: undefined as any,
-        updatedAt: undefined as any,
+        created_at: undefined as any,
+        updated_at: undefined as any,
       };
     }
 
     // Run finder with the config
-    const scored = await runFinder(metro, config);
+    const scored = await runFinder(metro_id, config);
 
     // Enrich with owner/hours data
-    const enriched = await enrichSites(scored, metro);
+    const enriched = await enrichSites(scored, metro_id);
 
-    await persistSiteFindings(db, metro, enriched);
+    await persistSiteFindings(db, metro_id, enriched);
   } catch (error) {
-    console.error(`[pitstop-finder] refresh failed for ${metro}:`, error);
-    throw new Error(`Failed to refresh finder results for ${metro}`);
+    console.error(`[pitstop-finder] refresh failed for ${metro_id}:`, error);
+    throw new Error(`Failed to refresh finder results for ${metro_id}`);
   }
 
   revalidatePath('/dashboard/admin/pitstop-finder');
@@ -153,7 +153,7 @@ export async function updateSiteStatus(siteId: string, newStatus: SiteFindingSta
   const db = getDb();
   await db.collection('pitstop_findings').doc(siteId).update({
     status: newStatus,
-    updatedAt: FieldValue.serverTimestamp(),
+    updated_at: FieldValue.serverTimestamp(),
   });
 }
 
@@ -163,24 +163,24 @@ export async function updateSiteManualFields(
     name?: string | null;
     type?: string | null;
     capacity?: number | null;
-    capacityActual?: number | null;
-    clearanceHeight?: string | null;
-    powerAvailable?: boolean | null;
-    notesInternal?: string | null;
+    stall_count_actual?: number | null;
+    clearance_height_inches?: string | null;
+    has_power_available?: boolean | null;
+    internal_notes?: string | null;
     photos?: string[] | null;
     address?: string | null;
     owner?: string | null;
-    ownerMailing?: string | null;
-    landUse?: string | null;
-    parcelId?: string | null;
-    zoning?: string | null;
-    openingHours?: string | null;
+    owner_mailing_address?: string | null;
+    land_use_code?: string | null;
+    parcel_id?: string | null;
+    zoning_code?: string | null;
+    opening_hours?: string | null;
   },
 ) {
   await requireAdmin();
   const db = getDb();
 
-  const updateData: Record<string, any> = { updatedAt: FieldValue.serverTimestamp() };
+  const updateData: Record<string, any> = { updated_at: FieldValue.serverTimestamp() };
   for (const [key, value] of Object.entries(fields)) {
     if (value === null) {
       updateData[key] = FieldValue.delete();
@@ -217,15 +217,15 @@ export async function promoteSiteToProspect(
   await prospectRef.set({
     side: 'provider',
     stage: 'INITIAL',
-    companyName: companyName || site.owner || 'Unknown',
+    companyName: companyName || site.owner_name || 'Unknown',
     contactName,
     contactEmail,
     contactPhone: contactPhone || '',
     source: 'OUTBOUND',
-    description: `Pit Stop Finder discovery: ${site.name} (${site.metro}). ${site.storageScore}/${site.stagingScore} scores.`,
-    tags: ['pitstop-finder', site.metro],
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
+    description: `Pit Stop Finder discovery: ${site.name} (${site.metro_id}). ${site.storage_score}/${site.staging_score} scores.`,
+    tags: ['pitstop-finder', site.metro_id],
+    created_at: FieldValue.serverTimestamp(),
+    updated_at: FieldValue.serverTimestamp(),
   });
 
   // Update site status
@@ -234,33 +234,33 @@ export async function promoteSiteToProspect(
 
 // ===== Config Management =====
 
-export async function saveFinderConfig(metro: MetroCode, config: Omit<FinderConfig, 'createdAt' | 'updatedAt'>) {
+export async function saveFinderConfig(metro_id: MetroCode, config: Omit<FinderConfig, 'created_at' | 'updated_at'>) {
   await requireAdmin();
   const db = getDb();
 
-  const existing = await db.collection('pitstop_configs').doc(metro).get();
+  const existing = await db.collection('pitstop_configs').doc(metro_id).get();
 
   const doc: Record<string, any> = {
     ...config,
-    updatedAt: FieldValue.serverTimestamp(),
+    updated_at: FieldValue.serverTimestamp(),
   };
 
   if (!existing.exists) {
-    doc.createdAt = FieldValue.serverTimestamp();
+    doc.created_at = FieldValue.serverTimestamp();
   }
 
-  await db.collection('pitstop_configs').doc(metro).set(doc, { merge: true });
+  await db.collection('pitstop_configs').doc(metro_id).set(doc, { merge: true });
 }
 
-export async function deleteMetro(metro: MetroCode) {
+export async function deleteMetro(metro_id: MetroCode) {
   await requireAdmin();
   const db = getDb();
 
   // Delete config
-  await db.collection('pitstop_configs').doc(metro).delete();
+  await db.collection('pitstop_configs').doc(metro_id).delete();
 
-  // Optionally delete all site findings for this metro
-  const sites = await db.collection('pitstop_findings').where('metro', '==', metro).get();
+  // Optionally delete all site findings for this metro_id
+  const sites = await db.collection('pitstop_findings').where('metro_id', '==', metro_id).get();
   const batch = db.batch();
   sites.docs.forEach((doc) => batch.delete(doc.ref));
   await batch.commit();

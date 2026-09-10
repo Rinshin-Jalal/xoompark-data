@@ -42,7 +42,7 @@ interface ChecklistFieldDef {
 }
 
 // Same kill-order the doc states in section 0: "Depth beats breadth on the
-// fields that kill sites: capacity -> 24/7 -> fenced -> lit -> ingress/egress
+// fields that kill sites: capacity -> 24/7 -> is_fenced -> is_lit -> ingress/egress
 // -> clearance -> rates." Rates & hours are one combined doc section
 // ("Rates & hours (easiest — start here)"), so they're one checklist row.
 //
@@ -57,49 +57,49 @@ export const CHECKLIST_FIELDS: ChecklistFieldDef[] = [
     label: 'Capacity (50+ stalls)',
     guidance:
       'Look for a number the operator actually states — an exact stall count in their site description or FAQ, or a city/port/county facility record. Reviews and photos are a weak signal only. Cite what you find in Notes; never estimate a number.',
-    isEmpty: (l) => isEmpty(l.capacityText) && typeof l.stallsTotal !== 'number',
+    isEmpty: (l) => isEmpty(l.capacity_text) && typeof l.stall_count !== 'number',
   },
   {
     key: 'open247',
     label: '24/7 access',
     guidance:
       "Only record this if a source states it outright — an hours page saying 24/7, or a listing's “open 24 hours” tag. A gateless/LPR gate suggests it but isn't proof by itself. Cite what you find in Notes.",
-    isEmpty: (l) => l.access247 === undefined,
+    isEmpty: (l) => l.is_24_7 === undefined,
   },
   {
-    key: 'fenced',
+    key: 'is_fenced',
     label: 'Fenced',
     guidance:
       'Walk the perimeter in Street View — is a fence visible? Check operator photo galleries too. Note what the imagery shows and which tool/date you used (imagery you looked at is evidence).',
-    isEmpty: (l) => l.fenced === undefined,
+    isEmpty: (l) => l.is_fenced === undefined,
   },
   {
-    key: 'lit',
+    key: 'is_lit',
     label: 'Lit',
     guidance:
-      'Same approach as fenced — look for light poles or fixtures in Street View or photos, and note the source and date.',
-    isEmpty: (l) => l.lit === undefined,
+      'Same approach as is_fenced — look for light poles or fixtures in Street View or photos, and note the source and date.',
+    isEmpty: (l) => l.is_lit === undefined,
   },
   {
-    key: 'ingressEgress',
+    key: 'ingress_egress',
     label: 'Ingress / egress',
     guidance:
       'Drive the frontage in Street View and check satellite view for curb cuts and one-way lane markings. Operator directions pages sometimes describe entrances too.',
-    isEmpty: (l) => isEmpty(l.ingressEgress),
+    isEmpty: (l) => isEmpty(l.ingress_egress),
   },
   {
     key: 'clearance',
     label: 'Clearance',
     guidance:
       "Look for height signs — most garage pages post a clearance figure. Also check the SpotHero facility page's restrictions section.",
-    isEmpty: (l) => isEmpty(l.clearanceText),
+    isEmpty: (l) => isEmpty(l.clearance_text),
   },
   {
     key: 'ratesHours',
     label: 'Rates & hours',
     guidance:
       'Check the existing listing first, then verify against the operator’s own location page — it almost always states current rates and hours.',
-    isEmpty: (l) => isEmpty(l.priceText) || isEmpty(l.hoursText),
+    isEmpty: (l) => isEmpty(l.price_text) || isEmpty(l.hours_text),
   },
 ];
 
@@ -143,7 +143,7 @@ export function isFloodFailed(location: SourcedParkingLocation): boolean {
 /** A record is a live BDR work item when it's still draft and hasn't been
  * folded into another record via a cross-source merge. */
 export function isBdrVisible(location: SourcedParkingLocation): boolean {
-  return location.status === 'draft' && !location.mergedInto;
+  return location.status === 'draft' && !location.merged_into_lot_id;
 }
 
 /** Deterministic string hash (djb2) — used only to reorder records that are
@@ -171,14 +171,14 @@ function seededRank(seed: number, id: string): number {
  * first, with flood-failed records sunk to the very end regardless of how
  * much else they're missing (visible, never hidden — same wide-net
  * principle as sortForReview in hardFilters.ts, just a different secondary
- * key: BDR effort remaining instead of createdAt-desc as primary).
+ * key: BDR effort remaining instead of created_at-desc as primary).
  *
  * `seed`, when given, breaks ties among equally-urgent records (same flood
  * status, same missing-field count) by a reproducible pseudo-random order
- * instead of createdAt — so two BDRs' sessions (or one BDR's refresh) fan
+ * instead of created_at — so two BDRs' sessions (or one BDR's refresh) fan
  * out across those ties rather than racing to the identical top record.
  * Omitted (the default, and what every existing caller/test uses) keeps the
- * plain createdAt-desc tiebreak.
+ * plain created_at-desc tiebreak.
  */
 /**
  * ODD-only by default (see BdrQueueView's `showOutsideOdd` toggle) — a lot
@@ -202,16 +202,16 @@ export function buildBdrQueue(locations: SourcedParkingLocation[], seed?: number
     const missingDiff = missingChecklistCount(b) - missingChecklistCount(a);
     if (missingDiff !== 0) return missingDiff;
     if (seed !== undefined) return seededRank(seed, a.id) - seededRank(seed, b.id);
-    return b.createdAt.localeCompare(a.createdAt);
+    return b.created_at.localeCompare(a.created_at);
   });
 }
 
 // --- Card copy -------------------------------------------------------------
 
 /** "Never worked" = no field on this record has ever been human-verified —
- * every fieldProvenance entry is still scraped/self-reported-only. */
+ * every field_sources entry is still scraped/self-reported-only. */
 export function neverWorked(location: SourcedParkingLocation): boolean {
-  return !Object.values(location.fieldProvenance).some((v) => v === 'verified');
+  return !Object.values(location.field_sources).some((v) => v === 'verified');
 }
 
 // Exported so the BDR wizard's one-tap-confirm prompt ("SpotHero says: ...")
@@ -226,12 +226,12 @@ export const SOURCE_LABELS: Record<string, string> = {
 };
 
 export function sourceLabel(location: SourcedParkingLocation): string {
-  return SOURCE_LABELS[location.source] ?? location.source;
+  return SOURCE_LABELS[location.source_name] ?? location.source_name;
 }
 
 export function contextStripLabel(location: SourcedParkingLocation): string {
   const base = `${sourceLabel(location)} listing · ${neverWorked(location) ? 'never worked' : 'in progress'}`;
-  return location.addedBy ? `${base} · added by ${location.addedBy}` : base;
+  return location.added_by ? `${base} · added by ${location.added_by}` : base;
 }
 
 export function mapsUrl(location: SourcedParkingLocation): string | null {
@@ -279,7 +279,7 @@ export function hasConflictNote(location: SourcedParkingLocation): boolean {
  * BDR-facing banner text, with the FEMA zone letter when known. */
 export function floodBanner(location: SourcedParkingLocation): string | null {
   if (!isFloodFailed(location)) return null;
-  const zone = location.geoContext?.floodZone;
+  const zone = location.enrichment?.geo?.floodZone;
   return zone
     ? `❌ Flood zone ${zone} — Waymo can't use it, skip details`
     : `❌ In a flood zone — Waymo can't use it, skip details`;

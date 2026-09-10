@@ -43,11 +43,11 @@ test('real payload: camera/plate text derives lpr', () => {
   const ev = toGateEvidence(REAL_103525, 'https://spothero.com/facility/103525/x', '2026-09-04T00:00:00.000Z');
   assert.ok(ev);
   assert.equal(ev.derivedGateType, 'lpr');
-  assert.equal(ev.sourceUrl, 'https://spothero.com/facility/103525/x');
+  assert.equal(ev.source_url, 'https://spothero.com/facility/103525/x');
 });
 
 test('drive-in only (no plate/camera text) stays a claim, derives nothing', () => {
-  const source: GateEvidenceSource = {
+  const source_name: GateEvidenceSource = {
     redemptionInstructions: [{ text: 'Just drive in and pick any open spot. Drive out when ready.' }],
     amenities: [{ type: 'self-park' }],
   };

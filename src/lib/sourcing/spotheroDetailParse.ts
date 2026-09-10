@@ -153,9 +153,9 @@ export function mapFacilityDetailToInput(
 }
 
 /** Up to `limit` spothero records that haven't been through this enrichment tier yet (truthy enrichedAt -> already done, skip). */
-export function selectUnenrichedSpotHero<T extends { source: string; enrichedAt?: string }>(
+export function selectUnenrichedSpotHero<T extends { source_name: string; enriched_at?: string }>(
   records: T[],
   limit: number,
 ): T[] {
-  return records.filter((r) => r.source === 'spothero' && !r.enrichedAt).slice(0, limit);
+  return records.filter((r) => r.source_name === 'spothero' && !r.enriched_at).slice(0, limit);
 }

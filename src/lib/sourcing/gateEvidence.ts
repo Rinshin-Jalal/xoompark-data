@@ -10,11 +10,11 @@
 // plate-validation lines.
 //
 // Rule (enrichment-plan.md #2): extraction produces CLAIMS, never writes
-// gateType directly. Only camera/plate-recognition text is explicit enough
+// gate_type directly. Only camera/plate-recognition text is explicit enough
 // to normalize — derivedGateType is 'lpr' or nothing.
 import type { SourcedParkingLocation } from './types.ts';
 
-export type GateEvidence = NonNullable<SourcedParkingLocation['gateEvidence']>;
+export type GateEvidence = NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['gate']>;
 
 /** The facility-detail fields gate claims come from (subset of
  * SpotHeroFacilityDetail in spotheroDetailParse.ts — kept structural so
@@ -51,7 +51,7 @@ export function extractGateClaims(source: GateEvidenceSource): string[] {
 }
 
 /**
- * Derive gateType from claims — 'lpr' only, and only when a sentence
+ * Derive gate_type from claims — 'lpr' only, and only when a sentence
  * explicitly describes plate recognition (camera or plate matching).
  * "Just drive in" is suggestive of gateless but NOT explicit (an open gate
  * arm reads the same) — stays a claim, per the plan's rule.

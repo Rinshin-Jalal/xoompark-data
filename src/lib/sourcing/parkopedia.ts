@@ -94,7 +94,7 @@ export async function ingestParkopediaMiami(): Promise<{ ingested: number; skipp
  */
 export async function reportParkopediaSpotHeroMatches(): Promise<CrossSourceMatch[]> {
   const all = await listSourcedLocations({});
-  const parkopediaRecords = all.filter((r) => r.source === 'parkopedia');
-  const spotheroRecords = all.filter((r) => r.source === 'spothero');
+  const parkopediaRecords = all.filter((r) => r.source_name === 'parkopedia');
+  const spotheroRecords = all.filter((r) => r.source_name === 'spothero');
   return findCrossSourceMatches(parkopediaRecords, spotheroRecords);
 }

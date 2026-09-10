@@ -280,52 +280,52 @@ export type SiteFindingStatus = 'new' | 'walk-list' | 'walked' | 'contacted' | '
 
 export interface SiteFinding {
   id: string;
-  metro: MetroCode;
-  osmId: string;
+  metro_id: MetroCode;
+  osm_id: string;
   lat: number;
-  lon: number;
+  lng: number;
   name: string;
-  type: string;
-  capacity: number | null;
-  capacitySource: string;
-  areaSqm: number | null;
+  facility_type: string;
+  stall_count: number | null;
+  capacity_source: string;
+  area_sqm: number | null;
 
   // Scored data (refreshed on re-run)
-  storageScore: number;
-  stagingScore: number;
-  nearestAnchor: string;
-  anchorMi: number;
-  depotMi?: number;
-  residentialFlag: string;
-  resDistanceM: number | null;
-  ownerDirectCandidate: boolean;
-  access?: string;
-  fee?: string;
-  walkList?: boolean;
-  closedAtNight: boolean;
+  storage_score: number;
+  staging_score: number;
+  nearest_anchor_name: string;
+  distance_to_anchor_miles: number;
+  distance_to_depot_miles?: number;
+  residential_flag: string;
+  distance_to_res_meters: number | null;
+  is_owner_direct_candidate: boolean;
+  access_type?: string;
+  fee_type?: string;
+  is_walk_list_ready?: boolean;
+  is_closed_at_night: boolean;
 
   // Manual fields (preserved across re-runs)
   status: SiteFindingStatus;
-  capacityActual?: number;
-  clearanceHeight?: string;
-  powerAvailable?: boolean;
-  notesInternal?: string;
+  stall_count_actual?: number;
+  clearance_height_inches?: string;
+  has_power_available?: boolean;
+  internal_notes?: string;
   photos?: string[];
 
   // Enrichment (owner/address/land use) — editable; a manual edit wins over
   // the next refresh's freshly-scraped/enriched value.
   address?: string;
-  owner?: string;
-  ownerMailing?: string;
-  landUse?: string;
-  parcelId?: string;
-  zoning?: string;
-  openingHours?: string;
+  owner_name?: string;
+  owner_mailing_address?: string;
+  land_use_code?: string;
+  parcel_id?: string;
+  zoning_code?: string;
+  opening_hours?: string;
 
   // Timestamps
-  lastScoredAt: Timestamp;
-  updatedAt: Timestamp;
-  createdAt: Timestamp;
+  last_scored_at: Timestamp;
+  updated_at: Timestamp;
+  created_at: Timestamp;
 }
 
 export interface ProximityBand {
@@ -336,14 +336,14 @@ export interface ProximityBand {
 export interface Anchor {
   name: string;
   lat: number;
-  lon: number;
+  lng: number;
   kind: string;
 }
 
 export interface Depot {
   name: string;
   lat: number;
-  lon: number;
+  lng: number;
 }
 
 export interface BBox {
@@ -380,27 +380,27 @@ export interface CapacityThresholds {
 }
 
 export interface FinderConfig {
-  metro: MetroCode;
+  metro_id: MetroCode;
   name: string;
 
-  bbox: BBox;
-  anchors: Anchor[];
-  referenceDepot?: Depot;
+  bounding_box: BBox;
+  anchor_locations: Anchor[];
+  depot_location?: Depot;
 
-  storageWeights: ScoringWeights;
-  stagingWeights: ScoringWeights;
+  storage_weights: ScoringWeights;
+  staging_weights: ScoringWeights;
 
-  proximityBands: ProximityBand[];
-  geometryScores: GeometryScores;
-  commercialScores: CommercialScores;
-  capacityThresholds: CapacityThresholds;
+  proximity_bands: ProximityBand[];
+  geometry_scores: GeometryScores;
+  commercial_scores: CommercialScores;
+  capacity_thresholds: CapacityThresholds;
 
-  walkListThreshold: number;
-  residentialPenalty: number;
-  residentialBuffer: number;
+  walk_list_min_score: number;
+  residential_penalty_points: number;
+  residential_buffer_meters: number;
 
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  created_at: Timestamp;
+  updated_at: Timestamp;
 }
 
 // ===== Charging sites (AFDC) =====
@@ -410,36 +410,36 @@ export type ChargingAccessCode = 'public' | 'private' | 'unknown';
 
 /** Normalized AFDC record. Not persisted as-is — see SavedChargingLocation. */
 export interface ChargingSite {
-  afdcId: number;
+  source_id: number;
   name: string;
-  network: string | null;
+  network_name: string | null;
 
-  streetAddress: string | null;
+  street_address: string | null;
   city: string | null;
   state: string | null;
   zip: string | null;
   lat: number;
   lng: number;
 
-  dcFastPorts: number;
-  level2Ports: number;
+  dc_fast_port_count: number;
+  level_2_ports: number;
   connectors: string[];
 
   /** kW, descending. Absent means unreported — never 0; 0 would read as a dead station. */
-  powerKw: number[];
-  maxPowerKw: number | null;
+  power_kw: number[];
+  max_power_kw: number | null;
 
   access: ChargingAccessCode;
-  accessHours: string | null;
-  is247: boolean;
+  access_hours: string | null;
+  is_24_7: boolean;
 
   status: ChargingStationStatus;
   pricing: string | null;
-  facilityType: string | null;
-  ownerType: string | null;
+  facility_type: string | null;
+  owner_type: string | null;
   updatedAt: string | null;
 
-  distanceMiles: number | null;
+  distance_miles: number | null;
 }
 
 /**
@@ -480,30 +480,30 @@ export type PortMounting = 'overhead' | 'ground';
  */
 export interface SavedChargingLocation {
   id: string;
-  afdcId: number;
+  source_id: number;
 
   // Cached AFDC snapshot (refreshed on save/refresh, never authoritative for our fields below)
   name: string;
   lat: number;
   lng: number;
-  network: string | null;
-  streetAddress: string | null;
+  network_name: string | null;
+  street_address: string | null;
   city: string | null;
   state: string | null;
-  dcFastPorts: number;
-  maxPowerKw: number | null;
+  dc_fast_port_count: number;
+  max_power_kw: number | null;
 
   // Ours
   clearance: Clearance | null;
   notes: string | null;
   /** Property owner, from the assessor -> LinkedIn outreach lookup — see lib/outreach.ts. */
-  ownerName: string | null;
+  owner_name: string | null;
   /** Field-verified connector mounting — see PortMounting above. */
-  portMounting: PortMounting | null;
-  savedBy: string;
+  mounting_type: PortMounting | null;
+  saved_by: string;
 
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  created_at: Timestamp;
+  updated_at: Timestamp;
 }
 
 // ── Task Verification ──────────────────────────────────────────────────────────

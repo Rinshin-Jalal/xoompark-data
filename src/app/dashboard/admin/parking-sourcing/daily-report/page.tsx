@@ -16,7 +16,7 @@ async function getOutreachData() {
 
   for (const lotDoc of lotsSnap.docs) {
     const lot = lotDoc.data() as SourcedParkingLocation;
-    if (lot.mergedInto) continue;
+    if (lot.merged_into_lot_id) continue;
     const outreachSnap = await db
       .collection('parking_lots')
       .doc(lotDoc.id)

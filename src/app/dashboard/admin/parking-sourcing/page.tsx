@@ -24,8 +24,8 @@ async function getLocations() {
 // a preference); the "more fields wins" heuristic isn't worth the complexity
 // for what's currently a single-city, low-volume probe.
 function buildCrossSourceCandidates(locations: Awaited<ReturnType<typeof getLocations>>): CrossSourceCandidate[] {
-  const spothero = locations.filter((l) => l.source === 'spothero');
-  const parkopedia = locations.filter((l) => l.source === 'parkopedia');
+  const spothero = locations.filter((l) => l.source_name === 'spothero');
+  const parkopedia = locations.filter((l) => l.source_name === 'parkopedia');
   const byId = new Map(locations.map((l) => [l.id, l]));
 
   return findCrossSourceMatches(parkopedia, spothero)
@@ -36,10 +36,10 @@ function buildCrossSourceCandidates(locations: Awaited<ReturnType<typeof getLoca
       return {
         primaryId: primary.id,
         primaryName: primary.name,
-        primaryUrl: primary.sourceUrl,
+        primaryUrl: primary.source_url,
         secondaryId: secondary.id,
         secondaryName: secondary.name,
-        secondaryUrl: secondary.sourceUrl,
+        secondaryUrl: secondary.source_url,
         distanceMeters: match.distanceMeters,
         addressSimilarity: match.addressSimilarity,
         verdict: classifyCrossSourceMatch(match),

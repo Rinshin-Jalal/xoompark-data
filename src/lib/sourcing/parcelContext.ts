@@ -20,7 +20,7 @@
 //      // unfiltered tier if that gap measurably matters.
 import type { SourcedParkingLocation } from './types.ts';
 
-export type ParcelContext = NonNullable<SourcedParkingLocation['parcelContext']>;
+export type ParcelContext = NonNullable<NonNullable<SourcedParkingLocation['enrichment']>['parcel']>;
 
 export const PARCELS_LAYER_URL =
   'https://gisweb.miamidade.gov/arcgis/rest/services/MD_LandInformation/MapServer/26/query';

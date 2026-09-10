@@ -11,10 +11,10 @@ import { listSourcedLocations } from '@/lib/sourcing/store';
  *
  * Params (see parseFleetQuery in src/lib/fleet/sites.ts for exact validation):
  *   lat, lng, radiusM   — geo search (radiusM default 5000, max 50000)
- *   minStalls=N         — stallsTotal >= N
- *   surfaceType=surface|structured
- *   gateType=lpr|manual|automatic|gateless
- *   access247|fenced|lit=true|false — true requires pass, false requires fail
+ *   minStalls=N         — stall_count >= N
+ *   surface_type=surface|structured
+ *   gate_type=lpr|manual|automatic|gateless
+ *   is_24_7|is_fenced|is_lit=true|false — true requires pass, false requires fail
  *   managed=true|false|any — operator-managed only (DEFAULT true), unmanaged
  *                             only, or everything
  *   status=draft|saved  — default: both (wide net)

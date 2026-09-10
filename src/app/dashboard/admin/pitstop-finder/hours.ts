@@ -39,18 +39,18 @@ function isOpenDuringNight(periods: PlacesPeriod[]): boolean {
 }
 
 export interface HoursResult {
-  closedAtNight: boolean;
-  hoursText: string | null;
+  is_closed_at_night: boolean;
+  hours_text: string | null;
 }
 
 let warnedAboutApiError = false;
 
-export async function lookupClosedAtNight(lat: number, lon: number): Promise<HoursResult | null> {
+export async function lookupClosedAtNight(lat: number, lng: number): Promise<HoursResult | null> {
   const key = process.env.GOOGLE_MAPS_API_KEY;
   if (!key) return null;
   try {
     const nearby = await fetch(
-      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lon}&radius=60&type=parking&key=${key}`,
+      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=60&type=parking&key=${key}`,
       { signal: AbortSignal.timeout(8_000) },
     ).then((r) => r.json());
     if (nearby.status !== 'OK' && nearby.status !== 'ZERO_RESULTS' && !warnedAboutApiError) {
@@ -64,13 +64,13 @@ export async function lookupClosedAtNight(lat: number, lon: number): Promise<Hou
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=opening_hours&key=${key}`,
       { signal: AbortSignal.timeout(8_000) },
     ).then((r) => r.json());
-    const openingHours = details.result?.opening_hours;
-    const periods: PlacesPeriod[] | undefined = openingHours?.periods;
+    const opening_hours = details.result?.opening_hours;
+    const periods: PlacesPeriod[] | undefined = opening_hours?.periods;
     if (!periods || periods.length === 0) return null;
 
     return {
-      closedAtNight: !isOpenDuringNight(periods),
-      hoursText: Array.isArray(openingHours.weekday_text) ? openingHours.weekday_text.join('; ') : null,
+      is_closed_at_night: !isOpenDuringNight(periods),
+      hours_text: Array.isArray(opening_hours.weekday_text) ? opening_hours.weekday_text.join('; ') : null,
     };
   } catch {
     return null;

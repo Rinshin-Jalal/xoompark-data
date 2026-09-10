@@ -6,7 +6,7 @@
 // scraped value counts as done there), but the wizard needs to visit that
 // field to get a human's one-tap confirm (or a fresh save) before it counts
 // as captured — done means "has SOME value", captured means "a human signed
-// off on this value" (fieldProvenance === 'verified' on the field(s) this
+// off on this value" (field_sources === 'verified' on the field(s) this
 // step writes). Same Firestore/'server-only'-free split as the rest of this
 // pipeline — only imports bdrView.ts and types.ts.
 import { CHECKLIST_FIELDS } from './bdrView.ts';
@@ -17,11 +17,11 @@ function isEmpty(v: unknown): boolean {
 }
 
 function verified(location: SourcedParkingLocation, field: string): boolean {
-  return location.fieldProvenance[field] === 'verified';
+  return location.field_sources[field] === 'verified';
 }
 
 /** The 7 checklist field keys, in bdrView.ts's kill-order (capacity -> 24/7
- * -> fenced -> lit -> ingress/egress -> clearance -> rates). */
+ * -> is_fenced -> is_lit -> ingress/egress -> clearance -> rates). */
 export const WIZARD_FIELD_KEYS: string[] = CHECKLIST_FIELDS.map((f) => f.key);
 
 export interface WizardFieldState {
@@ -39,7 +39,7 @@ export interface WizardFieldState {
 function tristateState(
   location: SourcedParkingLocation,
   key: string,
-  field: 'access247' | 'fenced' | 'lit',
+  field: 'is_24_7' | 'is_fenced' | 'is_lit',
 ): WizardFieldState {
   const captured = verified(location, field);
   const v = location[field];
@@ -52,31 +52,31 @@ function tristateState(
 export function wizardFieldState(location: SourcedParkingLocation, key: string): WizardFieldState {
   switch (key) {
     case 'capacity': {
-      const captured = verified(location, 'stallsTotal');
-      const scrapedValue = !captured && typeof location.stallsTotal === 'number' ? String(location.stallsTotal) : null;
+      const captured = verified(location, 'stall_count');
+      const scrapedValue = !captured && typeof location.stall_count === 'number' ? String(location.stall_count) : null;
       return { key, captured, scrapedValue };
     }
     case 'open247':
-      return tristateState(location, key, 'access247');
-    case 'fenced':
-      return tristateState(location, key, 'fenced');
-    case 'lit':
-      return tristateState(location, key, 'lit');
-    case 'ingressEgress': {
-      const captured = verified(location, 'ingressEgress');
-      const scrapedValue = !captured && !isEmpty(location.ingressEgress) ? String(location.ingressEgress) : null;
+      return tristateState(location, key, 'is_24_7');
+    case 'is_fenced':
+      return tristateState(location, key, 'is_fenced');
+    case 'is_lit':
+      return tristateState(location, key, 'is_lit');
+    case 'ingress_egress': {
+      const captured = verified(location, 'ingress_egress');
+      const scrapedValue = !captured && !isEmpty(location.ingress_egress) ? String(location.ingress_egress) : null;
       return { key, captured, scrapedValue };
     }
     case 'clearance': {
-      const captured = verified(location, 'clearanceText');
-      const scrapedValue = !captured && !isEmpty(location.clearanceText) ? location.clearanceText! : null;
+      const captured = verified(location, 'clearance_text');
+      const scrapedValue = !captured && !isEmpty(location.clearance_text) ? location.clearance_text! : null;
       return { key, captured, scrapedValue };
     }
     case 'ratesHours': {
-      const captured = verified(location, 'priceText') && verified(location, 'hoursText');
+      const captured = verified(location, 'price_text') && verified(location, 'hours_text');
       const parts: string[] = [];
-      if (!verified(location, 'priceText') && !isEmpty(location.priceText)) parts.push(location.priceText!);
-      if (!verified(location, 'hoursText') && !isEmpty(location.hoursText)) parts.push(location.hoursText!);
+      if (!verified(location, 'price_text') && !isEmpty(location.price_text)) parts.push(location.price_text!);
+      if (!verified(location, 'hours_text') && !isEmpty(location.hours_text)) parts.push(location.hours_text!);
       return { key, captured, scrapedValue: captured || parts.length === 0 ? null : parts.join(' · ') };
     }
     default:

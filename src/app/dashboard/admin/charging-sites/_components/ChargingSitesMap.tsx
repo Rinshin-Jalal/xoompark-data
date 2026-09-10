@@ -55,11 +55,11 @@ export function ChargingSitesMap({
                 />
               ))}
             {sites.map((s) => (
-              <AdvancedMarker key={s.afdcId} position={{ lat: s.lat, lng: s.lng }} onClick={() => onSelect(s)} title={s.name}>
+              <AdvancedMarker key={s.source_id} position={{ lat: s.lat, lng: s.lng }} onClick={() => onSelect(s)} title={s.name}>
                 <span
                   className={
                     'block h-3 w-3 rounded-full border-2 border-white shadow cursor-pointer transition-transform hover:scale-125 ' +
-                    (isTeslaNetwork(s.network) ? 'bg-[#c1121f]' : isInOdd(s.lat, s.lng, fleet) ? 'bg-[#1a5a2a]' : 'bg-[#0e1c36]')
+                    (isTeslaNetwork(s.network_name) ? 'bg-[#c1121f]' : isInOdd(s.lat, s.lng, fleet) ? 'bg-[#1a5a2a]' : 'bg-[#0e1c36]')
                   }
                 />
               </AdvancedMarker>

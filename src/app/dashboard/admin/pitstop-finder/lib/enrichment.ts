@@ -8,31 +8,31 @@ import { ScoredSite } from './finder';
 export interface EnrichedSite extends ScoredSite {
   address?: string;
   owner?: string;
-  ownerMailing?: string;
-  parcelId?: string;
-  landUse?: string;
-  zoning?: string;
-  closedAtNight?: boolean;
+  owner_mailing_address?: string;
+  parcel_id?: string;
+  land_use_code?: string;
+  zoning_code?: string;
+  is_closed_at_night?: boolean;
 }
 
 // Enrich owner-direct candidates with parcel/owner data and hours
-export async function enrichSite(site: ScoredSite, metro: MetroCode): Promise<EnrichedSite> {
+export async function enrichSite(site: ScoredSite, metro_id: MetroCode): Promise<EnrichedSite> {
   const enriched = { ...site } as EnrichedSite;
 
   // Only enrich owner-direct candidates
-  if (!site.ownerDirectCandidate) {
+  if (!site.is_owner_direct_candidate) {
     return enriched;
   }
 
   // Attempt owner lookup
   try {
-    const ownerInfo = await lookupOwner(metro, site.lat, site.lon);
+    const ownerInfo = await lookupOwner(metro_id, site.lat, site.lng);
     if (ownerInfo.ownerName) {
       enriched.owner = ownerInfo.ownerName;
-      enriched.ownerMailing = ownerInfo.ownerMailingAddress ?? undefined;
-      enriched.parcelId = ownerInfo.folio ?? undefined;
-      enriched.landUse = ownerInfo.landUse ?? undefined;
-      enriched.zoning = ownerInfo.zoning ?? undefined;
+      enriched.owner_mailing_address = ownerInfo.owner_mailing_addressAddress ?? undefined;
+      enriched.parcel_id = ownerInfo.folio ?? undefined;
+      enriched.land_use_code = ownerInfo.land_use_code ?? undefined;
+      enriched.zoning_code = ownerInfo.zoning_code ?? undefined;
     }
   } catch (err) {
     console.debug('[enrichment] owner lookup failed:', err);
@@ -40,11 +40,11 @@ export async function enrichSite(site: ScoredSite, metro: MetroCode): Promise<En
 
   // Attempt hours lookup
   try {
-    const hoursResult = await lookupClosedAtNight(site.lat, site.lon);
+    const hoursResult = await lookupClosedAtNight(site.lat, site.lng);
     if (hoursResult) {
-      enriched.closedAtNight = hoursResult.closedAtNight;
-      if (hoursResult.hoursText) {
-        enriched.openingHours = hoursResult.hoursText;
+      enriched.is_closed_at_night = hoursResult.is_closed_at_night;
+      if (hoursResult.hours_text) {
+        enriched.opening_hours = hoursResult.hours_text;
       }
     }
   } catch (err) {
@@ -53,7 +53,7 @@ export async function enrichSite(site: ScoredSite, metro: MetroCode): Promise<En
 
   // Attempt address lookup
   try {
-    const address = await lookupAddress(site.lat, site.lon);
+    const address = await lookupAddress(site.lat, site.lng);
     if (address) {
       enriched.address = address;
     }
@@ -65,12 +65,12 @@ export async function enrichSite(site: ScoredSite, metro: MetroCode): Promise<En
 }
 
 // Batch enrich multiple sites (rate-limited to avoid hammering APIs)
-export async function enrichSites(sites: ScoredSite[], metro: MetroCode, chunkSize: number = 10): Promise<EnrichedSite[]> {
+export async function enrichSites(sites: ScoredSite[], metro_id: MetroCode, chunkSize: number = 10): Promise<EnrichedSite[]> {
   const enriched: EnrichedSite[] = [];
 
   for (let i = 0; i < sites.length; i += chunkSize) {
     const chunk = sites.slice(i, i + chunkSize);
-    const results = await Promise.all(chunk.map((s) => enrichSite(s, metro)));
+    const results = await Promise.all(chunk.map((s) => enrichSite(s, metro_id)));
     enriched.push(...results);
   }
 

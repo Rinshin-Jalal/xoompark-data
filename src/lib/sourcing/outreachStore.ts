@@ -13,13 +13,13 @@ export async function getOutreachRecord(lotId: string): Promise<OutreachRecord |
 
 export async function saveOutreachRecord(
   lotId: string,
-  data: Omit<OutreachRecord, 'id' | 'lotId' | 'createdAt' | 'updatedAt'>,
+  data: Omit<OutreachRecord, 'id' | 'lot_id' | 'created_at' | 'updated_at'>,
 ): Promise<OutreachRecord> {
   const existing = await getOutreachRecord(lotId);
   const now = new Date().toISOString();
 
   if (existing) {
-    const updated: OutreachRecord = { ...existing, ...data, updatedAt: now };
+    const updated: OutreachRecord = { ...existing, ...data, updated_at: now };
     await outreachCollection(lotId).doc(existing.id).set(updated);
     return updated;
   }
@@ -27,10 +27,10 @@ export async function saveOutreachRecord(
   const ref = outreachCollection(lotId).doc();
   const record: OutreachRecord = {
     id: ref.id,
-    lotId,
+    lot_id: lotId,
     ...data,
-    createdAt: now,
-    updatedAt: now,
+    created_at: now,
+    updated_at: now,
   };
   await ref.set(record);
   return record;
@@ -47,31 +47,31 @@ export async function setOutreachState(
     const ref = outreachCollection(lotId).doc();
     const record: OutreachRecord = {
       id: ref.id,
-      lotId,
-      contactName: '',
-      contactRole: '',
-      contactEmail: '',
-      contactPhone: '',
-      inquirySent: false,
-      callMade: false,
-      formSubmitted: false,
-      offerSpaces: null,
-      offerPrice: '',
-      offerStart: '',
-      outreachState: state,
-      responseDate: state === 'responded' ? now : null,
-      quoteSource: '',
-      bdrOwner: '',
-      createdAt: now,
-      updatedAt: now,
+      lot_id: lotId,
+      contact_name: '',
+      contact_title: '',
+      contact_email: '',
+      contact_phone: '',
+      email_sent: false,
+      call_completed: false,
+      form_submitted: false,
+      offered_spaces: null,
+      offered_price: '',
+      offered_start_date: '',
+      status: state,
+      response_date: state === 'responded' ? now : null,
+      quote_source: '',
+      assigned_to: '',
+      created_at: now,
+      updated_at: now,
     };
     await ref.set(record);
     return record;
   }
 
-  const update: Partial<OutreachRecord> = { outreachState: state, updatedAt: now };
-  if (state === 'responded' && !existing.responseDate) {
-    update.responseDate = now;
+  const update: Partial<OutreachRecord> = { status: state, updated_at: now };
+  if (state === 'responded' && !existing.response_date) {
+    update.response_date = now;
   }
   await outreachCollection(lotId).doc(existing.id).update(update);
   return { ...existing, ...update } as OutreachRecord;
