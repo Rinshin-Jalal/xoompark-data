@@ -10,6 +10,7 @@ import { useData } from '@/components/outreach/DataContext';
 import { ConnectionsBar } from '@/components/outreach/ConnectionsBar';
 import { DetailWorkflow } from '@/components/outreach/DetailWorkflow';
 import { OfferCapture } from '@/components/outreach/OfferCapture';
+import { EnrichmentVerify } from '@/components/outreach/EnrichmentVerify';
 import { nextAction, gaps } from '@/lib/outreach/workflow';
 import { getActivity, saveFields } from '@/lib/outreach/actions';
 
@@ -150,6 +151,7 @@ export function DetailSheet() {
             </div>
             <DetailWorkflow lead={selected} />
             <OfferCapture lotId={selected.id} />
+            <EnrichmentVerify lotId={selected.id} />
             <section className="detail-section">
               <h3>Contact</h3>
               <div className="detail-info-grid">

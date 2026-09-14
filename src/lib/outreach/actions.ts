@@ -433,6 +433,27 @@ export async function enrichLot(lotId: string): Promise<{ status: string; fields
   return { status: result.status, fields: result.fields.length };
 }
 
+// ── Enrichment read + field verification ───────────────────────────────────
+export async function getEnrichment(lotId: string): Promise<{ fields: { field: string; value: string; confidence: number; snippet: string; verified: boolean }[]; status: string; scrapedAt: string } | null> {
+  await requireAdmin();
+  const db = getAdminFirestore();
+  const snap = await db.collection(LOTS).doc(lotId).get();
+  const data = snap.data();
+  return (data?.ai_enrichment as { fields: { field: string; value: string; confidence: number; snippet: string; verified: boolean }[]; status: string; scrapedAt: string }) ?? null;
+}
+
+export async function verifyField(lotId: string, field: string, verified: boolean): Promise<void> {
+  const admin = await requireAdmin();
+  const db = getAdminFirestore();
+  const snap = await db.collection(LOTS).doc(lotId).get();
+  const enrichment = snap.data()?.ai_enrichment as { fields: { field: string; verified: boolean }[] } | undefined;
+  if (!enrichment) return;
+  const fields = enrichment.fields.map((f) => (f.field === field ? { ...f, verified } : f));
+  await db.collection(LOTS).doc(lotId).update({ ai_enrichment: { ...enrichment, fields } });
+  await logActivity(admin.email, lotId, `${verified ? 'Verified' : 'Rejected'} field: ${field}`);
+  revalidatePath('/', 'layout');
+}
+
 // ── Preview a lot before adding (Quick Add confirmation) ───────────────────
 // Parses the input (URL → parse, address → minimal) and returns the FULL
 // parsed fields WITHOUT writing. The UI shows these in an editable dialog,

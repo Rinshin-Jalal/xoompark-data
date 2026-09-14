@@ -1275,6 +1275,63 @@ td:first-child {
   padding-top: 14px;
   border-top: 1px solid #e1e8ec;
 }
+.enrich-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+.enrich-field {
+  border: 1px solid #e1e8ec;
+  border-radius: 8px;
+  padding: 12px;
+}
+.enrich-confidence {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f5f4f4;
+  color: #657e8a;
+}
+.enrich-value {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.enrich-snippet {
+  font-size: 12px;
+  color: #8a989f;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.enrich-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.enrich-accept,
+.enrich-reject {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #e5e3e3;
+  color: #171717;
+}
+.enrich-accept:hover {
+  border-color: #3b7a57;
+  color: #3b7a57;
+}
+.enrich-reject:hover {
+  border-color: #b63232;
+  color: #b63232;
+}
+.enrich-verified {
+  font-size: 12px;
+  color: #3b7a57;
+  font-weight: 500;
+}
 .source-link {
   display: flex;
   gap: 6px;
