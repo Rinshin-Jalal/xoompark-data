@@ -7,6 +7,7 @@ import { Plus } from 'lucide-react';
 import { useData, useRoles } from '@/components/outreach/DataContext';
 import { AvatarStack } from '@/components/spectrumui/avatar-stack';
 import { createUser, setUserRoles, listUsers } from '@/lib/outreach/userActions';
+import { syncCompanyAccounts } from '@/lib/outreach/actions';
 import { ROLES, ROLE_LABELS, type Role } from '@/lib/outreach/roles';
 
 export function TeamView() {
@@ -65,6 +66,18 @@ export function TeamView() {
     });
   }
 
+  function handleSyncAccounts() {
+    startTransition(async () => {
+      try {
+        const r = await syncCompanyAccounts();
+        toast.success(`Synced ${r.accounts} operator accounts`);
+        router.refresh();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Failed to sync accounts');
+      }
+    });
+  }
+
   return (
     <>
       <div className="page-heading">
@@ -82,7 +95,12 @@ export function TeamView() {
               <h2>Team members</h2>
               <p>Create users and assign roles. Only admins can create accounts.</p>
             </div>
-            {!loaded && <button onClick={loadUsers} className="text-sm text-[#3b7a57] hover:underline">Load users</button>}
+            <div className="flex gap-2">
+              <button onClick={handleSyncAccounts} disabled={pending} className="text-sm text-[#3b7a57] hover:underline disabled:opacity-50">
+                Sync accounts
+              </button>
+              {!loaded && <button onClick={loadUsers} className="text-sm text-[#3b7a57] hover:underline">Load users</button>}
+            </div>
           </div>
           <div className="p-4">
             <form onSubmit={handleCreate} className="flex gap-2 mb-4">
