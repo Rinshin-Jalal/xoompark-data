@@ -158,6 +158,18 @@ export async function saveField(
   revalidatePath('/', 'layout');
 }
 
+// ── Batch save (edit mode in the detail sheet) ─────────────────────────────
+export async function saveFields(lotId: string, fields: Record<string, string>): Promise<void> {
+  const admin = await requireAdmin();
+  const db = getAdminFirestore();
+  await db.collection(LOTS).doc(lotId).update({
+    ...fields,
+    updated_at: new Date().toISOString(),
+  });
+  await logActivity(admin.email, lotId, `Fields saved: ${Object.keys(fields).join(', ')}`);
+  revalidatePath('/', 'layout');
+}
+
 // ── Save a decision-maker contact (Research Desk write) ───────────────────
 // Creates or updates the outreach subcollection record with the contact and
 // moves the lot to `ready` (BDR email). No new write path — same subcollection

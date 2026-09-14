@@ -1123,34 +1123,27 @@ td:first-child {
   letter-spacing: -0.7px;
   margin-bottom: 7px;
 }
-.detail-name {
+.detail-edit-bar {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+.detail-name-input {
   font-size: 25px;
   font-weight: 600;
   letter-spacing: -0.7px;
   margin-bottom: 7px;
-  text-align: left;
   width: 100%;
   color: #171717;
   padding: 0;
   border: none;
+  border-bottom: 1px solid #e5e3e3;
   background: transparent;
 }
-.detail-name:focus {
-  outline: 1px solid #3b7a57;
-  outline-offset: 2px;
-}
-.detail-field {
-  font-size: 13px;
-  color: #171717;
-  text-align: left;
-  padding: 0;
-  border: none;
-  background: transparent;
-  width: 100%;
-}
-.detail-field:focus {
-  outline: 1px solid #3b7a57;
-  outline-offset: 2px;
+.detail-name-input:focus {
+  outline: none;
+  border-bottom-color: #3b7a57;
 }
 .open-in-links {
   display: flex;
