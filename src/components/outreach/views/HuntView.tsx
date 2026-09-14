@@ -9,6 +9,7 @@ import { LOCALITIES } from '@/lib/sourcing/locality';
 import { huntAggregatorLinks, HUNT_OFFICIAL_LINKS, HUNT_UNINGESTED_AGGREGATOR_LINKS } from '@/lib/sourcing/huntLinks';
 import { quickAddLot, previewLot } from '@/lib/outreach/actions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { ManualAddSheet } from '@/components/outreach/ManualAddSheet';
 
 export function HuntView() {
   const data = useData();
@@ -18,10 +19,9 @@ export function HuntView() {
   const [url, setUrl] = useState('');
   const [html, setHtml] = useState('');
   const [htmlSource, setHtmlSource] = useState('');
-  const [manualName, setManualName] = useState('');
-  const [manualAddress, setManualAddress] = useState('');
   const [preview, setPreview] = useState<{ name: string; address: string; source: string; count: number } | null>(null);
   const [showGuide, setShowGuide] = useState(false);
+  const [showManual, setShowManual] = useState(false);
 
   function handlePreview() {
     if (!url.trim()) return;
@@ -67,26 +67,6 @@ export function HuntView() {
         router.refresh();
       } catch (err) {
         toast.error(err instanceof Error ? err.message : 'Failed to import HTML');
-      }
-    });
-  }
-
-  async function handleManualAdd() {
-    if (!manualName.trim() || !manualAddress.trim()) {
-      toast.error('Name and address are required');
-      return;
-    }
-    startTransition(async () => {
-      try {
-        const { addSourcedLocation } = await import('@/app/dashboard/admin/parking-sourcing/actions');
-        const r = await addSourcedLocation({ name: manualName.trim(), address: manualAddress.trim() } as never);
-        if (!r.ok) throw new Error('Failed to add');
-        toast.success(`Added "${manualName.trim()}"`);
-        setManualName('');
-        setManualAddress('');
-        router.refresh();
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : 'Failed to add');
       }
     });
   }
@@ -173,26 +153,14 @@ export function HuntView() {
           )}
 
           {mode === 'manual' && (
-            <div className="space-y-2">
-              <input
-                value={manualName}
-                onChange={(e) => setManualName(e.target.value)}
-                placeholder="Lot name"
-                className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
-              />
-              <input
-                value={manualAddress}
-                onChange={(e) => setManualAddress(e.target.value)}
-                placeholder="Address"
-                className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
-              />
-              <button onClick={handleManualAdd} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
-                <Plus size={14} /> {pending ? 'Adding…' : 'Add lot'}
-              </button>
-            </div>
+            <button onClick={() => setShowManual(true)} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5">
+              <Plus size={14} /> Open manual form
+            </button>
           )}
         </div>
       </div>
+
+      <ManualAddSheet open={showManual} onClose={() => setShowManual(false)} />
 
       <Dialog open={!!preview} onOpenChange={(open) => { if (!open) setPreview(null); }}>
         <DialogContent className="sm:max-w-sm">
