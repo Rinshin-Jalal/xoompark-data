@@ -4,9 +4,9 @@ import { formatHoursText } from './hours';
 import type { ResourceTag, ServiceTag, SourcedParkingLocation } from './sourcing/types';
 import { MIAMI_DEMAND_ZONES } from './sourcing/demandZones';
 import type { Site, Resource, Offering, ServiceType, ResourceType, OfferingRate } from './types';
-// Client-safe constants module — importing from app components is fine
-// here (server-side), and keeps one source of truth for the demo site.
-import { DEMO_DOC_ID } from '@/app/search/_components/locked';
+
+// Demo doc id — was imported from the deleted /search route; inlined here.
+const DEMO_DOC_ID = 'addr:2201-north-miami-avenue-miami';
 
 // sourcing tags (lowercase) -> public /search enums. Not a plain uppercase:
 // 'staging' maps to STAGE, not STAGING.
