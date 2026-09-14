@@ -2728,3 +2728,11 @@ td:first-child {
 @media (max-width: 1000px) {
   .queue-layout { grid-template-columns: 1fr; }
 }
+
+/* ── Leaflet map: contain panes so overlays (detail sheet, dialogs) sit above ── */
+.leaflet-container {
+  z-index: 0;
+}
+.leaflet-pane {
+  z-index: 0;
+}
