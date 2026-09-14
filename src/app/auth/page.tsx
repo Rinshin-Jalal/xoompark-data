@@ -2,12 +2,11 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { motion, easeOut } from 'framer-motion';
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  updateProfile,
   RecaptchaVerifier,
   signInWithPhoneNumber,
   getIdToken,
@@ -20,6 +19,18 @@ import { Loader2, Mail, Lock, Phone, ArrowLeft } from 'lucide-react';
 
 type AuthMethod = 'email' | 'phone';
 type PhoneStep = 'input' | 'verify';
+
+// Staggered entrance — semantic chunks, ~100ms apart (better-ui: split & stagger).
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.5, staggerChildren: 0.1 } },
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
+};
+// Scale on press — always 0.96 (better-ui: scale on press).
+const press = { whileHover: { scale: 1.01 }, whileTap: { scale: 0.96 } };
 
 function AuthPageContent() {
   const router = useRouter();
@@ -110,30 +121,29 @@ function AuthPageContent() {
     }
   }
 
+  // Concentric radius: card 8px, inputs/buttons 6px (better-ui: concentric radius).
   const inputCls =
-    'w-full bg-white border border-[#e5e3e3] rounded-lg pl-10 pr-4 py-3 text-sm text-[#171717] placeholder-[#6b6868] focus:outline-none focus:border-[#3b7a57] transition-colors';
+    'w-full bg-white border border-[#e5e3e3] rounded-md pl-10 pr-4 py-2.5 text-sm text-[#171717] placeholder-[#6b6868] focus:outline-none focus:border-[#3b7a57] transition-colors duration-150';
 
   return (
     <div className="w-full min-h-screen bg-[#fdfcfc]">
       <div id="recaptcha-container" />
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-sm">
-          <div className="flex items-center justify-center mb-8">
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="w-full max-w-sm">
+          <motion.div variants={itemVariants} className="flex items-center justify-center mb-8">
             <span className="text-2xl font-bold tracking-[-0.05em] text-[#171717]">
               XOOM<span className="font-normal">PARK</span>
             </span>
-          </div>
+          </motion.div>
 
-          <div className="bg-white border border-[#e5e3e3] rounded-lg p-6">
-            <h1 className="text-lg font-semibold text-[#171717] mb-1">
-              Sign in
-            </h1>
+          <motion.div variants={itemVariants} className="bg-white border border-[#e5e3e3] rounded-lg p-6">
+            <h1 className="text-lg font-semibold text-[#171717] mb-1">Sign in</h1>
             <p className="text-sm text-[#6b6868] mb-5">Supply workspace</p>
 
-            <div className="flex gap-1 mb-5">
+            <motion.div variants={itemVariants} className="flex gap-1 mb-5">
               <button
                 onClick={() => setAuthMethod('email')}
-                className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors duration-150 ${
                   authMethod === 'email' ? 'bg-[#111] text-white' : 'text-[#6b6868] hover:text-[#171717]'
                 }`}
               >
@@ -141,18 +151,18 @@ function AuthPageContent() {
               </button>
               <button
                 onClick={() => { setAuthMethod('phone'); setPhoneStep('input'); }}
-                className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors duration-150 ${
                   authMethod === 'phone' ? 'bg-[#111] text-white' : 'text-[#6b6868] hover:text-[#171717]'
                 }`}
               >
                 Phone
               </button>
-            </div>
+            </motion.div>
 
             {authMethod === 'email' && (
-              <form onSubmit={handleEmailSubmit} className="space-y-3">
+              <motion.form variants={itemVariants} onSubmit={handleEmailSubmit} className="space-y-3">
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" strokeWidth={1.5} />
                   <input
                     type="email"
                     value={email}
@@ -164,7 +174,7 @@ function AuthPageContent() {
                   />
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" strokeWidth={1.5} />
                   <input
                     type="password"
                     value={password}
@@ -176,20 +186,21 @@ function AuthPageContent() {
                     className={inputCls}
                   />
                 </div>
-                <button
+                <motion.button
                   type="submit"
+                  {...press}
                   disabled={loading}
-                  className="w-full bg-[#111] text-white rounded-md py-2.5 text-sm font-medium hover:bg-[#333] transition-colors disabled:opacity-60"
+                  className="w-full bg-[#111] text-white rounded-md py-2.5 text-sm font-medium hover:bg-[#333] transition-colors duration-150 disabled:opacity-60"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Sign in'}
-                </button>
-              </form>
+                </motion.button>
+              </motion.form>
             )}
 
             {authMethod === 'phone' && phoneStep === 'input' && (
-              <form onSubmit={handleSendOtp} className="space-y-3">
+              <motion.form variants={itemVariants} onSubmit={handleSendOtp} className="space-y-3">
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" strokeWidth={1.5} />
                   <input
                     type="tel"
                     value={phone}
@@ -199,27 +210,28 @@ function AuthPageContent() {
                     className={inputCls}
                   />
                 </div>
-                <button
+                <motion.button
                   type="submit"
+                  {...press}
                   disabled={loading}
-                  className="w-full bg-[#111] text-white rounded-md py-2.5 text-sm font-medium hover:bg-[#333] transition-colors disabled:opacity-60"
+                  className="w-full bg-[#111] text-white rounded-md py-2.5 text-sm font-medium hover:bg-[#333] transition-colors duration-150 disabled:opacity-60"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Send OTP'}
-                </button>
-              </form>
+                </motion.button>
+              </motion.form>
             )}
 
             {authMethod === 'phone' && phoneStep === 'verify' && (
-              <form onSubmit={handleVerifyOtp} className="space-y-3">
+              <motion.form variants={itemVariants} onSubmit={handleVerifyOtp} className="space-y-3">
                 <button
                   type="button"
                   onClick={() => setPhoneStep('input')}
-                  className="flex items-center gap-1 text-xs text-[#6b6868] hover:text-[#171717]"
+                  className="flex items-center gap-1 text-xs text-[#6b6868] hover:text-[#171717] transition-colors duration-150"
                 >
-                  <ArrowLeft className="h-3 w-3" /> Back
+                  <ArrowLeft className="h-3 w-3" strokeWidth={1.5} /> Back
                 </button>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6868]" strokeWidth={1.5} />
                   <input
                     type="text"
                     value={otp}
@@ -230,27 +242,29 @@ function AuthPageContent() {
                     className={inputCls}
                   />
                 </div>
-                <button
+                <motion.button
                   type="submit"
+                  {...press}
                   disabled={loading}
-                  className="w-full bg-[#111] text-white rounded-md py-2.5 text-sm font-medium hover:bg-[#333] transition-colors disabled:opacity-60"
+                  className="w-full bg-[#111] text-white rounded-md py-2.5 text-sm font-medium hover:bg-[#333] transition-colors duration-150 disabled:opacity-60"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Verify OTP'}
-                </button>
-              </form>
+                </motion.button>
+              </motion.form>
             )}
 
-            <div className="flex items-center gap-3 my-4">
+            <motion.div variants={itemVariants} className="flex items-center gap-3 my-4">
               <div className="flex-1 h-px bg-[#e5e3e3]" />
               <span className="text-xs text-[#6b6868]">or</span>
               <div className="flex-1 h-px bg-[#e5e3e3]" />
-            </div>
+            </motion.div>
 
-            <button
+            <motion.button
               type="button"
+              {...press}
               onClick={handleGoogle}
               disabled={loading}
-              className="w-full border border-[#e5e3e3] rounded-md py-2.5 text-sm text-[#171717] flex items-center justify-center gap-2 hover:bg-[#fdfcfc] transition-colors disabled:opacity-60"
+              className="w-full border border-[#e5e3e3] rounded-md py-2.5 text-sm text-[#171717] flex items-center justify-center gap-2 hover:bg-[#f5f4f4] transition-colors duration-150 disabled:opacity-60"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -259,13 +273,13 @@ function AuthPageContent() {
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
               Google
-            </button>
+            </motion.button>
 
             <p className="text-center text-xs text-[#6b6868] mt-4">
               Accounts are created by an admin. Contact your team lead for access.
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

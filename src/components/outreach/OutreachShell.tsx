@@ -18,6 +18,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
+  SidebarFooter,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
@@ -26,7 +27,8 @@ import {
 } from '@/components/ui/sidebar';
 import type { Data } from '@/lib/outreach/workflow';
 import { isActive } from '@/lib/outreach/workflow';
-import { canAccess, type Role } from '@/lib/outreach/roles';
+import { canAccess, ROLE_LABELS, type Role } from '@/lib/outreach/roles';
+import { signOutAction } from '@/lib/authActions';
 import { DataProvider } from '@/components/outreach/DataContext';
 import { DetailProvider } from '@/components/outreach/DetailContext';
 import { DetailSheet } from '@/components/outreach/DetailSheet';
@@ -46,7 +48,7 @@ const nav = [
   ['/team', 'Team & workflow', Users],
 ] as const;
 
-export function OutreachShell({ data, roles, children }: { data: Data; roles: Role[]; children: React.ReactNode }) {
+export function OutreachShell({ data, roles, user, children }: { data: Data; roles: Role[]; user: { email: string; name: string }; children: React.ReactNode }) {
   const pathname = usePathname();
   const activeCount = data.leads.filter(isActive).length;
 
@@ -96,6 +98,17 @@ export function OutreachShell({ data, roles, children }: { data: Data; roles: Ro
               ))}
             </SidebarMenu>
           </SidebarContent>
+          <SidebarFooter>
+            <div className="profile">
+              <span className="avatar">{user.name.slice(0, 2).toUpperCase()}</span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-[#171717]">{user.name}</p>
+                <p className="truncate text-xs text-[#6b6868]">{user.email}</p>
+                <p className="text-[10px] text-[#3b7a57] mt-0.5">{roles.map((r) => ROLE_LABELS[r]).join(' · ')}</p>
+              </div>
+              <button onClick={() => signOutAction()} className="ml-auto text-xs text-[#6b6868] hover:text-[#171717]">Sign out</button>
+            </div>
+          </SidebarFooter>
         </Sidebar>
         <SidebarInset className="xp-main">
           <header className="topbar">

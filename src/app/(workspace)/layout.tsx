@@ -12,11 +12,16 @@ export default async function OutreachLayout({ children }: { children: React.Rea
   const session = cookieStore.get('session')?.value;
   if (!session) redirect('/auth');
 
-  // Read the roles from the session cookie's custom claims.
+  // Read the roles + user info from the session cookie's custom claims.
   let roles: Role[] = [];
+  let user: { email: string; name: string } = { email: '', name: '' };
   try {
     const decoded = await getAdminAuth().verifySessionCookie(session, true);
     roles = (Array.isArray(decoded.roles) ? (decoded.roles as Role[]) : []);
+    user = {
+      email: decoded.email ?? '',
+      name: (decoded.name as string | undefined) ?? decoded.email ?? '',
+    };
   } catch {
     redirect('/auth');
   }
@@ -24,7 +29,7 @@ export default async function OutreachLayout({ children }: { children: React.Rea
   const data = await getOutreachData();
   return (
     <div className="outreach-root">
-      <OutreachShell data={data} roles={roles}>{children}</OutreachShell>
+      <OutreachShell data={data} roles={roles} user={user}>{children}</OutreachShell>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { AvatarStack } from '@/components/spectrumui/avatar-stack';
 import { createUser, setUserRoles, listUsers } from '@/lib/outreach/userActions';
 import { syncCompanyAccounts } from '@/lib/outreach/actions';
 import { ROLES, ROLE_LABELS, type Role } from '@/lib/outreach/roles';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 export function TeamView() {
   const data = useData();
@@ -19,6 +20,8 @@ export function TeamView() {
   const [newRoles, setNewRoles] = useState<Role[]>(['bdr']);
   const [users, setUsers] = useState<{ uid: string; email: string; roles: string[] }[]>([]);
   const [loaded, setLoaded] = useState(false);
+  // Pending role change — confirmed via dialog before applying.
+  const [pendingChange, setPendingChange] = useState<{ uid: string; email: string; roles: Role[] } | null>(null);
 
   const owners = [...new Set(Object.values(data.settings).filter((v) => typeof v === 'string'))] as string[];
 
@@ -64,6 +67,12 @@ export function TeamView() {
         toast.error(err instanceof Error ? err.message : 'Failed to update roles');
       }
     });
+  }
+
+  function confirmRoleChange() {
+    if (!pendingChange) return;
+    handleRoles(pendingChange.uid, pendingChange.roles);
+    setPendingChange(null);
   }
 
   function handleSyncAccounts() {
@@ -139,7 +148,7 @@ export function TeamView() {
                       {ROLES.map((r) => (
                         <button
                           key={r}
-                          onClick={() => handleRoles(u.uid, (u.roles.includes(r) ? u.roles.filter((x) => x !== r) : [...u.roles, r]) as Role[])}
+                          onClick={() => setPendingChange({ uid: u.uid, email: u.email, roles: (u.roles.includes(r) ? u.roles.filter((x) => x !== r) : [...u.roles, r]) as Role[] })}
                           className={`px-2 py-1 text-xs rounded-md border transition-colors ${
                             u.roles.includes(r) ? 'bg-[#111] text-white border-[#111]' : 'border-[#e5e3e3] text-[#6b6868] hover:border-[#171717]'
                           }`}
@@ -192,6 +201,28 @@ export function TeamView() {
           ))}
         </section>
       </div>
+
+      <Dialog open={!!pendingChange} onOpenChange={(open) => { if (!open) setPendingChange(null); }}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Change roles?</DialogTitle>
+            <DialogDescription>
+              {pendingChange?.email} will become:{' '}
+              <span className="font-medium text-[#171717]">
+                {pendingChange?.roles.length ? pendingChange.roles.map((r) => ROLE_LABELS[r]).join(', ') : 'no roles'}
+              </span>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <button onClick={() => setPendingChange(null)} className="px-4 py-2 text-sm rounded-md border border-[#e5e3e3] text-[#171717] hover:bg-[#f5f4f4] transition-colors duration-150">
+              Cancel
+            </button>
+            <button onClick={confirmRoleChange} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] transition-colors duration-150 disabled:opacity-60">
+              Confirm
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
