@@ -16,6 +16,7 @@ export function HuntView() {
   const [pending, startTransition] = useTransition();
   const [url, setUrl] = useState('');
   const [preview, setPreview] = useState<{ name: string; address: string; source: string; count: number } | null>(null);
+  const [showGuide, setShowGuide] = useState(false);
 
   function handlePreview() {
     if (!url.trim()) return;
@@ -58,6 +59,9 @@ export function HuntView() {
           <h1>Find the next lot.</h1>
           <p>Locality-by-locality discovery of lots not yet in the system.</p>
         </div>
+        <button onClick={() => setShowGuide(true)} className="px-4 py-2 text-sm rounded-md border border-[#e5e3e3] text-[#171717] hover:bg-[#f5f4f4] transition-colors duration-150">
+          How to add a lot
+        </button>
       </div>
 
       <div className="panel mb-6">
@@ -151,6 +155,31 @@ export function HuntView() {
           ))}
         </div>
       </div>
+
+      <Dialog open={showGuide} onOpenChange={setShowGuide}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>How to add a lot</DialogTitle>
+            <DialogDescription>The quick-add flow for BDRs.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            {[
+              ['1', 'Paste a URL or address', 'Paste a SpotHero, Parkopedia, or any listing URL — or just an address. The system parses it automatically.'],
+              ['2', 'Review the details', 'A dialog shows the parsed name, address, and source. Check it looks right before adding.'],
+              ['3', 'Confirm', 'Hit "Confirm add". The lot is created as a draft and lands in the Work Queue for the 7-field checklist.'],
+              ['4', 'Hunt by locality', 'Use the locality cards below to open aggregator deep links and find lots not yet in the system.'],
+            ].map(([n, t, d]) => (
+              <div key={n} className="flex gap-3">
+                <b className="text-[#3b7a57] text-sm shrink-0">{n}</b>
+                <div>
+                  <h3 className="text-sm font-medium text-[#171717]">{t}</h3>
+                  <p className="text-sm text-[#6b6868] leading-relaxed">{d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

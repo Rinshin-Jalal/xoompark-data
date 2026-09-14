@@ -58,6 +58,21 @@ const AGGREGATORS: AggregatorConfig[] = [
     verifiedLinks: {},
     homepage: 'https://www.bestparking.com/miami-parking/neighborhoods/',
   },
+  {
+    name: 'Way.com',
+    verifiedLinks: {},
+    homepage: 'https://www.way.com/parking/miami/',
+  },
+  {
+    name: 'ParkMe',
+    verifiedLinks: {},
+    homepage: 'https://www.parkme.com/miami-parking',
+  },
+  {
+    name: 'SpotAngels',
+    verifiedLinks: {},
+    homepage: 'https://www.spotangels.com/miami',
+  },
 ];
 
 export interface HuntAggregatorLink {
