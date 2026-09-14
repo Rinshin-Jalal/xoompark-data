@@ -207,25 +207,29 @@ export function TeamView() {
       <div className="team-layout">
         <section className="panel settings-panel">
           <h2>Who owns the next step?</h2>
-          <p className="muted">Preview role names, not authenticated employee accounts.</p>
+          <p className="muted">Real users, assigned by role. Manage roles in the Team members section above.</p>
           <div className="mt-4"><AvatarStack items={owners.map((name) => ({ name }))} /></div>
-          <form style={{ display: 'grid', gap: 18, marginTop: 28 }}>
+          <div style={{ display: 'grid', gap: 18, marginTop: 28 }}>
             {[
               ['researcher', 'Research owner'],
-              ['bdr1', 'BDR · territory A'],
-              ['bdr2', 'BDR · territory B'],
+              ['bdr', 'BDR · territory A'],
+              ['bdr', 'BDR · territory B'],
               ['sdr', 'SDR call owner'],
-            ].map(([key, label]) => (
-              <label key={key} style={{ display: 'grid', gap: 8, fontSize: 13, color: '#6b6868' }}>
-                {label}
-                <input name={key} defaultValue={String(data.settings[key as keyof typeof data.settings])} readOnly className="h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
-              </label>
-            ))}
+            ].map(([role, label], i) => {
+              const roleUsers = users.filter((u) => u.roles.includes(role));
+              const value = role === 'bdr' ? (roleUsers[i === 1 ? 0 : 1]?.email ?? 'Unassigned') : (roleUsers[0]?.email ?? 'Unassigned');
+              return (
+                <label key={label} style={{ display: 'grid', gap: 8, fontSize: 13, color: '#6b6868' }}>
+                  {label}
+                  <input value={value} readOnly className="h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+                </label>
+              );
+            })}
             <label style={{ display: 'grid', gap: 8, fontSize: 13, color: '#6b6868' }}>
               Daily operator groups per person
-              <input name="dailyLimit" type="number" defaultValue={data.settings.dailyLimit} readOnly className="h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              <input type="number" defaultValue={data.settings.dailyLimit} readOnly className="h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
             </label>
-          </form>
+          </div>
         </section>
         <section className="panel settings-panel">
           <h2>How work moves</h2>

@@ -68,11 +68,15 @@ function derivePriority(
   }
 }
 
-/** Derive the assignee from the stage — no hardcoded default. */
+/** Real users per role — built from the users collection. */
+export type RoleUsers = { bdr: string[]; sdr: string[]; researcher: string[] };
+
+/** Derive the assignee from the stage + real users. */
 function deriveAssignee(
   lot: SourcedParkingLocation,
   outreach: OutreachRecord | null,
   stage: string,
+  users: RoleUsers,
 ): string {
   if (outreach?.assigned_to) return outreach.assigned_to;
   // Territory-based BDR split (same hash as workflow.bdrOwner).
@@ -81,11 +85,14 @@ function deriveAssignee(
     case 'ready':
     case 'email_followup':
     case 'email_reply':
-      return territory ? 'BDR 1' : 'BDR 2';
+      return users.bdr.length ? users.bdr[territory % users.bdr.length] : 'Unassigned';
     case 'sdr':
     case 'followup':
     case 'qualified':
-      return 'SDR team';
+      return users.sdr[0] ?? 'Unassigned';
+    case 'research':
+    case 'verify':
+      return users.researcher[0] ?? 'Unassigned';
     default:
       return 'Unassigned';
   }
@@ -174,6 +181,7 @@ function buildPropertyDetails(lot: SourcedParkingLocation): Record<string, strin
 export function makeLead(
   lot: SourcedParkingLocation,
   outreach: OutreachRecord | null,
+  users: RoleUsers = { bdr: [], sdr: [], researcher: [] },
 ): Lead {
   const stage = deriveStage(lot, outreach);
   // New outreach-layer fields written by lib/outreach/actions.ts — not yet on
@@ -186,7 +194,7 @@ export function makeLead(
     id: lot.id,
     raw: buildRaw(lot, outreach),
     stage,
-    assignee: deriveAssignee(lot, outreach, stage),
+    assignee: deriveAssignee(lot, outreach, stage, users),
     contact_name: outreach?.contact_name ?? '',
     contact_role: outreach?.contact_title ?? '',
     email: outreach?.contact_email ?? '',
