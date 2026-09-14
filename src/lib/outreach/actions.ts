@@ -413,3 +413,41 @@ export async function enrichLot(lotId: string): Promise<{ status: string; fields
   revalidatePath('/', 'layout');
   return { status: result.status, fields: result.fields.length };
 }
+
+// ── Preview a lot before adding (Quick Add confirmation) ───────────────────
+// Parses the input (URL → parse, address → minimal) and returns the details
+// WITHOUT writing. The UI shows these in a confirm dialog, then calls
+// quickAddLot on confirm.
+export async function previewLot(input: string): Promise<{ name: string; address: string; source: string; count: number }> {
+  await requireAdmin();
+  const trimmed = input.trim();
+  if (!trimmed) throw new Error('Paste a URL or address');
+
+  const isUrl = /^https?:\/\//i.test(trimmed);
+  if (isUrl) {
+    const { parseSourceUrl } = await import('@/app/dashboard/admin/parking-sourcing/actions');
+    const parsed = await parseSourceUrl(trimmed);
+    if (!parsed.ok) throw new Error(parsed.error);
+    const first = parsed.results[0];
+    return {
+      name: (first as { name?: string })?.name ?? trimmed,
+      address: (first as { address?: string })?.address ?? '',
+      source: parsed.kind,
+      count: parsed.results.length,
+    };
+  }
+  return {
+    name: trimmed.split(',')[0].trim() || trimmed,
+    address: trimmed,
+    source: 'manual',
+    count: 1,
+  };
+}
+
+// ── All activity (admin viewer) ────────────────────────────────────────────
+export async function getAllActivity(limit = 100): Promise<{ actor: string; message: string; created: string; lead_id: string }[]> {
+  await requireAdmin();
+  const db = getAdminFirestore();
+  const snap = await db.collection('activity').orderBy('created', 'desc').limit(limit).get();
+  return snap.docs.map((d) => d.data() as { actor: string; message: string; created: string; lead_id: string });
+}

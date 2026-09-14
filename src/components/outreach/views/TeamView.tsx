@@ -7,7 +7,7 @@ import { Plus } from 'lucide-react';
 import { useData, useRoles } from '@/components/outreach/DataContext';
 import { AvatarStack } from '@/components/spectrumui/avatar-stack';
 import { createUser, setUserRoles, listUsers } from '@/lib/outreach/userActions';
-import { syncCompanyAccounts } from '@/lib/outreach/actions';
+import { syncCompanyAccounts, getAllActivity } from '@/lib/outreach/actions';
 import { ROLES, ROLE_LABELS, type Role } from '@/lib/outreach/roles';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
@@ -20,6 +20,8 @@ export function TeamView() {
   const [newRoles, setNewRoles] = useState<Role[]>(['bdr']);
   const [users, setUsers] = useState<{ uid: string; email: string; roles: string[] }[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [activity, setActivity] = useState<{ actor: string; message: string; created: string; lead_id: string }[]>([]);
+  const [activityLoaded, setActivityLoaded] = useState(false);
   // Pending role change — confirmed via dialog before applying.
   const [pendingChange, setPendingChange] = useState<{ uid: string; email: string; roles: Role[] } | null>(null);
 
@@ -83,6 +85,17 @@ export function TeamView() {
         router.refresh();
       } catch (err) {
         toast.error(err instanceof Error ? err.message : 'Failed to sync accounts');
+      }
+    });
+  }
+
+  function loadActivity() {
+    startTransition(async () => {
+      try {
+        setActivity(await getAllActivity(100));
+        setActivityLoaded(true);
+      } catch {
+        setActivityLoaded(true);
       }
     });
   }
@@ -162,6 +175,32 @@ export function TeamView() {
               </div>
             )}
           </div>
+        </section>
+      )}
+
+      {roles.includes('admin') && (
+        <section className="panel mb-6">
+          <div className="panel-heading">
+            <div>
+              <h2>Activity</h2>
+              <p>Who did what, across the whole workspace.</p>
+            </div>
+            {!activityLoaded && <button onClick={loadActivity} className="text-sm text-[#3b7a57] hover:underline">Load activity</button>}
+          </div>
+          {activityLoaded && (
+            <div className="divide-y divide-[#e5e3e3] max-h-96 overflow-y-auto">
+              {activity.length === 0 ? (
+                <p className="p-4 text-sm text-[#6b6868]">No activity yet.</p>
+              ) : (
+                activity.map((a, i) => (
+                  <div key={i} className="flex items-center justify-between py-2 px-4">
+                    <span className="text-sm text-[#171717]">{a.message}</span>
+                    <span className="text-xs text-[#6b6868] shrink-0 ml-4">{a.actor} · {new Date(a.created).toLocaleString()}</span>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </section>
       )}
 

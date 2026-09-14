@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { Check, Zap, Settings2, ArrowUpRight, Database } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { StatCards } from '@/components/spectrumui/charts/stat-cards';
 import { TaskRows } from '@/components/spectrumui/blocks/ai-assistants/task-rows';
 import { useData } from '@/components/outreach/DataContext';
@@ -11,11 +12,20 @@ import { useDetail } from '@/components/outreach/DetailContext';
 import { isActive, priority, priorities, propertyValue } from '@/lib/outreach/workflow';
 import { calculateScore } from '@/lib/outreach/sla';
 
+const WORKFLOW_RULES = [
+  ['01', 'A daily action queue', 'A dated plan is created when the workspace opens. Unfinished work carries forward.'],
+  ['02', 'AI-first research is the target', 'AI should fill sourced property details: address, owner/operator, facility type, spaces, hours, access, PUDO, staging, accessibility and contact routes.'],
+  ['03', 'BDRs review and email', 'BDRs verify the details, resolve missing information, prepare and send emails from their own inbox, log sent messages and replies, and follow up.'],
+  ['04', 'SDRs own the calls', 'SDRs receive the research brief and BDR email history. They call to identify or qualify the decision-maker, resolve open questions and record the next step.'],
+  ['05', 'Fewer duplicate conversations', 'Daily tasks group operator records. Updates affect only the selected property; portfolio-wide approval is never assumed.'],
+];
+
 export function MyDayView() {
   const data = useData();
   const { open } = useDetail();
   const [owner, setOwner] = useState('all');
   const [taskTab, setTaskTab] = useState('open');
+  const [showRules, setShowRules] = useState(false);
 
   const owners = useMemo(
     () => [...new Set(Object.values(data.settings).filter((v) => typeof v === 'string'))] as string[],
@@ -141,7 +151,7 @@ export function MyDayView() {
                 <div><h3>{t}</h3><p>{d}</p></div>
               </div>
             ))}
-            <a className="text-link" href="/outreach/team">View workflow rules <ArrowUpRight size={15} /></a>
+            <button className="text-link" onClick={() => setShowRules(true)}>View workflow rules <ArrowUpRight size={15} /></button>
           </section>
           <div className="source-note">
             <Database size={17} />
@@ -149,6 +159,26 @@ export function MyDayView() {
           </div>
         </aside>
       </div>
+
+      <Dialog open={showRules} onOpenChange={setShowRules}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>How work moves</DialogTitle>
+            <DialogDescription>The workflow rules that keep the pipeline moving.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            {WORKFLOW_RULES.map(([n, t, d]) => (
+              <div key={n} className="flex gap-3">
+                <b className="text-[#3b7a57] text-sm shrink-0">{n}</b>
+                <div>
+                  <h3 className="text-sm font-medium text-[#171717]">{t}</h3>
+                  <p className="text-sm text-[#6b6868] leading-relaxed">{d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

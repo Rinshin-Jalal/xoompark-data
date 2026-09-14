@@ -46,13 +46,15 @@ export function deriveStage(
   }
 }
 
-/** Derive a 1–4 priority string from checklist + outreach state. */
+/** Derive a 1–4 priority string from checklist + outreach state.
+ * 1 = buyer signal (responded/quoted), 2 = in outreach, 3 = needs research,
+ * 4 = flood-failed/hold. */
 function derivePriority(
   lot: SourcedParkingLocation,
   outreach: OutreachRecord | null,
 ): string {
   if (isFloodFailed(lot)) return '4';
-  if (!outreach) return '1';
+  if (!outreach) return '3';
   switch (outreach.status) {
     case 'responded':
     case 'quoted':
@@ -63,6 +65,29 @@ function derivePriority(
       return '2';
     default:
       return '3';
+  }
+}
+
+/** Derive the assignee from the stage — no hardcoded default. */
+function deriveAssignee(
+  lot: SourcedParkingLocation,
+  outreach: OutreachRecord | null,
+  stage: string,
+): string {
+  if (outreach?.assigned_to) return outreach.assigned_to;
+  // Territory-based BDR split (same hash as workflow.bdrOwner).
+  const territory = [...deriveOperator(lot)].reduce((a, c) => a + c.charCodeAt(0), 0) % 2;
+  switch (stage) {
+    case 'ready':
+    case 'email_followup':
+    case 'email_reply':
+      return territory ? 'BDR 1' : 'BDR 2';
+    case 'sdr':
+    case 'followup':
+    case 'qualified':
+      return 'SDR team';
+    default:
+      return 'Unassigned';
   }
 }
 
@@ -160,7 +185,7 @@ export function makeLead(
     id: lot.id,
     raw: buildRaw(lot, outreach),
     stage,
-    assignee: outreach?.assigned_to ?? 'Rinshin',
+    assignee: deriveAssignee(lot, outreach, stage),
     contact_name: outreach?.contact_name ?? '',
     contact_role: outreach?.contact_title ?? '',
     email: outreach?.contact_email ?? '',

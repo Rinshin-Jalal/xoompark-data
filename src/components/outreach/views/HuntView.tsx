@@ -7,21 +7,35 @@ import { ExternalLink, Plus, Search } from 'lucide-react';
 import { useData } from '@/components/outreach/DataContext';
 import { LOCALITIES } from '@/lib/sourcing/locality';
 import { huntAggregatorLinks, HUNT_OFFICIAL_LINKS, HUNT_UNINGESTED_AGGREGATOR_LINKS } from '@/lib/sourcing/huntLinks';
-import { quickAddLot } from '@/lib/outreach/actions';
+import { quickAddLot, previewLot } from '@/lib/outreach/actions';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 export function HuntView() {
   const data = useData();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [url, setUrl] = useState('');
+  const [preview, setPreview] = useState<{ name: string; address: string; source: string; count: number } | null>(null);
 
-  function handleAdd() {
+  function handlePreview() {
+    if (!url.trim()) return;
+    startTransition(async () => {
+      try {
+        setPreview(await previewLot(url));
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Failed to parse');
+      }
+    });
+  }
+
+  function handleConfirmAdd() {
     if (!url.trim()) return;
     startTransition(async () => {
       try {
         const r = await quickAddLot(url);
         toast.success(r.message);
         setUrl('');
+        setPreview(null);
         router.refresh();
       } catch (err) {
         toast.error(err instanceof Error ? err.message : 'Failed to add');
@@ -59,16 +73,41 @@ export function HuntView() {
             <input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleAdd(); }}
+              onKeyDown={(e) => { if (e.key === 'Enter') handlePreview(); }}
               placeholder="Paste a URL or address…"
               className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
             />
           </div>
-          <button onClick={handleAdd} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
-            <Plus size={14} /> {pending ? 'Adding…' : 'Add'}
+          <button onClick={handlePreview} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
+            <Plus size={14} /> {pending ? 'Parsing…' : 'Add'}
           </button>
         </div>
       </div>
+
+      <Dialog open={!!preview} onOpenChange={(open) => { if (!open) setPreview(null); }}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add this lot?</DialogTitle>
+            <DialogDescription>Review the parsed details before adding.</DialogDescription>
+          </DialogHeader>
+          {preview && (
+            <div className="space-y-2 mt-2">
+              <div><small className="text-[#6b6868]">Name</small><p className="text-sm text-[#171717]">{preview.name}</p></div>
+              <div><small className="text-[#6b6868]">Address</small><p className="text-sm text-[#171717]">{preview.address || '—'}</p></div>
+              <div><small className="text-[#6b6868]">Source</small><p className="text-sm text-[#171717]">{preview.source}</p></div>
+              {preview.count > 1 && <p className="text-xs text-[#6b6868]">{preview.count} lots found — all will be imported.</p>}
+            </div>
+          )}
+          <div className="flex justify-end gap-2 mt-4">
+            <button onClick={() => setPreview(null)} className="px-4 py-2 text-sm rounded-md border border-[#e5e3e3] text-[#171717] hover:bg-[#f5f4f4] transition-colors duration-150">
+              Cancel
+            </button>
+            <button onClick={handleConfirmAdd} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] transition-colors duration-150 disabled:opacity-60">
+              {pending ? 'Adding…' : 'Confirm add'}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {LOCALITIES.map((locality) => {
