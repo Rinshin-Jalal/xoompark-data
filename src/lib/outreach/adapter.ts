@@ -5,6 +5,7 @@
 
 import type { SourcedParkingLocation, OutreachRecord } from '@/lib/sourcing/types';
 import { missingChecklistCount, isFloodFailed } from '@/lib/sourcing/bdrView';
+import { deriveLocality } from '@/lib/sourcing/locality';
 import type { Lead, Raw } from './workflow';
 
 // Local source-label map — bdrView's sourceLabel reads `location.source`,
@@ -139,7 +140,8 @@ function buildRaw(lot: SourcedParkingLocation, outreach: OutreachRecord | null):
     contact_group: deriveOperator(lot),
     company_account_id: accountSlug(deriveOperator(lot)),
     contact_source: outreach?.quote_source ?? lot.source_url ?? '',
-    locality: lot.locality ?? '',
+    // Locality — stored value first, else derived from coords on the fly.
+    locality: lot.locality ?? deriveLocality(lot.address, lot.lat, lot.lng) ?? '',
     // Follow-up engine — next_touch_at is written by logEmailSent (+3 days).
     next_touch_at: (outreach as (OutreachRecord & { next_touch_at?: string }) | null)?.next_touch_at ?? '',
     // Coordinates — for the map view.

@@ -81,7 +81,7 @@ export function OutreachShell({ data, roles, user, children }: { data: Data; rol
         <Sidebar className="xp-sidebar">
           <SidebarHeader>
             <div className="logo">
-              XOOM<span>PARK</span>
+              xoompark<span> workspace</span>
             </div>
           </SidebarHeader>
           <SidebarContent>
