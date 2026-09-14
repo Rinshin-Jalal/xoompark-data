@@ -172,7 +172,7 @@ function StatCard({
 
   return (
     <div
-      className="flex items-stretch justify-between gap-5 rounded-2xl border border-black/8 bg-white/60 p-5 dark:border-white/10 dark:bg-white/[0.02]"
+      className="flex items-stretch justify-between gap-6 rounded-2xl border border-[#e5e3e3] bg-white p-6"
       role="img"
       aria-label={`${label}: ${format(headline)}${
         delta != null ? `, ${rising ? 'up' : 'down'} ${Math.abs(delta).toFixed(0)} percent ${deltaLabel}` : ''
@@ -184,8 +184,8 @@ function StatCard({
       }
     >
       <div className="flex min-w-0 flex-col justify-between">
-        <p className="truncate text-[13px] text-neutral-500 dark:text-neutral-400">{label}</p>
-        <p className="mt-1.5 text-[27px] font-medium leading-none tracking-tight text-neutral-950 dark:text-white">
+        <p className="truncate text-[13px] text-[#[0-9a-f]{6}]">{label}</p>
+        <p className="mt-1.5 text-[27px] font-medium leading-none tracking-tight text-[#171717]">
           <RollingNumber
             value={hover != null ? shown : displayValue}
             format={format}
@@ -194,7 +194,7 @@ function StatCard({
         </p>
         <p className="mt-2 h-[17px] overflow-hidden whitespace-nowrap text-[12.5px] font-medium leading-none">
           {hover != null && series ? (
-            <span className="text-neutral-400 dark:text-neutral-500">
+            <span className="text-[#[0-9a-f]{6}]">
               day {hover + 1} of {n}
             </span>
           ) : delta != null ? (
@@ -202,7 +202,7 @@ function StatCard({
               {rising ? '↑' : '↓'} {Math.abs(delta).toFixed(0)}% {deltaLabel}
             </span>
           ) : (
-            <span className="text-neutral-500 dark:text-neutral-400">{caption ?? ' '}</span>
+            <span className="text-[#[0-9a-f]{6}]">{caption ?? ' '}</span>
           )}
         </p>
       </div>
@@ -230,7 +230,7 @@ function StatCard({
       ) : series && n >= 2 ? (
         <div
           ref={sparkRef}
-          className="relative w-[44%] max-w-52 shrink-0 cursor-crosshair touch-pan-y select-none self-stretch focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black/15 dark:focus-visible:ring-white/20"
+          className="relative w-[44%] max-w-52 shrink-0 cursor-crosshair touch-pan-y select-none self-stretch focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black/15:ring-white/20"
           style={{ minHeight: 58 }}
           tabIndex={0}
           onKeyDown={onKeyDown}
@@ -298,7 +298,7 @@ function StatCard({
                 cx={scrubDot.x}
                 cy={scrubDot.y}
                 r={4.5}
-                className="fill-white dark:fill-neutral-950"
+                className="fill-[#[0-9a-f]{6}]"
                 stroke={color}
                 strokeWidth={2}
               />
@@ -348,7 +348,7 @@ export function StatCards({
         }}
         onRetry={onRetry}
       >
-        <div className={cn('grid gap-3', COLUMN_CLASS[columns] ?? COLUMN_CLASS[2])}>
+        <div className={cn('grid gap-4', COLUMN_CLASS[columns] ?? COLUMN_CLASS[2])}>
           {cards.map((card, index) => (
             <StatCard key={card.label} card={card} index={index} reduce={reduce} />
           ))}

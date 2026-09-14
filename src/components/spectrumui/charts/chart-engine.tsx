@@ -4,7 +4,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 export const marketVarsClassName =
-  '[--spectrum-chart-up:#059669] [--spectrum-chart-down:#e11d48] [--spectrum-chart-surface:#fff] dark:[--spectrum-chart-up:#34d399] dark:[--spectrum-chart-down:#fb7185] dark:[--spectrum-chart-surface:#0a0a0a]';
+  '[--spectrum-chart-up:#059669] [--spectrum-chart-down:#e11d48] [--spectrum-chart-surface:#fff]';
 
 export const UP = 'var(--spectrum-chart-up)';
 export const DOWN = 'var(--spectrum-chart-down)';
@@ -420,11 +420,11 @@ export function RangeSelector({
     <div
       role="tablist"
       aria-label="Time range"
-      className="relative inline-flex items-center rounded-full bg-black/[0.045] p-0.5 dark:bg-white/[0.07]"
+      className="relative inline-flex items-center rounded-full bg-black/[0.045] p-0.5/[0.07]"
     >
       <span
         aria-hidden
-        className="absolute inset-y-0.5 left-0.5 rounded-full bg-white shadow-sm ring-1 ring-black/[0.06] dark:bg-white/12 dark:ring-white/10"
+        className="absolute inset-y-0.5 left-0.5 rounded-full bg-white shadow-sm ring-1 ring-black/[0.06]/12/10"
         style={{
           width: `calc(${width}% - 4px)`,
           transform: `translateX(calc(${index * 100}% + ${index * 4}px))`,
@@ -442,10 +442,10 @@ export function RangeSelector({
             onClick={() => onChange(range.label)}
             className={cn(
               'relative z-10 rounded-full px-2.5 py-1 font-mono text-[11px] leading-none tracking-wide transition-colors duration-200',
-              'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black/20 dark:focus-visible:ring-white/25',
+              'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black/20:ring-white/25',
               active
-                ? 'text-neutral-950 dark:text-white'
-                : 'text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200',
+                ? 'text-[#171717]'
+                : 'text-[#6b6868] hover:text-[#[0-9a-f]{6}]:text-[#6b6868]',
             )}
             style={{ flex: `0 0 ${width}%` }}
           >
@@ -590,7 +590,7 @@ export function changeColor(change: number, cap = 4) {
 }
 
 export const seriesVarsClassName =
-  '[--spectrum-series-1:#2563eb] [--spectrum-series-2:#f59e0b] [--spectrum-series-3:#0d9488] [--spectrum-series-4:#7c3aed] [--spectrum-series-5:#db2777] [--spectrum-series-6:#64748b] [--spectrum-track:#ececef] [--spectrum-chart-surface:#fff] [--spectrum-chart-up:#059669] [--spectrum-chart-down:#e11d48] dark:[--spectrum-series-1:#60a5fa] dark:[--spectrum-series-2:#fbbf24] dark:[--spectrum-series-3:#2dd4bf] dark:[--spectrum-series-4:#a78bfa] dark:[--spectrum-series-5:#f472b6] dark:[--spectrum-series-6:#94a3b8] dark:[--spectrum-track:#26262b] dark:[--spectrum-chart-surface:#0a0a0a] dark:[--spectrum-chart-up:#34d399] dark:[--spectrum-chart-down:#fb7185]';
+  '[--spectrum-series-1:#2563eb] [--spectrum-series-2:#f59e0b] [--spectrum-series-3:#0d9488] [--spectrum-series-4:#7c3aed] [--spectrum-series-5:#db2777] [--spectrum-series-6:#64748b] [--spectrum-track:#ececef] [--spectrum-chart-surface:#fff] [--spectrum-chart-up:#059669] [--spectrum-chart-down:#e11d48]';
 
 export const SERIES_COLORS = [
   'var(--spectrum-series-1)',
@@ -631,8 +631,8 @@ export function formatPct(value: number, digits = 1) {
 
 export function onFillClass(intensity: number) {
   return intensity > 0.55
-    ? 'fill-white dark:fill-neutral-950'
-    : 'fill-neutral-900 dark:fill-white';
+    ? 'fill-[#[0-9a-f]{6}]'
+    : 'fill-[#171717]';
 }
 
 export type ChartStatus = 'ready' | 'loading' | 'empty' | 'error';
@@ -658,7 +658,7 @@ function SkeletonShapes({
     animate
       ? { animation: `spectrum-sk-pulse 1.5s ease-in-out ${index * 120}ms infinite alternate` }
       : undefined;
-  const block = 'rounded-md bg-black/[0.06] dark:bg-white/[0.08]';
+  const block = 'rounded-md bg-black/[0.06]/[0.08]';
 
   if (variant === 'bars') {
     return (
@@ -674,7 +674,7 @@ function SkeletonShapes({
     return (
       <div className="relative flex h-full flex-col justify-between py-4">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="h-px w-full bg-black/[0.05] dark:bg-white/[0.06]" />
+          <div key={i} className="h-px w-full bg-black/[0.05]/[0.06]" />
         ))}
         <svg
           className="absolute inset-x-0 top-1/4 h-1/2 w-full"
@@ -684,7 +684,7 @@ function SkeletonShapes({
           <path
             d="M0,30 C12,10 22,34 34,22 C46,10 54,28 66,16 C78,6 88,20 100,8"
             fill="none"
-            className="stroke-black/[0.1] dark:stroke-white/[0.12]"
+            className="stroke-black/[0.1]/[0.12]"
             strokeWidth={2}
             vectorEffect="non-scaling-stroke"
             style={breathe(1)}
@@ -724,7 +724,7 @@ function SkeletonShapes({
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            className="flex h-full min-h-16 flex-col justify-between gap-2 rounded-xl border border-black/[0.05] p-3 dark:border-white/[0.06]"
+            className="flex h-full min-h-16 flex-col justify-between gap-2 rounded-xl border border-black/[0.05] p-3/[0.06]"
             style={breathe(i)}
           >
             <div className={cn('h-2.5 w-1/2', block)} />
@@ -739,7 +739,7 @@ function SkeletonShapes({
   return (
     <div className="flex h-full items-center justify-center">
       <div
-        className="rounded-full border-[14px] border-black/[0.06] dark:border-white/[0.08]"
+        className="rounded-full border-[14px] border-black/[0.06]/[0.08]"
         style={{ width: height * 0.6, height: height * 0.6, ...breathe(0) }}
       />
     </div>
@@ -788,14 +788,14 @@ function StateShell({
   const reduce = usePrefersReducedMotion();
   return (
     <div
-      className="relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-black/[0.06] bg-black/[0.015] dark:border-white/[0.08] dark:bg-white/[0.02]"
+      className="relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-black/[0.06] bg-black/[0.015]/[0.08]/[0.02]"
       style={{ height }}
       role="status"
     >
       <Keyframes />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-5 inset-y-4 opacity-60 dark:opacity-50"
+        className="pointer-events-none absolute inset-x-5 inset-y-4 opacity-6050"
         style={{
           maskImage:
             'radial-gradient(ellipse 62% 58% at 50% 50%, transparent 34%, black 78%)',
@@ -811,15 +811,15 @@ function StateShell({
       >
         <span
           className={cn(
-            'mb-2 flex size-10 items-center justify-center rounded-xl border border-black/[0.07] bg-white text-neutral-500 shadow-xs dark:border-white/[0.1] dark:bg-neutral-900 dark:text-neutral-400',
+            'mb-2 flex size-10 items-center justify-center rounded-xl border border-black/[0.07] bg-white text-[#6b6868] shadow-xs/[0.1]900400',
             iconClassName,
           )}
         >
           {icon}
         </span>
-        <p className="text-[13px] font-medium text-neutral-900 dark:text-neutral-100">{title}</p>
+        <p className="text-[13px] font-medium text-[#[0-9a-f]{6}]">{title}</p>
         {description ? (
-          <p className="text-[12px] leading-relaxed text-neutral-500 dark:text-neutral-400">
+          <p className="text-[12px] leading-relaxed text-[#[0-9a-f]{6}]">
             {description}
           </p>
         ) : null}
@@ -830,7 +830,7 @@ function StateShell({
 }
 
 const actionClass =
-  'inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[12px] font-medium text-neutral-900 shadow-xs transition-colors hover:bg-black/[0.03] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/12 dark:bg-white/[0.06] dark:text-white dark:hover:bg-white/[0.1] dark:focus-visible:ring-white/25';
+  'inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[12px] font-medium text-[#171717] shadow-xs transition-colors hover:bg-black/[0.03] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black/20/12/[0.06]:bg-white/[0.1]:ring-white/25';
 
 export function ChartEmpty({
   height = 300,
@@ -887,7 +887,7 @@ export function ChartError({
       variant={variant}
       title={title}
       description={description}
-      iconClassName="text-rose-500/90 dark:text-rose-400/90"
+      iconClassName="text-rose-500/90400/90"
       action={
         onRetry ? (
           <button type="button" onClick={onRetry} className={actionClass}>
@@ -1029,7 +1029,7 @@ export function ChartDataTable({
 export function Stat({ ready, children }: { ready: boolean; children: React.ReactNode }) {
   if (ready) return <>{children}</>;
   return (
-    <span aria-hidden className="text-neutral-300 dark:text-neutral-600">
+    <span aria-hidden className="text-[#[0-9a-f]{6}]">
       —
     </span>
   );
