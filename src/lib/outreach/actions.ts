@@ -360,12 +360,19 @@ export async function syncCompanyAccounts(): Promise<{ accounts: number }> {
 // Detects URL vs address. URL → parse + import via the existing sourcing
 // actions. Address → create a minimal manual lot. Returns a human-readable
 // summary for the toast.
+
+/** Normalize pasted input: prepend https:// when a bare domain is pasted. */
+function normalizeInput(input: string): { isUrl: boolean; value: string } {
+  const trimmed = input.trim();
+  if (/^https?:\/\//i.test(trimmed)) return { isUrl: true, value: trimmed };
+  if (/^[\w-]+\.(com|org|net|io|co|app|dev)\b/i.test(trimmed)) return { isUrl: true, value: `https://${trimmed}` };
+  return { isUrl: false, value: trimmed };
+}
+
 export async function quickAddLot(input: string): Promise<{ message: string }> {
   const admin = await requireAdmin();
-  const trimmed = input.trim();
+  const { isUrl, value: trimmed } = normalizeInput(input);
   if (!trimmed) throw new Error('Paste a URL or address');
-
-  const isUrl = /^https?:\/\//i.test(trimmed);
 
   if (isUrl) {
     const { parseSourceUrl, importParsedSourceLocations } = await import('@/app/dashboard/admin/parking-sourcing/actions');
@@ -420,10 +427,9 @@ export async function enrichLot(lotId: string): Promise<{ status: string; fields
 // quickAddLot on confirm.
 export async function previewLot(input: string): Promise<{ name: string; address: string; source: string; count: number }> {
   await requireAdmin();
-  const trimmed = input.trim();
+  const { isUrl, value: trimmed } = normalizeInput(input);
   if (!trimmed) throw new Error('Paste a URL or address');
 
-  const isUrl = /^https?:\/\//i.test(trimmed);
   if (isUrl) {
     const { parseSourceUrl } = await import('@/app/dashboard/admin/parking-sourcing/actions');
     const parsed = await parseSourceUrl(trimmed);

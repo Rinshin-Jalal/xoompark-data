@@ -14,7 +14,12 @@ export function HuntView() {
   const data = useData();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [mode, setMode] = useState<'url' | 'html' | 'manual'>('url');
   const [url, setUrl] = useState('');
+  const [html, setHtml] = useState('');
+  const [htmlSource, setHtmlSource] = useState('');
+  const [manualName, setManualName] = useState('');
+  const [manualAddress, setManualAddress] = useState('');
   const [preview, setPreview] = useState<{ name: string; address: string; source: string; count: number } | null>(null);
   const [showGuide, setShowGuide] = useState(false);
 
@@ -37,6 +42,48 @@ export function HuntView() {
         toast.success(r.message);
         setUrl('');
         setPreview(null);
+        router.refresh();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Failed to add');
+      }
+    });
+  }
+
+  async function handleHtmlImport() {
+    if (!html.trim() || !htmlSource.trim()) {
+      toast.error('Paste HTML and a source URL');
+      return;
+    }
+    startTransition(async () => {
+      try {
+        const { parsePastedHtml, importPastedFacilities } = await import('@/app/dashboard/admin/parking-sourcing/actions');
+        const parsed = await parsePastedHtml(html, htmlSource);
+        if (!parsed.ok) throw new Error(parsed.error);
+        const imported = await importPastedFacilities(parsed.results, htmlSource);
+        if (!imported.ok) throw new Error(imported.error);
+        toast.success(`Imported ${imported.imported} lot${imported.imported === 1 ? '' : 's'}${imported.merged ? `, merged ${imported.merged}` : ''}`);
+        setHtml('');
+        setHtmlSource('');
+        router.refresh();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Failed to import HTML');
+      }
+    });
+  }
+
+  async function handleManualAdd() {
+    if (!manualName.trim() || !manualAddress.trim()) {
+      toast.error('Name and address are required');
+      return;
+    }
+    startTransition(async () => {
+      try {
+        const { addSourcedLocation } = await import('@/app/dashboard/admin/parking-sourcing/actions');
+        const r = await addSourcedLocation({ name: manualName.trim(), address: manualAddress.trim() } as never);
+        if (!r.ok) throw new Error('Failed to add');
+        toast.success(`Added "${manualName.trim()}"`);
+        setManualName('');
+        setManualAddress('');
         router.refresh();
       } catch (err) {
         toast.error(err instanceof Error ? err.message : 'Failed to add');
@@ -67,24 +114,83 @@ export function HuntView() {
       <div className="panel mb-6">
         <div className="panel-heading">
           <div>
-            <h2>Add a lot <span className="count">paste URL</span></h2>
-            <p>Paste a SpotHero or Parkopedia listing URL — it auto-parses and imports.</p>
+            <h2>Add a lot</h2>
+            <p>Paste a URL, paste HTML, or add manually.</p>
           </div>
         </div>
-        <div className="p-4 flex gap-2">
-          <div className="search-field flex-1">
-            <Search size={17} />
-            <input
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handlePreview(); }}
-              placeholder="Paste a URL or address…"
-              className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
-            />
+        <div className="p-4">
+          <div className="flex gap-1 mb-4">
+            {(['url', 'html', 'manual'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => setMode(m)}
+                className={`px-3 py-1.5 text-xs rounded-md font-medium transition-colors duration-150 ${
+                  mode === m ? 'bg-[#111] text-white' : 'text-[#6b6868] hover:text-[#171717]'
+                }`}
+              >
+                {m === 'url' ? 'Paste URL' : m === 'html' ? 'Paste HTML' : 'Manual'}
+              </button>
+            ))}
           </div>
-          <button onClick={handlePreview} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
-            <Plus size={14} /> {pending ? 'Parsing…' : 'Add'}
-          </button>
+
+          {mode === 'url' && (
+            <div className="flex gap-2">
+              <div className="search-field flex-1">
+                <Search size={17} />
+                <input
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handlePreview(); }}
+                  placeholder="Paste a URL or address…"
+                  className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
+                />
+              </div>
+              <button onClick={handlePreview} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
+                <Plus size={14} /> {pending ? 'Parsing…' : 'Add'}
+              </button>
+            </div>
+          )}
+
+          {mode === 'html' && (
+            <div className="space-y-2">
+              <textarea
+                value={html}
+                onChange={(e) => setHtml(e.target.value)}
+                placeholder="Paste listing HTML here…"
+                rows={5}
+                className="w-full px-3 py-2 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
+              />
+              <input
+                value={htmlSource}
+                onChange={(e) => setHtmlSource(e.target.value)}
+                placeholder="Source URL (where this HTML came from)"
+                className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
+              />
+              <button onClick={handleHtmlImport} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
+                <Plus size={14} /> {pending ? 'Importing…' : 'Parse & import'}
+              </button>
+            </div>
+          )}
+
+          {mode === 'manual' && (
+            <div className="space-y-2">
+              <input
+                value={manualName}
+                onChange={(e) => setManualName(e.target.value)}
+                placeholder="Lot name"
+                className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
+              />
+              <input
+                value={manualAddress}
+                onChange={(e) => setManualAddress(e.target.value)}
+                placeholder="Address"
+                className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
+              />
+              <button onClick={handleManualAdd} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
+                <Plus size={14} /> {pending ? 'Adding…' : 'Add lot'}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
