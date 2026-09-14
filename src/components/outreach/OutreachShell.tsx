@@ -6,12 +6,14 @@ import {
   LayoutGrid,
   Building2,
   ClipboardList,
-  MapPin,
+  Map,
+  Compass,
   FlaskConical,
   Mail,
   Phone,
   Archive,
   Users,
+  BarChart3,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -36,14 +38,14 @@ import { DetailSheet } from '@/components/outreach/DetailSheet';
 const nav = [
   ['/', 'My day', LayoutGrid],
   ['/properties', 'Properties', Building2],
-  ['/map', 'Map', MapPin],
-  ['/hunt', 'Hunt', MapPin],
+  ['/map', 'Map', Map],
+  ['/hunt', 'Hunt', Compass],
   ['/work-queue', 'Work Queue', ClipboardList],
   ['/research-desk', 'Research desk', FlaskConical],
   ['/bdr-email', 'BDR email queue', Mail],
   ['/sdr-call', 'SDR call queue', Phone],
   ['/pipeline', 'Pipeline', ClipboardList],
-  ['/site-intelligence', 'Site intelligence', MapPin],
+  ['/site-intelligence', 'Site intelligence', BarChart3],
   ['/archived', 'Hidden & archived', Archive],
   ['/team', 'Team & workflow', Users],
 ] as const;
