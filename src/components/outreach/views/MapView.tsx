@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import type { Map as LeafletMap, Marker } from 'leaflet';
 import { useData } from '@/components/outreach/DataContext';
 import { useDetail } from '@/components/outreach/DetailContext';
 import { isActive } from '@/lib/outreach/workflow';
@@ -23,53 +22,53 @@ const STAGE_COLORS: Record<string, string> = {
 export function MapView() {
   const data = useData();
   const { open } = useDetail();
-  const mapRef = useRef<L.Map | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    let cancelled = false;
+    let map: LeafletMap | null = null;
 
-    const map = L.map(containerRef.current).setView([25.7617, -80.1918], 11); // Miami default
-    mapRef.current = map;
+    // Dynamic import — Leaflet references `window`, so it must load client-side.
+    (async () => {
+      const L = (await import('leaflet')).default;
+      await import('leaflet/dist/leaflet.css');
+      if (cancelled || !containerRef.current) return;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-      maxZoom: 19,
-    }).addTo(map);
+      map = L.map(containerRef.current).setView([25.7617, -80.1918], 11); // Miami default
+      mapRef.current = map;
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+      }).addTo(map);
+
+      // Render markers after the map is ready.
+      const withCoords = data.leads.filter((l) => isActive(l) && l.raw.lat && l.raw.lng);
+      for (const l of withCoords) {
+        const lat = parseFloat(l.raw.lat);
+        const lng = parseFloat(l.raw.lng);
+        if (Number.isNaN(lat) || Number.isNaN(lng)) continue;
+
+        const color = STAGE_COLORS[l.stage] ?? '#9ca3af';
+        const icon = L.divIcon({
+          className: '',
+          html: `<div style="width:12px;height:12px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)"></div>`,
+          iconSize: [12, 12],
+          iconAnchor: [6, 6],
+        });
+
+        const marker = L.marker([lat, lng], { icon }).addTo(map!);
+        marker.on('click', () => open(l));
+        marker.bindTooltip(l.raw.name, { direction: 'top', offset: [0, -8] });
+      }
+    })();
 
     return () => {
-      map.remove();
+      cancelled = true;
+      if (map) map.remove();
       mapRef.current = null;
     };
-  }, []);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    // Clear existing markers
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Marker) map.removeLayer(layer);
-    });
-
-    const withCoords = data.leads.filter((l) => isActive(l) && l.raw.lat && l.raw.lng);
-    for (const l of withCoords) {
-      const lat = parseFloat(l.raw.lat);
-      const lng = parseFloat(l.raw.lng);
-      if (Number.isNaN(lat) || Number.isNaN(lng)) continue;
-
-      const color = STAGE_COLORS[l.stage] ?? '#9ca3af';
-      const icon = L.divIcon({
-        className: '',
-        html: `<div style="width:12px;height:12px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)"></div>`,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
-      });
-
-      const marker = L.marker([lat, lng], { icon }).addTo(map);
-      marker.on('click', () => open(l));
-      marker.bindTooltip(l.raw.name, { direction: 'top', offset: [0, -8] });
-    }
   }, [data.leads, open]);
 
   return (
