@@ -7,7 +7,7 @@ import { ExternalLink, Plus, Search } from 'lucide-react';
 import { useData } from '@/components/outreach/DataContext';
 import { LOCALITIES } from '@/lib/sourcing/locality';
 import { huntAggregatorLinks, HUNT_OFFICIAL_LINKS, HUNT_UNINGESTED_AGGREGATOR_LINKS } from '@/lib/sourcing/huntLinks';
-import { quickAddLot, previewLot } from '@/lib/outreach/actions';
+import { quickAddLot, previewLot, confirmAddLot, type LotPreview } from '@/lib/outreach/actions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ManualAddSheet } from '@/components/outreach/ManualAddSheet';
 
@@ -19,7 +19,7 @@ export function HuntView() {
   const [url, setUrl] = useState('');
   const [html, setHtml] = useState('');
   const [htmlSource, setHtmlSource] = useState('');
-  const [preview, setPreview] = useState<{ name: string; address: string; source: string; count: number } | null>(null);
+  const [preview, setPreview] = useState<LotPreview | null>(null);
   const [showGuide, setShowGuide] = useState(false);
   const [showManual, setShowManual] = useState(false);
 
@@ -35,10 +35,10 @@ export function HuntView() {
   }
 
   function handleConfirmAdd() {
-    if (!url.trim()) return;
+    if (!preview) return;
     startTransition(async () => {
       try {
-        const r = await quickAddLot(url);
+        const r = await confirmAddLot(preview);
         toast.success(r.message);
         setUrl('');
         setPreview(null);
@@ -163,17 +163,68 @@ export function HuntView() {
       <ManualAddSheet open={showManual} onClose={() => setShowManual(false)} />
 
       <Dialog open={!!preview} onOpenChange={(open) => { if (!open) setPreview(null); }}>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Add this lot?</DialogTitle>
-            <DialogDescription>Review the parsed details before adding.</DialogDescription>
+            <DialogDescription>Review and edit the parsed details before adding.</DialogDescription>
           </DialogHeader>
           {preview && (
-            <div className="space-y-2 mt-2">
-              <div><small className="text-[#6b6868]">Name</small><p className="text-sm text-[#171717]">{preview.name}</p></div>
-              <div><small className="text-[#6b6868]">Address</small><p className="text-sm text-[#171717]">{preview.address || '—'}</p></div>
-              <div><small className="text-[#6b6868]">Source</small><p className="text-sm text-[#171717]">{preview.source}</p></div>
-              {preview.count > 1 && <p className="text-xs text-[#6b6868]">{preview.count} lots found — all will be imported.</p>}
+            <div className="form-grid mt-2">
+              <label>
+                <span className="text-xs text-[#6b6868]">Name</span>
+                <input value={preview.name} onChange={(e) => setPreview({ ...preview, name: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">Address</span>
+                <input value={preview.address} onChange={(e) => setPreview({ ...preview, address: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">Capacity (stalls)</span>
+                <input value={preview.stalls} onChange={(e) => setPreview({ ...preview, stalls: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">Hours</span>
+                <input value={preview.hours} onChange={(e) => setPreview({ ...preview, hours: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">Clearance</span>
+                <input value={preview.clearance} onChange={(e) => setPreview({ ...preview, clearance: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">Rates</span>
+                <input value={preview.rates} onChange={(e) => setPreview({ ...preview, rates: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              </label>
+              <label className="full">
+                <span className="text-xs text-[#6b6868]">Ingress / egress</span>
+                <input value={preview.ingressEgress} onChange={(e) => setPreview({ ...preview, ingressEgress: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]" />
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">24/7 access</span>
+                <select value={preview.access247} onChange={(e) => setPreview({ ...preview, access247: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]">
+                  <option value="">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">Fenced</span>
+                <select value={preview.fenced} onChange={(e) => setPreview({ ...preview, fenced: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]">
+                  <option value="">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+              <label>
+                <span className="text-xs text-[#6b6868]">Lit</span>
+                <select value={preview.lit} onChange={(e) => setPreview({ ...preview, lit: e.target.value })} className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]">
+                  <option value="">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+              <div className="full text-xs text-[#6b6868]">
+                Source: {preview.source}{preview.count > 1 ? ` · ${preview.count} lots found` : ''}
+              </div>
             </div>
           )}
           <div className="flex justify-end gap-2 mt-4">

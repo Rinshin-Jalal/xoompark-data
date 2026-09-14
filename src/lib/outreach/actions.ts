@@ -422,10 +422,25 @@ export async function enrichLot(lotId: string): Promise<{ status: string; fields
 }
 
 // ── Preview a lot before adding (Quick Add confirmation) ───────────────────
-// Parses the input (URL → parse, address → minimal) and returns the details
-// WITHOUT writing. The UI shows these in a confirm dialog, then calls
-// quickAddLot on confirm.
-export async function previewLot(input: string): Promise<{ name: string; address: string; source: string; count: number }> {
+// Parses the input (URL → parse, address → minimal) and returns the FULL
+// parsed fields WITHOUT writing. The UI shows these in an editable dialog,
+// then calls quickAddLot on confirm.
+export type LotPreview = {
+  name: string;
+  address: string;
+  source: string;
+  count: number;
+  stalls: string;
+  hours: string;
+  clearance: string;
+  rates: string;
+  ingressEgress: string;
+  access247: string;
+  fenced: string;
+  lit: string;
+};
+
+export async function previewLot(input: string): Promise<LotPreview> {
   await requireAdmin();
   const { isUrl, value: trimmed } = normalizeInput(input);
   if (!trimmed) throw new Error('Paste a URL or address');
@@ -434,12 +449,21 @@ export async function previewLot(input: string): Promise<{ name: string; address
     const { parseSourceUrl } = await import('@/app/dashboard/admin/parking-sourcing/actions');
     const parsed = await parseSourceUrl(trimmed);
     if (!parsed.ok) throw new Error(parsed.error);
-    const first = parsed.results[0];
+    const first = parsed.results[0] as unknown as Record<string, unknown>;
+    const tri = (v: unknown) => (v === true ? 'yes' : v === false ? 'no' : '');
     return {
-      name: (first as { name?: string })?.name ?? trimmed,
-      address: (first as { address?: string })?.address ?? '',
+      name: (first.name as string) ?? trimmed,
+      address: (first.address as string) ?? '',
       source: parsed.kind,
       count: parsed.results.length,
+      stalls: first.stallsTotal != null ? String(first.stallsTotal) : (first.capacityText as string) ?? '',
+      hours: (first.hoursText as string) ?? '',
+      clearance: (first.clearanceText as string) ?? '',
+      rates: (first.priceText as string) ?? '',
+      ingressEgress: (first.ingressEgress as string) ?? '',
+      access247: tri(first.access247),
+      fenced: tri(first.fenced),
+      lit: tri(first.lit),
     };
   }
   return {
@@ -447,6 +471,14 @@ export async function previewLot(input: string): Promise<{ name: string; address
     address: trimmed,
     source: 'manual',
     count: 1,
+    stalls: '',
+    hours: '',
+    clearance: '',
+    rates: '',
+    ingressEgress: '',
+    access247: '',
+    fenced: '',
+    lit: '',
   };
 }
 
@@ -456,4 +488,32 @@ export async function getAllActivity(limit = 100): Promise<{ actor: string; mess
   const db = getAdminFirestore();
   const snap = await db.collection('activity').orderBy('created', 'desc').limit(limit).get();
   return snap.docs.map((d) => d.data() as { actor: string; message: string; created: string; lead_id: string });
+}
+
+// ── Confirm add with edited fields (Quick Add) ─────────────────────────────
+// Creates a lot from the edited preview fields. The user can edit the parsed
+// values in the dialog before confirming.
+export async function confirmAddLot(preview: LotPreview): Promise<{ message: string }> {
+  const admin = await requireAdmin();
+  const { upsertSourcedLocation } = await import('@/lib/sourcing/store');
+  const tri = (v: string) => (v === 'yes' ? true : v === 'no' ? false : undefined);
+  await upsertSourcedLocation({
+    name: preview.name,
+    address: preview.address || undefined,
+    source: 'manual',
+    sourceUrl: '',
+    capturedBy: 'admin',
+    rawInput: { preview },
+    stallsTotal: preview.stalls ? Number(preview.stalls) : undefined,
+    hoursText: preview.hours || undefined,
+    clearanceText: preview.clearance || undefined,
+    priceText: preview.rates || undefined,
+    ingressEgress: preview.ingressEgress || undefined,
+    access247: tri(preview.access247),
+    fenced: tri(preview.fenced),
+    lit: tri(preview.lit),
+  });
+  await logActivity(admin.email, '', `Added lot: ${preview.name}`);
+  revalidatePath('/', 'layout');
+  return { message: `Added "${preview.name}"` };
 }
