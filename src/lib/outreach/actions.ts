@@ -5,7 +5,7 @@ import { getAdminFirestore } from '@/lib/firebaseAdmin';
 import { requireAdmin } from '@/lib/requireAdmin';
 import { setOutreachState, getOutreachRecord } from '@/lib/sourcing/outreachStore';
 import { getSourcedLocation } from '@/lib/sourcing/store';
-import type { OutreachState } from '@/lib/sourcing/types';
+import type { OutreachState, CommercialOffer } from '@/lib/sourcing/types';
 
 const LOTS = 'parking_lots';
 
@@ -488,6 +488,32 @@ export async function getAllActivity(limit = 100): Promise<{ actor: string; mess
   const db = getAdminFirestore();
   const snap = await db.collection('activity').orderBy('created', 'desc').limit(limit).get();
   return snap.docs.map((d) => d.data() as { actor: string; message: string; created: string; lead_id: string });
+}
+
+// ── Commercial offers (pricing + terms) ─────────────────────────────────────
+// First-class subcollection per lot: parking_lots/{lotId}/offers/{offerId}.
+// Outreach activities generate offers; offers drive qualification.
+export async function saveOffer(lotId: string, offer: Omit<CommercialOffer, 'id' | 'lot_id' | 'created_at'>): Promise<string> {
+  const admin = await requireAdmin();
+  const db = getAdminFirestore();
+  const ref = db.collection(LOTS).doc(lotId).collection('offers').doc();
+  await ref.set({
+    ...offer,
+    id: ref.id,
+    lot_id: lotId,
+    created_at: new Date().toISOString(),
+  });
+  const rate = offer.monthly_rate_per_stall != null ? `$${offer.monthly_rate_per_stall}/stall` : 'custom terms';
+  await logActivity(admin.email, lotId, `Offer captured: ${rate} · ${offer.term_months ?? '—'}mo · ${offer.status}`);
+  revalidatePath('/', 'layout');
+  return ref.id;
+}
+
+export async function getOffers(lotId: string): Promise<CommercialOffer[]> {
+  await requireAdmin();
+  const db = getAdminFirestore();
+  const snap = await db.collection(LOTS).doc(lotId).collection('offers').orderBy('created_at', 'desc').get();
+  return snap.docs.map((d) => d.data() as CommercialOffer);
 }
 
 // ── Confirm add with edited fields (Quick Add) ─────────────────────────────

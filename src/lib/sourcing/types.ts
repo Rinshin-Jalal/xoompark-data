@@ -394,6 +394,91 @@ export interface OutreachRecord {
   updated_at: string;
 }
 
+// --- Commercial offers (pricing + terms, subcollection per lot) ---
+// Offers are first-class: outreach activities generate offers, offers drive
+// qualification. Store numeric rate + raw text; derive tiers in the UI.
+
+export const OFFER_SOURCES = ['email', 'call', 'meeting'] as const;
+export type OfferSource = (typeof OFFER_SOURCES)[number];
+
+export const OFFER_STATUSES = ['indicative', 'quoted', 'negotiating', 'final'] as const;
+export type OfferStatus = (typeof OFFER_STATUSES)[number];
+
+export const PRICING_MODELS = ['per_stall_monthly', 'per_lot_monthly', 'revenue_share', 'custom'] as const;
+export type PricingModel = (typeof PRICING_MODELS)[number];
+
+export const OFFER_SOURCE_LABELS: Record<OfferSource, string> = {
+  email: 'Email',
+  call: 'Call',
+  meeting: 'Meeting',
+};
+
+export const OFFER_STATUS_LABELS: Record<OfferStatus, string> = {
+  indicative: 'Indicative',
+  quoted: 'Quoted',
+  negotiating: 'Negotiating',
+  final: 'Final',
+};
+
+export const PRICING_MODEL_LABELS: Record<PricingModel, string> = {
+  per_stall_monthly: 'Per stall / mo',
+  per_lot_monthly: 'Per lot / mo',
+  revenue_share: 'Revenue share',
+  custom: 'Custom',
+};
+
+export const TERM_TYPES = ['month_to_month', 'fixed', 'trial', 'unknown'] as const;
+export type TermType = (typeof TERM_TYPES)[number];
+
+export const TERM_TYPE_LABELS: Record<TermType, string> = {
+  month_to_month: 'Month-to-month',
+  fixed: 'Fixed term',
+  trial: 'Trial',
+  unknown: 'Unknown',
+};
+
+export const CONFIDENCE_LEVELS = ['low', 'medium', 'high'] as const;
+export type Confidence = (typeof CONFIDENCE_LEVELS)[number];
+
+// $5/$10/$20 are internal target bands, not the only allowed values. Store the
+// numeric rate; derive the band for routing/reporting.
+export function rateTier(rate: number | null): 'low_5' | 'mid_10' | 'high_20' | 'custom' | 'unknown' {
+  if (rate == null) return 'unknown';
+  if (rate <= 7.5) return 'low_5';
+  if (rate <= 15) return 'mid_10';
+  if (rate <= 30) return 'high_20';
+  return 'custom';
+}
+
+export const RATE_TIER_LABELS: Record<ReturnType<typeof rateTier>, string> = {
+  low_5: '$5 band',
+  mid_10: '$10 band',
+  high_20: '$20 band',
+  custom: 'Custom',
+  unknown: 'Unknown',
+};
+
+export interface CommercialOffer {
+  id: string;
+  lot_id: string;
+  source: OfferSource;
+  captured_by: string;
+  status: OfferStatus;
+  pricing_model: PricingModel;
+  currency: string;
+  monthly_rate_per_stall: number | null;
+  minimum_spaces: number | null;
+  term_months: number | null;
+  term_type: TermType;
+  cancellation_notice_days: number | null;
+  start_date: string | null;
+  confidence: Confidence;
+  needs_human_review: boolean;
+  notes: string;
+  raw_source_text: string;
+  created_at: string;
+}
+
 // --- Auto-derived services/resources ---
 
 const HOURS_247_RE = /24\s*\/\s*7|open\s+24|24\s*hours/i;

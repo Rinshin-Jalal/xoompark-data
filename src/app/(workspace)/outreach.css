@@ -1190,6 +1190,52 @@ td:first-child {
 .detail-info-grid span {
   font-size: 13px;
 }
+.offer-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+.offer-card {
+  border: 1px solid #e1e8ec;
+  border-radius: 8px;
+  padding: 12px;
+}
+.offer-card strong {
+  font-size: 13px;
+}
+.offer-tier {
+  color: #8d9ca4;
+  font-weight: 500;
+  font-size: 11px;
+}
+.offer-status {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef4f1;
+  color: #3b7a57;
+}
+.offer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #657e8a;
+}
+.offer-notes {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #657e8a;
+  line-height: 1.6;
+}
+.offer-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e1e8ec;
+}
 .source-link {
   display: flex;
   gap: 6px;

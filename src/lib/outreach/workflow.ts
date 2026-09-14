@@ -309,6 +309,6 @@ export function draftEmail(
     body:
       campaign === 'consulting'
         ? `${greeting}\n\n${routing}I’m reaching out from XoomPark about a proposed consulting service to help properties plan for AVs, rideshare and delivery. The scope can include digitizing pickup/drop-off zones, waiting and staging areas, accessible parking and routes, and vehicle access rules.\n\nWould a short conversation about ${l.raw.name}’s current setup and priorities be useful? We would scope and price any project individually.\n\nBest,\n${l.assignee}`
-        : `${greeting}\n\n${routing}I’m reaching out from XoomPark to explore an overnight fleet parking arrangement at ${l.raw.name}. Our working brief is ${l.raw.requested_spaces || '20'} spaces, with the access window and operating requirements to confirm.\n\nCould we discuss permitted fleet use, available capacity, overnight access and a written commercial quote? Published retail rates are only a reference.\n\nBest,\n${l.assignee}`,
+        : `${greeting}\n\n${routing}I’m reaching out from XoomPark to explore an overnight fleet parking arrangement at ${l.raw.name}. Our working brief is ${l.raw.requested_spaces || '20'} spaces, with the access window and operating requirements to confirm.\n\nCould you share:\n\n1. How many spaces could be made available\n2. Monthly rate per space\n3. Whether the arrangement is month-to-month or a fixed term\n4. Cancellation notice required (e.g. 30 days)\n\nBest,\n${l.assignee}`,
   };
 }
