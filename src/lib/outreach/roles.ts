@@ -17,10 +17,10 @@ export const ROLE_LABELS: Record<Role, string> = {
 // Which routes each role can see. The sidebar nav and the layout gate both
 // read from this.
 export const ROLE_ROUTES: Record<Role, string[]> = {
-  admin: ['/', '/properties', '/map', '/hunt', '/work-queue', '/research-desk', '/bdr-email', '/sdr-call', '/pipeline', '/site-intelligence', '/archived', '/team'],
+  admin: ['/', '/properties', '/map', '/source', '/work-queue', '/research-desk', '/bdr-email', '/sdr-call', '/pipeline', '/site-intelligence', '/archived', '/team'],
   bdr: ['/', '/properties', '/map', '/work-queue', '/research-desk', '/bdr-email'],
   sdr: ['/', '/properties', '/map', '/sdr-call', '/pipeline'],
-  researcher: ['/', '/properties', '/map', '/hunt', '/research-desk'],
+  researcher: ['/', '/properties', '/map', '/source', '/research-desk'],
 };
 
 export function canAccess(roles: Role[], path: string): boolean {

@@ -39,7 +39,7 @@ const nav = [
   ['/', 'My day', LayoutGrid],
   ['/properties', 'Properties', Building2],
   ['/map', 'Map', Map],
-  ['/hunt', 'Hunt', Compass],
+  ['/source', 'Source', Compass],
   ['/work-queue', 'Work Queue', ClipboardList],
   ['/research-desk', 'Research desk', FlaskConical],
   ['/bdr-email', 'BDR email queue', Mail],
