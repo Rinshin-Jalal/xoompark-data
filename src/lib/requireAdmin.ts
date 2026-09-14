@@ -8,7 +8,8 @@ export async function requireAdmin(): Promise<{ uid: string; email: string; name
   const session = cookieStore.get('session')?.value;
   if (!session) throw new Error('Not authenticated');
   const decoded = await getAdminAuth().verifySessionCookie(session, true);
-  if (decoded.role !== 'admin') throw new Error('Not authorized');
+  const roles: string[] = Array.isArray(decoded.roles) ? (decoded.roles as string[]) : [];
+  if (!roles.includes('admin')) throw new Error('Not authorized');
   return {
     uid: decoded.uid,
     email: decoded.email ?? '',

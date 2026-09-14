@@ -35,7 +35,10 @@ export async function syncUserClaims(uid: string): Promise<void> {
   ]);
   const profile = userSnap.exists ? userSnap.data()! : {};
   const claims: Record<string, unknown> = {};
-  if ((fbUser.email ?? '').endsWith('@xoompark.co')) claims.role = 'admin';
+  // Roles from the profile (array). Default empty — anyone can sign in, but
+  // sees nothing until an admin assigns roles.
+  const roles: string[] = Array.isArray(profile.roles) ? profile.roles : [];
+  claims.roles = roles;
   if (profile.providerId) claims.providerId = profile.providerId;
   if (profile.operatorId) claims.operatorId = profile.operatorId;
   await auth.setCustomUserClaims(uid, claims);
