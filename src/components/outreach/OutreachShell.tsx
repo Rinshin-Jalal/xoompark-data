@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -14,6 +15,7 @@ import {
   Archive,
   Users,
   BarChart3,
+  HelpCircle,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -34,6 +36,7 @@ import { signOutAction } from '@/lib/authActions';
 import { DataProvider } from '@/components/outreach/DataContext';
 import { DetailProvider } from '@/components/outreach/DetailContext';
 import { DetailSheet } from '@/components/outreach/DetailSheet';
+import { FlowGuide } from '@/components/outreach/FlowGuide';
 
 const nav = [
   ['/', 'My day', LayoutGrid],
@@ -52,6 +55,7 @@ const nav = [
 
 export function OutreachShell({ data, roles, user, children }: { data: Data; roles: Role[]; user: { email: string; name: string }; children: React.ReactNode }) {
   const pathname = usePathname();
+  const [showFlow, setShowFlow] = useState(false);
   const activeCount = data.leads.filter(isActive).length;
 
   // Filter nav by roles — SDRs don't see BDR stuff, BDRs don't see SDR stuff.
@@ -101,6 +105,9 @@ export function OutreachShell({ data, roles, user, children }: { data: Data; rol
             </SidebarMenu>
           </SidebarContent>
           <SidebarFooter>
+            <button onClick={() => setShowFlow(true)} className="flow-help">
+              <HelpCircle size={14} /> How it works
+            </button>
             <div className="profile">
               <span className="avatar">{user.name.slice(0, 2).toUpperCase()}</span>
               <div className="min-w-0">
@@ -122,6 +129,7 @@ export function OutreachShell({ data, roles, user, children }: { data: Data; rol
           <main className="content">{children}</main>
         </SidebarInset>
         <DetailSheet />
+        <FlowGuide open={showFlow} onClose={() => setShowFlow(false)} />
       </SidebarProvider>
       </DetailProvider>
     </DataProvider>

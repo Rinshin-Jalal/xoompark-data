@@ -1,12 +1,31 @@
-'use client';
+import { getProspects } from '@/lib/outreach/actions';
+import { PipelineKanban } from '@/components/pipeline/PipelineKanban';
+import type { BDProspect } from '@/lib/pipeline/types';
 
-import { useData } from '@/components/outreach/DataContext';
-import { useDetail } from '@/components/outreach/DetailContext';
-import { PipelinePortfolio } from '@/components/outreach/PipelinePortfolio';
-import { isActive } from '@/lib/outreach/workflow';
+export const dynamic = 'force-dynamic';
 
-export default function PipelinePage() {
-  const data = useData();
-  const { open } = useDetail();
-  return <PipelinePortfolio leads={data.leads.filter(isActive)} onSelect={open} />;
+export default async function PipelinePage() {
+  // Prospect-driven: cards render from bdProspects alone. Lots are only read
+  // inside the detail sheet's drill-down.
+  let prospects: BDProspect[] = [];
+  try {
+    prospects = await getProspects();
+  } catch {
+    prospects = [];
+  }
+
+  return (
+    <>
+      <div className="page-heading">
+        <div>
+          <div className="eyebrow">
+            <span /> BD PIPELINE
+          </div>
+          <h1>Deals in motion.</h1>
+          <p>Every promoted prospect, from qualification to live inventory.</p>
+        </div>
+      </div>
+      <PipelineKanban prospects={prospects} />
+    </>
+  );
 }

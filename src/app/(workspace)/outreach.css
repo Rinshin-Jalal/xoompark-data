@@ -254,6 +254,25 @@ small {
   color: #171717;
   font-size: 13px;
 }
+.flow-help {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 12px;
+  border: 1px solid #e5e3e3;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b6868;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.flow-help:hover {
+  color: #3b7a57;
+  border-color: #3b7a57;
+}
 .profile small {
   display: block;
   color: #6b6868;

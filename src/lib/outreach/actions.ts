@@ -6,6 +6,7 @@ import { requireAdmin } from '@/lib/requireAdmin';
 import { setOutreachState, getOutreachRecord } from '@/lib/sourcing/outreachStore';
 import { getSourcedLocation } from '@/lib/sourcing/store';
 import type { OutreachState, CommercialOffer } from '@/lib/sourcing/types';
+import { PIPELINE_STAGES, type BDProspect, type ProspectStage } from '@/lib/pipeline/types';
 
 const LOTS = 'parking_lots';
 
@@ -320,6 +321,59 @@ export async function createProspectFromLot(lotId: string): Promise<{ prospectId
   await logActivity(admin.email, lotId, 'Promoted to prospect');
   revalidatePath('/', 'layout');
   return { prospectId: prospectRef.id };
+}
+
+// ── BD prospects (the pipeline) ────────────────────────────────────────────
+// bdProspects is the primary object once a lot is promoted. Cards render from
+// these docs ALONE; parking_lots is only read for detail-view drill-down.
+
+/** Firestore Timestamp → ISO string (client components get strings only). */
+function iso(v: unknown): unknown {
+  if (v && typeof v === 'object' && typeof (v as { toDate?: unknown }).toDate === 'function') {
+    return (v as { toDate(): Date }).toDate().toISOString();
+  }
+  return v;
+}
+
+export async function getProspects(): Promise<BDProspect[]> {
+  await requireAdmin();
+  const db = getAdminFirestore();
+  // No orderBy — Firestore omits docs missing the field. Sort in JS instead.
+  const snap = await db.collection('bdProspects').get();
+  return snap.docs
+    .map((d) => {
+      const data = d.data() as Record<string, unknown>;
+      for (const k of Object.keys(data)) data[k] = iso(data[k]);
+      return data as unknown as BDProspect;
+    })
+    .sort((a, b) => (b.updatedAt ?? b.createdAt ?? '').localeCompare(a.updatedAt ?? a.createdAt ?? ''));
+}
+
+export async function moveProspectStage(prospectId: string, stage: ProspectStage, lostReason?: string): Promise<void> {
+  await requireAdmin();
+  if (!PIPELINE_STAGES.includes(stage)) throw new Error(`Invalid stage: ${stage}`);
+  const db = getAdminFirestore();
+  const now = new Date().toISOString();
+  await db.collection('bdProspects').doc(prospectId).update({
+    stage,
+    updatedAt: now,
+    stageUpdatedAt: now,
+    ...(stage === 'LOST' && lostReason ? { lostReason } : {}),
+  });
+  revalidatePath('/', 'layout');
+}
+
+// Drill-down only: linked lots for the prospect detail sheet.
+export async function getProspectLots(prospectId: string): Promise<{ id: string; name: string }[]> {
+  await requireAdmin();
+  const db = getAdminFirestore();
+  const links = await db.collection('lotProspectLinks').where('prospect_id', '==', prospectId).get();
+  const lots: { id: string; name: string }[] = [];
+  for (const link of links.docs) {
+    const lot = await db.collection(LOTS).doc(link.data().lot_id as string).get();
+    if (lot.exists) lots.push({ id: lot.id, name: (lot.data()?.name as string) ?? lot.id });
+  }
+  return lots;
 }
 
 // ── Sync company accounts (the operator entity layer) ─────────────────────
