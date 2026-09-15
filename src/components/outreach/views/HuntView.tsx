@@ -7,7 +7,7 @@ import { ExternalLink, Plus, Search } from 'lucide-react';
 import { useData } from '@/components/outreach/DataContext';
 import { LOCALITIES } from '@/lib/sourcing/locality';
 import { huntAggregatorLinks, HUNT_OFFICIAL_LINKS, HUNT_UNINGESTED_AGGREGATOR_LINKS } from '@/lib/sourcing/huntLinks';
-import { quickAddLot, previewLot, confirmAddLot, type LotPreview } from '@/lib/outreach/actions';
+import { quickAddLot, previewLot, confirmAddLot, searchLotsWithExa, type LotPreview } from '@/lib/outreach/actions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ManualAddSheet } from '@/components/outreach/ManualAddSheet';
 
@@ -15,13 +15,29 @@ export function HuntView() {
   const data = useData();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [mode, setMode] = useState<'url' | 'html' | 'manual'>('url');
+  const [mode, setMode] = useState<'url' | 'html' | 'manual' | 'exa'>('url');
   const [url, setUrl] = useState('');
   const [html, setHtml] = useState('');
   const [htmlSource, setHtmlSource] = useState('');
   const [preview, setPreview] = useState<LotPreview | null>(null);
   const [showGuide, setShowGuide] = useState(false);
   const [showManual, setShowManual] = useState(false);
+  const [exaQuery, setExaQuery] = useState('');
+  const [exaResults, setExaResults] = useState<LotPreview[]>([]);
+  const [exaSearching, setExaSearching] = useState(false);
+
+  function handleExaSearch() {
+    if (!exaQuery.trim()) return;
+    setExaSearching(true);
+    startTransition(async () => {
+      try {
+        setExaResults(await searchLotsWithExa(exaQuery));
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Exa search failed');
+      }
+      setExaSearching(false);
+    });
+  }
 
   function handlePreview() {
     if (!url.trim()) return;
@@ -100,7 +116,7 @@ export function HuntView() {
         </div>
         <div className="p-4">
           <div className="flex gap-1 mb-4">
-            {(['url', 'html', 'manual'] as const).map((m) => (
+            {(['url', 'exa', 'html', 'manual'] as const).map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
@@ -108,7 +124,7 @@ export function HuntView() {
                   mode === m ? 'bg-[#111] text-white' : 'text-[#6b6868] hover:text-[#171717]'
                 }`}
               >
-                {m === 'url' ? 'Paste URL' : m === 'html' ? 'Paste HTML' : 'Manual'}
+                {m === 'url' ? 'Paste URL' : m === 'exa' ? 'Exa search' : m === 'html' ? 'Paste HTML' : 'Manual'}
               </button>
             ))}
           </div>
@@ -128,6 +144,44 @@ export function HuntView() {
               <button onClick={handlePreview} disabled={pending} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
                 <Plus size={14} /> {pending ? 'Parsing…' : 'Add'}
               </button>
+            </div>
+          )}
+
+          {mode === 'exa' && (
+            <div className="space-y-3">
+              <div className="flex gap-2">
+                <div className="search-field flex-1">
+                  <Search size={17} />
+                  <input
+                    value={exaQuery}
+                    onChange={(e) => setExaQuery(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleExaSearch(); }}
+                    placeholder="e.g. parking lots in Brickell Miami"
+                    className="w-full h-10 px-3 border border-[#e5e3e3] rounded-md text-sm text-[#171717]"
+                  />
+                </div>
+                <button onClick={handleExaSearch} disabled={exaSearching} className="px-4 py-2 text-sm rounded-md bg-[#111] text-white hover:bg-[#333] inline-flex items-center gap-1.5 disabled:opacity-60">
+                  <Search size={14} /> {exaSearching ? 'Searching…' : 'Search'}
+                </button>
+              </div>
+              {exaResults.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs text-[#6b6868]">{exaResults.length} candidates — review before adding.</p>
+                  {exaResults.map((c, i) => (
+                    <div key={i} className="flex items-center justify-between gap-3 px-3 py-2 border border-[#e5e3e3] rounded-md">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-[#171717] truncate">{c.name}</p>
+                        <p className="text-xs text-[#6b6868] truncate">
+                          {c.address || '—'}{c.stalls ? ` · ${c.stalls} stalls` : ''}{c.hours ? ` · ${c.hours}` : ''}
+                        </p>
+                      </div>
+                      <button onClick={() => setPreview(c)} className="shrink-0 px-3 py-1.5 text-xs rounded-md border border-[#e5e3e3] text-[#171717] hover:border-[#3b7a57] inline-flex items-center gap-1">
+                        <Plus size={13} /> Add
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

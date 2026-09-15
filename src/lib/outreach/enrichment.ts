@@ -279,20 +279,25 @@ export async function scrapeAndExtract(sourceUrl: string, surfaceType?: string |
 // Shared by the enrichLot action and the batch script. Merge order: Google
 // Places wins for phone/hours/website; OSM fills stall_count/ev gaps; Exa
 // search fills operator only when the page didn't name one.
-export async function runEnrichment(lot: {
-  name: string;
-  address?: string;
-  source_url: string;
-  surface_type?: string | null;
-  lat?: number;
-  lng?: number;
-}): Promise<EnrichmentResult> {
+export async function runEnrichment(
+  lot: {
+    name: string;
+    address?: string;
+    source_url: string;
+    surface_type?: string | null;
+    lat?: number;
+    lng?: number;
+  },
+  skipPlaces = false,
+): Promise<EnrichmentResult> {
   const result = await scrapeAndExtract(lot.source_url, lot.surface_type);
 
-  const gpFields = await enrichWithGooglePlaces(lot.name, lot.address ?? '');
-  if (gpFields.length > 0) {
-    const gpKeys = new Set(gpFields.map((f) => f.field));
-    result.fields = [...result.fields.filter((f) => !gpKeys.has(f.field)), ...gpFields];
+  if (!skipPlaces) {
+    const gpFields = await enrichWithGooglePlaces(lot.name, lot.address ?? '');
+    if (gpFields.length > 0) {
+      const gpKeys = new Set(gpFields.map((f) => f.field));
+      result.fields = [...result.fields.filter((f) => !gpKeys.has(f.field)), ...gpFields];
+    }
   }
 
   const osmFields = await enrichWithOSM(lot.lat, lot.lng);

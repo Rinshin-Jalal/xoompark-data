@@ -470,6 +470,7 @@ export type LotPreview = {
   name: string;
   address: string;
   source: string;
+  sourceUrl?: string;
   count: number;
   stalls: string;
   hours: string;
@@ -567,8 +568,8 @@ export async function confirmAddLot(preview: LotPreview): Promise<{ message: str
   await upsertSourcedLocation({
     name: preview.name,
     address: preview.address || undefined,
-    source: 'manual',
-    sourceUrl: '',
+    source: preview.sourceUrl ? 'exa' : 'manual',
+    sourceUrl: preview.sourceUrl ?? '',
     capturedBy: 'admin',
     rawInput: { preview },
     stallsTotal: preview.stalls ? Number(preview.stalls) : undefined,
@@ -583,4 +584,51 @@ export async function confirmAddLot(preview: LotPreview): Promise<{ message: str
   await logActivity(admin.email, '', `Added lot: ${preview.name}`);
   revalidatePath('/', 'layout');
   return { message: `Added "${preview.name}"` };
+}
+
+// ── Exa search: find NEW parking lots (Source page "Exa search" mode) ──────
+// Semantic search via Exa, then Workers AI extracts structured fields from
+// each result. Returns candidates for human confirmation before adding.
+export async function searchLotsWithExa(query: string): Promise<LotPreview[]> {
+  const admin = await requireAdmin();
+  const key = process.env.EXA_API_KEY;
+  if (!key) throw new Error('EXA_API_KEY not set');
+  const { extractWithLLM } = await import('@/lib/outreach/enrichment');
+
+  const res = await fetch('https://api.exa.ai/search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+    body: JSON.stringify({
+      query: /parking/i.test(query) ? query : `${query} parking`,
+      numResults: 10,
+      contents: { text: true },
+    }),
+    signal: AbortSignal.timeout(30000),
+  });
+  if (!res.ok) throw new Error(`Exa search failed: HTTP ${res.status}`);
+  const data = await res.json();
+  const results = (data.results ?? []) as { title?: string; url?: string; text?: string }[];
+
+  const candidates: LotPreview[] = [];
+  for (const r of results) {
+    if (!r.url || !r.title) continue;
+    const fields = await extractWithLLM(r.text ?? '', r.url);
+    const get = (f: string) => fields?.find((x) => x.field === f)?.value ?? '';
+    candidates.push({
+      name: r.title,
+      address: get('address'),
+      source: new URL(r.url).hostname.replace(/^www\./, ''),
+      sourceUrl: r.url,
+      count: 1,
+      stalls: get('stall_count'),
+      hours: get('hours'),
+      clearance: get('clearance'),
+      rates: get('rates'),
+      ingressEgress: '',
+      access247: '',
+      fenced: '',
+      lit: '',
+    });
+  }
+  return candidates;
 }
