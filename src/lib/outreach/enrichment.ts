@@ -96,7 +96,7 @@ const EXTRACT_PROMPT =
   '- address: the full street address of the facility.\n' +
   '- Only include fields actually present. Never guess. Never combine multiple fields into one.';
 
-async function extractWithLLM(text: string, sourceUrl: string): Promise<EnrichmentField[] | null> {
+export async function extractWithLLM(text: string, sourceUrl: string): Promise<EnrichmentField[] | null> {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
   const token = process.env.CLOUDFLARE_API_TOKEN;
   if (!accountId || !token) return null;
@@ -176,7 +176,60 @@ export async function enrichWithGooglePlaces(name: string, address: string): Pro
   }
 }
 
-/** Fetch a URL and extract fields. Exa → LLM → regex fallback. */
+// ── Stage 4: OpenStreetMap (stall capacity + EV chargers) ──────────────────
+// Free. Queries Overpass for parking capacity and nearby charging stations.
+export async function enrichWithOSM(lat: number | undefined, lng: number | undefined): Promise<EnrichmentField[]> {
+  if (lat == null || lng == null) return [];
+  try {
+    const query = `[out:json];(way(around:100,${lat},${lng})[amenity=parking][capacity];node(around:100,${lat},${lng})[amenity=charging_station];);out tags;`;
+    const res = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, {
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const fields: EnrichmentField[] = [];
+    for (const el of data.elements ?? []) {
+      if (el.tags?.capacity) {
+        fields.push({ field: 'stall_count', value: String(el.tags.capacity), confidence: 0.7, source: 'openstreetmap', snippet: `OSM capacity=${el.tags.capacity}`, verified: false });
+      }
+      if (el.tags?.amenity === 'charging_station') {
+        fields.push({ field: 'ev', value: 'yes', confidence: 0.7, source: 'openstreetmap', snippet: 'OSM charging_station nearby', verified: false });
+      }
+    }
+    return fields;
+  } catch {
+    return [];
+  }
+}
+
+// ── Stage 5: Exa search (operator discovery) ───────────────────────────────
+// When the page doesn't name the operator, semantic-search for it and extract
+// the operator from the top results via the LLM.
+export async function enrichWithExaSearch(name: string, address: string): Promise<EnrichmentField[]> {
+  const key = process.env.EXA_API_KEY;
+  if (!key || !name) return [];
+  try {
+    const res = await fetch('https://api.exa.ai/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+      body: JSON.stringify({
+        query: `${name} ${address ?? ''} parking operator managed by`,
+        numResults: 3,
+        contents: { text: true },
+      }),
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const results = data?.results ?? [];
+    if (results.length === 0) return [];
+    const combined = results.map((r: { title?: string; text?: string }) => `${r.title ?? ''}\n${r.text ?? ''}`).join('\n\n');
+    const llmFields = await extractWithLLM(combined, 'exa_search');
+    return (llmFields ?? []).filter((f) => f.field === 'operator');
+  } catch {
+    return [];
+  }
+}
 export async function scrapeAndExtract(sourceUrl: string, surfaceType?: string | null): Promise<EnrichmentResult> {
   const scrapedAt = new Date().toISOString();
 
@@ -220,4 +273,38 @@ export async function scrapeAndExtract(sourceUrl: string, surfaceType?: string |
   }
 
   return { fields, scrapedAt, sourceUrl, status: 'ok' };
+}
+
+// ── Full pipeline: scrape → Google Places → OSM → Exa operator search ──────
+// Shared by the enrichLot action and the batch script. Merge order: Google
+// Places wins for phone/hours/website; OSM fills stall_count/ev gaps; Exa
+// search fills operator only when the page didn't name one.
+export async function runEnrichment(lot: {
+  name: string;
+  address?: string;
+  source_url: string;
+  surface_type?: string | null;
+  lat?: number;
+  lng?: number;
+}): Promise<EnrichmentResult> {
+  const result = await scrapeAndExtract(lot.source_url, lot.surface_type);
+
+  const gpFields = await enrichWithGooglePlaces(lot.name, lot.address ?? '');
+  if (gpFields.length > 0) {
+    const gpKeys = new Set(gpFields.map((f) => f.field));
+    result.fields = [...result.fields.filter((f) => !gpKeys.has(f.field)), ...gpFields];
+  }
+
+  const osmFields = await enrichWithOSM(lot.lat, lot.lng);
+  if (osmFields.length > 0) {
+    const have = new Set(result.fields.map((f) => f.field));
+    result.fields = [...result.fields, ...osmFields.filter((f) => !have.has(f.field))];
+  }
+
+  if (!result.fields.some((f) => f.field === 'operator')) {
+    const exaFields = await enrichWithExaSearch(lot.name, lot.address ?? '');
+    if (exaFields.length > 0) result.fields = [...result.fields, ...exaFields];
+  }
+
+  return result;
 }

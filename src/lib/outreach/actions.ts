@@ -417,22 +417,20 @@ export async function quickAddLot(input: string): Promise<{ message: string }> {
 export async function enrichLot(lotId: string): Promise<{ status: string; fields: number }> {
   const admin = await requireAdmin();
   const db = getAdminFirestore();
-  const { scrapeAndExtract, enrichWithGooglePlaces } = await import('@/lib/outreach/enrichment');
+  const { runEnrichment } = await import('@/lib/outreach/enrichment');
 
   const lot = await getSourcedLocation(lotId);
   if (!lot) throw new Error('Lot not found');
   if (!lot.source_url) throw new Error('No source URL to scrape');
 
-  const result = await scrapeAndExtract(lot.source_url, lot.surface_type);
-
-  // Cross-check against Google Places (hours/phone/website).
-  const gpFields = await enrichWithGooglePlaces(lot.name, lot.address ?? '');
-  if (gpFields.length > 0) {
-    // Prefer Google Places for phone/hours/website; keep scraped for the rest.
-    const gpKeys = new Set(gpFields.map((f) => f.field));
-    const merged = [...result.fields.filter((f) => !gpKeys.has(f.field)), ...gpFields];
-    result.fields = merged;
-  }
+  const result = await runEnrichment({
+    name: lot.name,
+    address: lot.address,
+    source_url: lot.source_url,
+    surface_type: lot.surface_type,
+    lat: lot.lat,
+    lng: lot.lng,
+  });
 
   await db.collection(LOTS).doc(lotId).update({
     ai_enrichment: result,
