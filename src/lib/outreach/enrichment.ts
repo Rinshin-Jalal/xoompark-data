@@ -1,7 +1,8 @@
 // AI enrichment pipeline — multi-stage, pluggable.
 //
 //   Stage 1: Exa contents (JS rendering → clean text)        [EXA_API_KEY]
-//   Stage 2: LLM structured extraction (evidence + confidence) [OPENAI_API_KEY]
+//   Stage 2: Cloudflare Workers AI extraction (evidence + confidence)
+//                                                            [CLOUDFLARE_ACCOUNT_ID + CLOUDFLARE_API_TOKEN]
 //   Stage 3: regex extraction (zero-cost fallback, low confidence)
 //
 // Each stage activates when its env key exists; otherwise it falls through to
@@ -75,33 +76,37 @@ async function scrapeWithExa(url: string): Promise<string | null> {
   }
 }
 
-// ── Stage 2: LLM structured extraction (evidence + confidence) ─────────────
-// Activates when OPENAI_API_KEY is set. Returns fields with evidence quotes,
-// else null. Schema: { field, value, confidence, evidence } per field.
-async function extractWithLLM(markdown: string, sourceUrl: string): Promise<EnrichmentField[] | null> {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) return null;
+// ── Stage 2: Cloudflare Workers AI extraction (evidence + confidence) ──────
+// Activates when CLOUDFLARE_ACCOUNT_ID + CLOUDFLARE_API_TOKEN are set. Returns
+// fields with evidence quotes, else null. Schema: {field, value, confidence,
+// evidence} per field.
+const CF_MODEL = '@cf/meta/llama-3.1-8b-instruct';
+
+async function extractWithLLM(text: string, sourceUrl: string): Promise<EnrichmentField[] | null> {
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const token = process.env.CLOUDFLARE_API_TOKEN;
+  if (!accountId || !token) return null;
   try {
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${CF_MODEL}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        response_format: { type: 'json_object' },
         messages: [
           {
             role: 'system',
             content:
-              'Extract parking-lot fields from the page. Return JSON: {"fields":[{"field":"stall_count|hours|clearance|phone|email|rates","value":"...","confidence":0..1,"evidence":"exact quote from page"}]}. Only include fields actually present. Never guess.',
+              'Extract parking-lot fields from the page. Return ONLY JSON: {"fields":[{"field":"stall_count|hours|clearance|phone|email|rates","value":"...","confidence":0..1,"evidence":"exact quote from page"}]}. Only include fields actually present. Never guess.',
           },
-          { role: 'user', content: markdown.slice(0, 12000) },
+          { role: 'user', content: text.slice(0, 12000) },
         ],
       }),
       signal: AbortSignal.timeout(30000),
     });
     if (!res.ok) return null;
     const data = await res.json();
-    const parsed = JSON.parse(data?.choices?.[0]?.message?.content ?? '{}');
+    const raw = (data?.result?.choices?.[0]?.message?.content ?? data?.result?.response ?? '') as string;
+    const json = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(json);
     const fields = (parsed.fields ?? []) as { field: string; value: string; confidence: number; evidence: string }[];
     return fields.map((f) => ({
       field: f.field,
