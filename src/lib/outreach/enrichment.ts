@@ -136,20 +136,30 @@ async function extractWithLLM(text: string, sourceUrl: string): Promise<Enrichme
 // ── Stage 3: Google Places (hours/phone/website validation) ────────────────
 // Activates when GOOGLE_MAPS_SERVER_KEY is set (a server-side key with IP
 // restrictions — the NEXT_PUBLIC browser key is referer-restricted and can't
-// call Places server-side). Cross-checks scraped fields against Google.
+// call Places server-side). Two-step: find place_id, then fetch details.
 export async function enrichWithGooglePlaces(name: string, address: string): Promise<EnrichmentField[]> {
   const key = process.env.GOOGLE_MAPS_SERVER_KEY;
   if (!key || !name) return [];
   try {
     const query = encodeURIComponent(`${name} ${address ?? ''}`.trim());
-    const res = await fetch(
-      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id,formatted_phone_number,opening_hours,website&key=${key}`,
+    const findRes = await fetch(
+      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id&key=${key}`,
       { signal: AbortSignal.timeout(15000) },
     );
-    if (!res.ok) return [];
-    const data = await res.json();
-    const place = data?.candidates?.[0];
+    if (!findRes.ok) return [];
+    const findData = await findRes.json();
+    const placeId = findData?.candidates?.[0]?.place_id;
+    if (!placeId) return [];
+
+    const detailRes = await fetch(
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=formatted_phone_number,opening_hours,website&key=${key}`,
+      { signal: AbortSignal.timeout(15000) },
+    );
+    if (!detailRes.ok) return [];
+    const detailData = await detailRes.json();
+    const place = detailData?.result;
     if (!place) return [];
+
     const fields: EnrichmentField[] = [];
     if (place.formatted_phone_number) {
       fields.push({ field: 'phone', value: place.formatted_phone_number, confidence: 0.9, source: 'google_places', snippet: 'Google Places', verified: false });
