@@ -85,6 +85,11 @@ const CF_MODEL = '@cf/meta/llama-3.1-8b-instruct';
 // Whitelist — drop any field the model invents outside the schema.
 const KNOWN_FIELDS = new Set(['stall_count', 'hours', 'clearance', 'phone', 'email', 'rates', 'operator', 'address']);
 
+// Known non-operators the LLM sometimes emits — booking marketplaces, data
+// vendors, real-estate firms, government entities. Dropped from the operator
+// field so deriveOperator doesn't get polluted.
+const OPERATOR_DENYLIST = /spothero|parkwhiz|parkopedia|parkmobile|inrix|spacer|way\.com|parkme|bestparking|parksy|colliers|county|city of|municipal|government|realtor|realty/i;
+
 const EXTRACT_PROMPT =
   'Extract parking-lot fields from the page. Return ONLY a JSON object with a "fields" array. Each element is a SEPARATE object with keys "field", "value", "confidence", "evidence".\n' +
   'Example output:\n' +
@@ -92,7 +97,7 @@ const EXTRACT_PROMPT =
   'Rules:\n' +
   '- field must be one of: stall_count, hours, clearance, phone, email, rates, operator, address.\n' +
   '- clearance: ONLY a height clearance/restriction (e.g. "7\'0\\" height restriction"). NOT length, width, or vehicle dimensions. Omit if not a height restriction.\n' +
-  '- operator: the parking operator/management company (e.g. "LAZ Parking", "SP+"), from branding/footer. NOT the property owner.\n' +
+  '- operator: the company that OPERATES the parking facility day-to-day (e.g. "LAZ Parking", "SP+", "Omni Parking", "Ace Parking"), from branding/footer. NOT the property owner, NOT a booking marketplace (SpotHero, ParkWhiz, Spacer), NOT a data vendor (INRIX, Parkopedia), NOT a government entity. If you cannot tell who operates it, OMIT the field.\n' +
   '- address: the full street address of the facility.\n' +
   '- Only include fields actually present. Never guess. Never combine multiple fields into one.';
 
@@ -120,6 +125,7 @@ export async function extractWithLLM(text: string, sourceUrl: string): Promise<E
     const fields = (parsed.fields ?? []) as { field: string; value: string; confidence: number; evidence: string }[];
     return fields
       .filter((f) => KNOWN_FIELDS.has(f.field))
+      .filter((f) => !(f.field === 'operator' && OPERATOR_DENYLIST.test(f.value)))
       .map((f) => ({
         field: f.field,
         value: String(f.value ?? '').trim(),
