@@ -99,12 +99,19 @@ function deriveAssignee(
   }
 }
 
-/** Derive the commercial operator/owner from enrichment signals, falling back
- * to the source label. Priority: parcel owner → OSM owner → corporate entity →
- * business license → source. This is the seed for the future company_accounts
- * layer — one operator controls many lots. */
+/** Derive the commercial operator from enrichment signals, falling back to
+ * the source label. Priority: AI-extracted operator → parcel owner → OSM owner
+ * → corporate entity → business license → source. This is the seed for the
+ * future company_accounts layer — one operator controls many lots. */
 export function deriveOperator(lot: SourcedParkingLocation): string {
+  // ai_enrichment is written by the enrichment pipeline but not on the
+  // SourcedParkingLocation type — read it via a narrow cast (same pattern as
+  // buildRaw/makeLead below).
+  const ext = lot as SourcedParkingLocation & {
+    ai_enrichment?: { fields?: { field: string; value: string }[] };
+  };
   return (
+    ext.ai_enrichment?.fields?.find((f) => f.field === 'operator')?.value ||
     lot.enrichment?.parcel?.ownerOfRecord ||
     lot.enrichment?.pitstop?.owner ||
     lot.enrichment?.corporate_entity?.entityName ||

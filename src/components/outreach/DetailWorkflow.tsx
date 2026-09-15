@@ -71,7 +71,7 @@ export function DetailWorkflow({ lead }: { lead: Lead }) {
       </div>
 
       <div className="detail-actions">
-        {['responded', 'quoted'].includes(lead.stage) && (
+        {['email_reply', 'qualified'].includes(lead.stage) && (
           <button
             disabled={pending}
             onClick={() => run(() => createProspectFromLot(lead.id).then(() => {}), 'Promoted to prospect')}
