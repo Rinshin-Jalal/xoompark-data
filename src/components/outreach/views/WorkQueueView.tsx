@@ -5,6 +5,7 @@ import { Check } from 'lucide-react';
 import { useData } from '@/components/outreach/DataContext';
 import { isActive, propertyValue } from '@/lib/outreach/workflow';
 import { WorkQueueMatrix } from '@/components/outreach/WorkQueueMatrix';
+import { OpenInLinks } from '@/components/outreach/OpenInLinks';
 
 export function WorkQueueView() {
   const data = useData();
@@ -50,6 +51,15 @@ export function WorkQueueView() {
                   <h2>{current.raw.name}</h2>
                   <p className="muted">{current.raw.address} · {propertyValue(current, 'operator')}</p>
                 </div>
+              </div>
+              <div className="px-4 -mt-2">
+                <OpenInLinks
+                  name={current.raw.name}
+                  address={current.raw.address}
+                  lat={current.raw.lat}
+                  lng={current.raw.lng}
+                  sourceUrl={current.raw.source_url}
+                />
               </div>
               <div className="p-4"><WorkQueueMatrix lead={current} /></div>
             </>

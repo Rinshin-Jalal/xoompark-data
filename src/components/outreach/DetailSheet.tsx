@@ -11,8 +11,9 @@ import { ConnectionsBar } from '@/components/outreach/ConnectionsBar';
 import { DetailWorkflow } from '@/components/outreach/DetailWorkflow';
 import { OfferCapture } from '@/components/outreach/OfferCapture';
 import { EnrichmentVerify } from '@/components/outreach/EnrichmentVerify';
+import { OpenInLinks } from '@/components/outreach/OpenInLinks';
 import { nextAction, gaps } from '@/lib/outreach/workflow';
-import { getActivity, saveFields } from '@/lib/outreach/actions';
+import { getActivity, saveFields, saveContact } from '@/lib/outreach/actions';
 
 const EDITABLE_FIELDS: { key: string; label: string }[] = [
   { key: 'stall_count', label: 'Total spaces' },
@@ -20,6 +21,17 @@ const EDITABLE_FIELDS: { key: string; label: string }[] = [
   { key: 'clearance_text', label: 'Clearance' },
   { key: 'price_text', label: 'Rates' },
   { key: 'gate_type', label: 'Gate' },
+  { key: 'ev', label: 'EV charging' },
+  { key: 'pudo', label: 'Pickup / drop-off' },
+  { key: 'staging', label: 'Waiting / staging' },
+  { key: 'accessible_routes', label: 'Accessible routes' },
+];
+
+const CONTACT_FIELDS: { key: string; label: string }[] = [
+  { key: 'contact_name', label: 'Contact name' },
+  { key: 'contact_role', label: 'Role' },
+  { key: 'email', label: 'Business email' },
+  { key: 'phone', label: 'Phone' },
 ];
 
 const inputCls = 'w-full h-9 px-2.5 border border-[#e5e3e3] rounded-md text-sm text-[#171717] focus:outline-none focus:border-[#3b7a57] transition-colors duration-150';
@@ -49,10 +61,6 @@ export function DetailSheet() {
     ? data.leads.filter((l) => l.raw.company_account_id === selected.raw.company_account_id).length
     : 0;
 
-  const lat = selected?.raw.lat ? parseFloat(selected.raw.lat) : null;
-  const lng = selected?.raw.lng ? parseFloat(selected.raw.lng) : null;
-  const hasCoords = lat != null && lng != null && !Number.isNaN(lat) && !Number.isNaN(lng);
-
   function startEdit() {
     if (!selected) return;
     setDraft({
@@ -63,20 +71,48 @@ export function DetailSheet() {
       clearance_text: selected.raw.clearance_text,
       price_text: selected.raw.price_text,
       gate_type: selected.raw.gate_type,
+      ev: selected.raw.ev,
+      pudo: selected.raw.pudo,
+      staging: selected.raw.staging,
+      accessible_routes: selected.raw.accessible_routes,
+      contact_name: selected.contact_name,
+      contact_role: selected.contact_role,
+      email: selected.email,
+      phone: selected.phone,
     });
     setEditing(true);
   }
 
   function save() {
     if (!selected) return;
-    const changed: Record<string, string> = {};
-    for (const [k, v] of Object.entries(draft)) {
-      if (v !== selected.raw[k]) changed[k] = v;
+    // Property fields → saveFields (batch to the lot).
+    const propertyChanged: Record<string, string> = {};
+    for (const f of EDITABLE_FIELDS) {
+      if ((draft[f.key] ?? '') !== (selected.raw[f.key] ?? '')) propertyChanged[f.key] = draft[f.key] ?? '';
     }
-    if (Object.keys(changed).length === 0) { setEditing(false); return; }
+    if ((draft.name ?? '') !== selected.raw.name) propertyChanged.name = draft.name ?? '';
+    if ((draft.address ?? '') !== selected.raw.address) propertyChanged.address = draft.address ?? '';
+
+    // Contact fields → saveContact (outreach subcollection).
+    const contactChanged =
+      (draft.contact_name ?? '') !== selected.contact_name ||
+      (draft.contact_role ?? '') !== selected.contact_role ||
+      (draft.email ?? '') !== selected.email ||
+      (draft.phone ?? '') !== selected.phone;
+
+    if (Object.keys(propertyChanged).length === 0 && !contactChanged) { setEditing(false); return; }
+
     startTransition(async () => {
       try {
-        await saveFields(selected.id, changed);
+        if (Object.keys(propertyChanged).length > 0) await saveFields(selected.id, propertyChanged);
+        if (contactChanged) {
+          await saveContact(selected.id, {
+            name: draft.contact_name ?? '',
+            role: draft.contact_role ?? '',
+            email: draft.email ?? '',
+            phone: draft.phone ?? '',
+          });
+        }
         toast.success('Saved');
         router.refresh();
       } catch (err) {
@@ -126,19 +162,13 @@ export function DetailSheet() {
             </div>
 
             <div className="open-in-links">
-              {hasCoords && (
-                <>
-                  <a href={`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`} target="_blank" rel="noreferrer">
-                    <MapPin size={13} /> Maps
-                  </a>
-                  <a href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`} target="_blank" rel="noreferrer">
-                    <Eye size={13} /> Street View
-                  </a>
-                </>
-              )}
-              <a href={`https://www.google.com/search?q=${encodeURIComponent(`${selected.raw.name} ${selected.raw.address}`)}`} target="_blank" rel="noreferrer">
-                <Search size={13} /> Google
-              </a>
+              <OpenInLinks
+                name={selected.raw.name}
+                address={selected.raw.address}
+                lat={selected.raw.lat}
+                lng={selected.raw.lng}
+                sourceUrl={selected.raw.source_url}
+              />
             </div>
 
             <ConnectionsBar lead={selected} lotCount={lotCount} />
@@ -155,10 +185,16 @@ export function DetailSheet() {
             <section className="detail-section">
               <h3>Contact</h3>
               <div className="detail-info-grid">
-                <div><small>Contact name</small><span>{selected.contact_name || 'Decision-maker needed'}</span></div>
-                <div><small>Role</small><span>{selected.contact_role || '—'}</span></div>
-                <div><small>Business email</small><span>{selected.email || '—'}</span></div>
-                <div><small>Phone</small><span>{selected.phone || '—'}</span></div>
+                {CONTACT_FIELDS.map((f) => (
+                  <div key={f.key}>
+                    <small>{f.label}</small>
+                    {editing ? (
+                      <input value={draft[f.key] ?? ''} onChange={(e) => setDraft({ ...draft, [f.key]: e.target.value })} className={inputCls} />
+                    ) : (
+                      <span>{f.key === 'contact_name' ? (selected.contact_name || 'Decision-maker needed') : (selected[f.key as 'contact_role' | 'email' | 'phone'] || '—')}</span>
+                    )}
+                  </div>
+                ))}
               </div>
             </section>
             <section className="detail-section">
@@ -176,7 +212,6 @@ export function DetailSheet() {
                 ))}
                 <div><small>Owner</small><span>{selected.property_details?.owner || '—'}</span></div>
                 <div><small>Operator</small><span>{selected.property_details?.operator || '—'}</span></div>
-                <div><small>EV</small><span>{selected.property_details?.ev || '—'}</span></div>
               </div>
             </section>
             <section className="detail-section">

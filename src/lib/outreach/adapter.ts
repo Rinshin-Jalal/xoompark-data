@@ -125,6 +125,7 @@ export function accountSlug(operator: string): string {
 function buildRaw(lot: SourcedParkingLocation, outreach: OutreachRecord | null): Raw {
   const tri = (v: boolean | null | undefined) =>
     v === true ? 'yes' : v === false ? 'no' : '';
+  const ext = lot as SourcedParkingLocation & { pudo?: string; staging?: string; accessible_routes?: string; ev?: string };
   return {
     id: lot.id,
     name: lot.name,
@@ -140,6 +141,7 @@ function buildRaw(lot: SourcedParkingLocation, outreach: OutreachRecord | null):
     contact_group: deriveOperator(lot),
     company_account_id: accountSlug(deriveOperator(lot)),
     contact_source: outreach?.quote_source ?? lot.source_url ?? '',
+    source_url: lot.source_url ?? '',
     // Locality — stored value first, else derived from coords on the fly.
     locality: lot.locality ?? deriveLocality(lot.address, lot.lat, lot.lng) ?? '',
     // Follow-up engine — next_touch_at is written by logEmailSent (+3 days).
@@ -157,10 +159,16 @@ function buildRaw(lot: SourcedParkingLocation, outreach: OutreachRecord | null):
     price_text: lot.price_text ?? '',
     hours_text: lot.hours_text ?? '',
     source_name: lot.source_name,
+    // Manual-fill fields (edit mode) — ev/pudo/staging/accessible_routes.
+    ev: ext.ev ?? '',
+    pudo: ext.pudo ?? '',
+    staging: ext.staging ?? '',
+    accessible_routes: ext.accessible_routes ?? '',
   };
 }
 
 function buildPropertyDetails(lot: SourcedParkingLocation): Record<string, string> {
+  const ext = lot as SourcedParkingLocation & { pudo?: string; staging?: string; accessible_routes?: string };
   const ev =
     (lot.enrichment?.ev?.onSiteDcFastPorts ?? 0) > 0 ||
     (lot.enrichment?.ev?.onSiteLevel2Ports ?? 0) > 0
@@ -174,9 +182,9 @@ function buildPropertyDetails(lot: SourcedParkingLocation): Record<string, strin
     clearance: lot.clearance_text ?? '',
     gate: lot.gate_type ?? '',
     ev,
-    pudo: '',
-    staging: '',
-    accessible_routes: '',
+    pudo: ext.pudo ?? '',
+    staging: ext.staging ?? '',
+    accessible_routes: ext.accessible_routes ?? '',
   };
 }
 
