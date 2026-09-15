@@ -3,7 +3,8 @@
 //   Stage 1: Exa contents (JS rendering → clean text)        [EXA_API_KEY]
 //   Stage 2: Cloudflare Workers AI extraction (evidence + confidence)
 //                                                            [CLOUDFLARE_ACCOUNT_ID + CLOUDFLARE_API_TOKEN]
-//   Stage 3: regex extraction (zero-cost fallback, low confidence)
+//   Stage 3: Google Places (hours/phone/website validation)  [NEXT_PUBLIC_GOOGLE_MAPS_API_KEY]
+//   Stage 4: regex extraction (zero-cost fallback, low confidence)
 //
 // Each stage activates when its env key exists; otherwise it falls through to
 // the next. Regex is the fallback, not the primary extractor.
@@ -12,7 +13,7 @@ export type EnrichmentField = {
   field: string;
   value: string;
   confidence: number; // 0..1
-  source: string; // URL
+  source: string; // URL or 'google_places'
   snippet: string; // raw text the value came from
   verified: boolean; // human-verified flag
 };
@@ -29,7 +30,6 @@ export type EnrichmentResult = {
 const EXTRACTORS: { field: string; re: RegExp }[] = [
   { field: 'stall_count', re: /(\d{1,4})\s*(?:stalls|spaces|spots|parking spaces)/i },
   { field: 'hours_24_7', re: /(24\s*\/\s*7|open\s+24\s*hours|24\s*hours)/i },
-  { field: 'clearance', re: /(\d{1,2}(?:\.\d{1,2})?)\s*(?:ft|feet|')\s*(?:clearance|height)?/i },
   { field: 'phone', re: /(\+?1?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})/ },
   { field: 'email', re: /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/ },
   { field: 'rates', re: /(\$\d{1,3}(?:\.\d{2})?\s*(?:\/|\sper\s)(?:day|hour|month|hr))/i },
@@ -82,6 +82,20 @@ async function scrapeWithExa(url: string): Promise<string | null> {
 // evidence} per field.
 const CF_MODEL = '@cf/meta/llama-3.1-8b-instruct';
 
+// Whitelist — drop any field the model invents outside the schema.
+const KNOWN_FIELDS = new Set(['stall_count', 'hours', 'clearance', 'phone', 'email', 'rates', 'operator', 'address']);
+
+const EXTRACT_PROMPT =
+  'Extract parking-lot fields from the page. Return ONLY a JSON object with a "fields" array. Each element is a SEPARATE object with keys "field", "value", "confidence", "evidence".\n' +
+  'Example output:\n' +
+  '{"fields":[{"field":"stall_count","value":"420","confidence":0.9,"evidence":"420 parking spaces"},{"field":"hours","value":"24/7","confidence":0.9,"evidence":"Open 24 hours"},{"field":"clearance","value":"7\'0\\"","confidence":0.9,"evidence":"Height restriction 7\'0\\""}]}\n' +
+  'Rules:\n' +
+  '- field must be one of: stall_count, hours, clearance, phone, email, rates, operator, address.\n' +
+  '- clearance: ONLY a height clearance/restriction (e.g. "7\'0\\" height restriction"). NOT length, width, or vehicle dimensions. Omit if not a height restriction.\n' +
+  '- operator: the parking operator/management company (e.g. "LAZ Parking", "SP+"), from branding/footer. NOT the property owner.\n' +
+  '- address: the full street address of the facility.\n' +
+  '- Only include fields actually present. Never guess. Never combine multiple fields into one.';
+
 async function extractWithLLM(text: string, sourceUrl: string): Promise<EnrichmentField[] | null> {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
   const token = process.env.CLOUDFLARE_API_TOKEN;
@@ -92,11 +106,7 @@ async function extractWithLLM(text: string, sourceUrl: string): Promise<Enrichme
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
         messages: [
-          {
-            role: 'system',
-            content:
-              'Extract parking-lot fields from the page. Return ONLY JSON: {"fields":[{"field":"stall_count|hours|clearance|phone|email|rates","value":"...","confidence":0..1,"evidence":"exact quote from page"}]}. Only include fields actually present. Never guess.',
-          },
+          { role: 'system', content: EXTRACT_PROMPT },
           { role: 'user', content: text.slice(0, 12000) },
         ],
       }),
@@ -108,22 +118,59 @@ async function extractWithLLM(text: string, sourceUrl: string): Promise<Enrichme
     const json = raw.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(json);
     const fields = (parsed.fields ?? []) as { field: string; value: string; confidence: number; evidence: string }[];
-    return fields.map((f) => ({
-      field: f.field,
-      value: String(f.value ?? '').trim(),
-      confidence: typeof f.confidence === 'number' ? f.confidence : 0.7,
-      source: sourceUrl,
-      snippet: f.evidence ?? '',
-      verified: false,
-    }));
+    return fields
+      .filter((f) => KNOWN_FIELDS.has(f.field))
+      .map((f) => ({
+        field: f.field,
+        value: String(f.value ?? '').trim(),
+        confidence: typeof f.confidence === 'number' ? f.confidence : 0.7,
+        source: sourceUrl,
+        snippet: f.evidence ?? '',
+        verified: false,
+      }));
   } catch {
     return null;
   }
 }
 
+// ── Stage 3: Google Places (hours/phone/website validation) ────────────────
+// Activates when GOOGLE_MAPS_SERVER_KEY is set (a server-side key with IP
+// restrictions — the NEXT_PUBLIC browser key is referer-restricted and can't
+// call Places server-side). Cross-checks scraped fields against Google.
+export async function enrichWithGooglePlaces(name: string, address: string): Promise<EnrichmentField[]> {
+  const key = process.env.GOOGLE_MAPS_SERVER_KEY;
+  if (!key || !name) return [];
+  try {
+    const query = encodeURIComponent(`${name} ${address ?? ''}`.trim());
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id,formatted_phone_number,opening_hours,website&key=${key}`,
+      { signal: AbortSignal.timeout(15000) },
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    const place = data?.candidates?.[0];
+    if (!place) return [];
+    const fields: EnrichmentField[] = [];
+    if (place.formatted_phone_number) {
+      fields.push({ field: 'phone', value: place.formatted_phone_number, confidence: 0.9, source: 'google_places', snippet: 'Google Places', verified: false });
+    }
+    if (place.website) {
+      fields.push({ field: 'website', value: place.website, confidence: 0.9, source: 'google_places', snippet: 'Google Places', verified: false });
+    }
+    if (place.opening_hours?.weekday_text?.length) {
+      fields.push({ field: 'hours', value: place.opening_hours.weekday_text.join('; '), confidence: 0.9, source: 'google_places', snippet: 'Google Places', verified: false });
+    }
+    return fields;
+  } catch {
+    return [];
+  }
+}
+
 /** Fetch a URL and extract fields. Exa → LLM → regex fallback. */
-export async function scrapeAndExtract(sourceUrl: string): Promise<EnrichmentResult> {
+export async function scrapeAndExtract(sourceUrl: string, surfaceType?: string | null): Promise<EnrichmentResult> {
   const scrapedAt = new Date().toISOString();
+
+  let fields: EnrichmentField[] = [];
 
   // Stage 1: Exa contents (JS rendering).
   const text = await scrapeWithExa(sourceUrl);
@@ -131,28 +178,36 @@ export async function scrapeAndExtract(sourceUrl: string): Promise<EnrichmentRes
     // Stage 2: LLM extraction on clean text.
     const llmFields = await extractWithLLM(text, sourceUrl);
     if (llmFields && llmFields.length > 0) {
-      return { fields: llmFields, scrapedAt, sourceUrl, status: 'ok' };
+      fields = llmFields;
+    } else {
+      // Fallback: regex on the text.
+      fields = extractFields(text, sourceUrl);
     }
-    // Fallback: regex on the text.
-    return { fields: extractFields(text, sourceUrl), scrapedAt, sourceUrl, status: 'ok' };
+  } else {
+    // Stage 4: static fetch + regex (zero-cost baseline).
+    try {
+      const res = await fetch(sourceUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (XoomPark enrichment)' },
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!res.ok) return { fields: [], scrapedAt, sourceUrl, status: 'blocked', error: `HTTP ${res.status}` };
+      const html = await res.text();
+      fields = extractFields(html, sourceUrl);
+    } catch (err) {
+      return {
+        fields: [],
+        scrapedAt,
+        sourceUrl,
+        status: 'failed',
+        error: err instanceof Error ? err.message : 'Fetch failed',
+      };
+    }
   }
 
-  // Stage 3: static fetch + regex (zero-cost baseline).
-  try {
-    const res = await fetch(sourceUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (XoomPark enrichment)' },
-      signal: AbortSignal.timeout(15000),
-    });
-    if (!res.ok) return { fields: [], scrapedAt, sourceUrl, status: 'blocked', error: `HTTP ${res.status}` };
-    const html = await res.text();
-    return { fields: extractFields(html, sourceUrl), scrapedAt, sourceUrl, status: 'ok' };
-  } catch (err) {
-    return {
-      fields: [],
-      scrapedAt,
-      sourceUrl,
-      status: 'failed',
-      error: err instanceof Error ? err.message : 'Fetch failed',
-    };
+  // Surface lots have no height clearance — drop any false-positive match.
+  if (surfaceType === 'surface') {
+    fields = fields.filter((f) => f.field !== 'clearance');
   }
+
+  return { fields, scrapedAt, sourceUrl, status: 'ok' };
 }
